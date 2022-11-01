@@ -1,13 +1,21 @@
 package movielist;
 
-import list.MovieList;
+import list.MovieFile;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MovieListTest {
+/**
+ * Tests for MovieFile.
+ *
+ * @author William Morris
+ * @version 11/1/2022
+ */
+public class MovieFileTest {
   static File movieJson;
 
   static {
@@ -17,6 +25,14 @@ public class MovieListTest {
 
   @Test
   void listParsesWithoutException() {
-    MovieList list = new MovieList(movieJson);
+    MovieFile file = new MovieFile(movieJson);
+  }
+
+  @Test
+  void getFileInputStreamTest() throws FileNotFoundException {
+    MovieFile file = new MovieFile(movieJson);
+    Scanner test = new Scanner(file.getStream());
+
+    assertEquals("{", test.next());
   }
 }

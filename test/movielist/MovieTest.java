@@ -1,3 +1,5 @@
+package movielist;
+
 import list.movie.Movie;
 import org.junit.jupiter.api.Test;
 
