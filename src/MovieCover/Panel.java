@@ -1,3 +1,4 @@
+package MovieCover;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;

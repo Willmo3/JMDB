@@ -1,3 +1,4 @@
+package MovieCover;
 
 /**
  * Movie cover class.
