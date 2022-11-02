@@ -40,6 +40,50 @@ public class MovieList {
     }
   }
 
+  /**
+   * Query a movie based on String MovieId.
+   * Searches this list using linear search.
+   * Returns a movie with the provided movieId, or null if none found.
+   *
+   * @param movieId Movie ID to search for.
+   * @return Found movie or null.
+   */
+  public Movie queryMovie(String movieId) {
+    if (movieId == null) {
+      return null;
+    }
+
+    for (Movie movie: movieList) {
+      if (movie.getId().equals(movieId)) {
+        return movie;
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Query a movie based on a movie object.
+   * Searches this list using linear search.
+   * Returns a movie equal to the movie object., or null if none found.
+   *
+   * @param toFind Movie ID to search for.
+   * @return Found movie or null.
+   */
+  public Movie queryMovie(Movie toFind) {
+    if (toFind == null) {
+      return null;
+    }
+
+    for (Movie movie: movieList) {
+      if (movie.equals(toFind)) {
+        return movie;
+      }
+    }
+
+    return null;
+  }
+
   public List<Movie> getMovieList() {
     return movieList;
   }
