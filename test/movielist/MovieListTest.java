@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests for MovieList.
@@ -53,5 +54,26 @@ public class MovieListTest {
     for (int i = 0; i < expected.size(); i++) {
       assertEquals(expected.get(i), movieList.get(i));
     }
+  }
+
+  @Test
+  void searchByMovieID() {
+    Movie beThere = new Movie("tt12960252", "https://imdb-api.com/images/original/nopicture.jpg",
+        "Inception Premiere", "(2010)");
+    assertEquals(beThere, list.queryMovie(beThere.getId()));
+    assertNull(list.queryMovie("Nill!"));
+    assertNull(list.queryMovie((String) null));
+  }
+
+  @Test
+  void searchByMovie() {
+    Movie beThere = new Movie("tt12960252", "https://imdb-api.com/images/original/nopicture.jpg",
+        "Inception Premiere", "(2010)");
+    assertEquals(beThere, list.queryMovie(beThere));
+
+    Movie notThere = new Movie("tt1er2960252", "https://imdb-api.com/images/original/nopicture.jpg",
+        "Inception Premiere", "(2010)");
+    assertNull(list.queryMovie(notThere));
+    assertNull(list.queryMovie((Movie) null));
   }
 }

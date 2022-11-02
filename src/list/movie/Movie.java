@@ -13,12 +13,22 @@ public class Movie {
   private final String imageLink;
   private final String title;
   private final String description;
+  private double imdb_rating;
 
   public Movie(String id, String imageLink, String title, String description) {
     this.id = id;
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
+  }
+
+  /**
+   * Sets the IMDB_Rating of this movie.
+   *
+   * @param imdb_rating New rating.
+   */
+  public void setRating(int imdb_rating) {
+    this.imdb_rating = imdb_rating;
   }
 
   public String getId() {
