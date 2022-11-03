@@ -17,6 +17,12 @@ import list.MovieList;
  */
 public final class JSONRequestor
 {
+  /**
+   * An enum of all the acceptable Query Types that can be made in a search.
+   * 
+   * @author Matthew Potter
+   * @version 11/03/2022
+   */
   public static enum QueryTypes {
     TITLE, MOVIE, SERIES, NAME, ALL
   }

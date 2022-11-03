@@ -7,7 +7,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Scanner;
 
 import org.junit.Test;
 
@@ -16,7 +15,7 @@ import search.JSONRequestor;
 import search.JSONRequestor.QueryTypes;
 
 /**
- * A test class for when requesting JSON through the IMDB api
+ * A test class for when requesting JSON through the IMDB api.
  * 
  * @author Matthew Potter
  * @version 11/03/2022
