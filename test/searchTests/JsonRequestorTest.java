@@ -11,8 +11,8 @@ import java.io.InputStream;
 import org.junit.Test;
 
 import list.MovieList;
-import search.JSONRequestor;
-import search.JSONRequestor.QueryTypes;
+import search.JsonRequestor;
+import search.JsonRequestor.QueryTypes;
 
 /**
  * A test class for when requesting JSON through the IMDB api.
@@ -20,7 +20,7 @@ import search.JSONRequestor.QueryTypes;
  * @author Matthew Potter
  * @version 11/03/2022
  */
-public class JSONRequestorTest
+public class JsonRequestorTest
 {
   // opens the testSearch.json file which is the JSON made
   // from the search query to all titles using query "inception 2010"
@@ -47,13 +47,18 @@ public class JSONRequestorTest
   static String queryText = "inception 2010";
 
   @Test
-  public void testRequestJSON()
+  public void testQueryList()
   {
     assertEquals(testList.getMovieList(),
-        JSONRequestor.search(queryText).getMovieList());
+        JsonRequestor.search(queryText).getMovieList());
     assertEquals(testList.getMovieList(),
-        JSONRequestor.search(QueryTypes.TITLE, queryText).getMovieList());
+        JsonRequestor.search(QueryTypes.TITLE, queryText).getMovieList());
+  }
 
+  @Test
+  public void testQueryRating()
+  {
+    assertEquals(88, Math.round(JsonRequestor.queryRating("tt1375666") * 10));
   }
 
 }

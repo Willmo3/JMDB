@@ -1,12 +1,14 @@
 package media;
 
+import search.JsonRequestor;
+
 /**
  * Represents a single movie as specified in the IMDB Api.
  * Note: Currently, only supports json files as described in the Title Search Results.
  * This may be changed later.
  *
- * @author Will Morris
- * @version 11/1/2022
+ * @author Will Morris, Matthew Potter
+ * @version 11/03/2022
  */
 public class Movie {
   private final String id;
@@ -20,6 +22,7 @@ public class Movie {
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
+    this.imdb_rating = Double.NEGATIVE_INFINITY;
   }
 
   /**
@@ -27,7 +30,7 @@ public class Movie {
    *
    * @param imdb_rating New rating.
    */
-  public void setRating(int imdb_rating) {
+  private void setRating(int imdb_rating) {
     this.imdb_rating = imdb_rating;
   }
 
@@ -45,6 +48,16 @@ public class Movie {
 
   public String getDescription() {
     return description;
+  }
+  
+  public double getRating() {
+    if (imdb_rating == Double.NEGATIVE_INFINITY) {
+      imdb_rating = JsonRequestor.queryRating(id);
+    }
+    if (imdb_rating == Double.NEGATIVE_INFINITY) {
+      System.err.println("Rating was unable to be received");
+    }
+    return -1.0;
   }
 
   @Override

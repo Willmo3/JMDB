@@ -6,7 +6,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import search.JSONRequestor;
+import search.JsonRequestor;
 
 /**
  * A GUI element that allows the user to enter text in order to search for a
@@ -30,7 +30,7 @@ public class Searchbar extends JPanel
     submit = new JButton("Submit");
     submit.addActionListener((action) -> {
       // System.out.println(textField.getText());
-       JSONRequestor.search(textField.getText());
+       JsonRequestor.search(textField.getText());
     });
     this.add(textField, BorderLayout.WEST);
     this.add(submit, BorderLayout.EAST);
