@@ -1,7 +1,8 @@
 package movielist;
 
-import list.movie.Movie;
 import org.junit.jupiter.api.Test;
+
+import media.Movie;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;

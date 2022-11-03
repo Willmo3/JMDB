@@ -2,7 +2,8 @@ package movielist;
 
 import list.MovieFile;
 import list.MovieList;
-import list.movie.Movie;
+import media.Movie;
+
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

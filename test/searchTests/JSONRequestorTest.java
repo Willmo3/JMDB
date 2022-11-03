@@ -9,12 +9,13 @@ import java.util.Scanner;
 import org.junit.Test;
 
 import search.JSONRequestor;
+import search.JSONRequestor.QueryTypes;
 
 /**
  * A test class for when requesting JSON through the IMDB api
  * 
  * @author Matthew Potter
- * @version 11/2/2022
+ * @version 11/03/2022
  */
 public class JSONRequestorTest
 {
@@ -32,15 +33,20 @@ public class JSONRequestorTest
     catch (FileNotFoundException e)
     {
       System.err.println("Cannot find searchJSON in test");
-    } finally {
-      if (fileReader != null) {
-        while (fileReader.hasNextLine()) {
+    }
+    finally
+    {
+      if (fileReader != null)
+      {
+        while (fileReader.hasNextLine())
+        {
           searchJSONText += fileReader.nextLine();
         }
-        if (searchJSONText == "") {
+        if (searchJSONText == "")
+        {
           System.err.println("JSON text is empty");
         }
-        fileReader.close();        
+        fileReader.close();
       }
     }
   }
@@ -49,8 +55,10 @@ public class JSONRequestorTest
   @Test
   public void testRequestJSON()
   {
-    JSONRequestor test1 = new JSONRequestor(queryText);
-    assertEquals(searchJSONText, test1.getStringJSON());
+    assertEquals(searchJSONText, JSONRequestor.search(queryText));
+    assertEquals(searchJSONText,
+        JSONRequestor.search(QueryTypes.TITLE, queryText));
+
   }
 
 }

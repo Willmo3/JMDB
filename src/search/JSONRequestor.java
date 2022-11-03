@@ -6,41 +6,46 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.List;
-
-import com.fasterxml.jackson.databind.node.ArrayNode;
 
 /**
- * An object which queries the Internet for IMDb information using HTTP requests
- * to the IMDb API
+ * Utility class for querying the Internet in order to receive JSON files that
+ * include information about searches, ratings, and other aspects of media
+ * present on IMDb, all as queried through the IMDb API.
  * 
  * @author Matthew Potter
- * @version 11/2/2022
+ * @version 11/03/2022
  */
-public class JSONRequestor
+public final class JSONRequestor
 {
-  
-  private String stringJSON;
+  public static enum QueryTypes {
+    TITLE, MOVIE, SERIES, NAME, ALL
+  }
   
   /**
-   * Initializes the values to null
+   * Queries the IMDb API for a JSON text containing a list of films that match
+   * the search criteria. Searches are based on title.
+   * 
+   * @param queryText
+   *          the text to be searched for using the IMDb API
+   * @return the String representation of the JSON file received from the web
    */
-  public JSONRequestor()
+  public static String search(String queryText)
   {
-    this(null);
-  }
-  
-  public JSONRequestor(String queryText) {
-    stringJSON = requestJSON(null, queryText);
+    return search(null, queryText);
   }
 
-  protected List<ArrayNode> getSearchedList(String queryType, String queryText)
-  {
-    String textJSON = requestJSON(queryType, queryText);
-    return null;
-  }
-
-  private String requestJSON(String queryType, String queryText)
+  /**
+   * Queries the IMDb API for a JSON text containing a list of films that match
+   * the search criteria. Searches are based on title the passed queryType.
+   * Acceptable queryTypes are defined in the QueryTypes enumerated class.
+   * 
+   * @param queryType
+   *          the type of query to base the search on
+   * @param queryText
+   *          the text to be searched for using the IMDb API
+   * @return the String representation of the JSON file received from the web
+   */
+  public static String search(QueryTypes queryType, String queryText)
   {
     // formatted url based on associated queryType and queryText TODO
     String urlString = String
@@ -93,10 +98,5 @@ public class JSONRequestor
       }
     }
     return null;
-  }
-  
-  public String getStringJSON()
-  {
-    return stringJSON;
   }
 }
