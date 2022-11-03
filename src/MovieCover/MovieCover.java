@@ -2,8 +2,6 @@ package MovieCover;
 
 /**
  * Movie cover class.
- * @author Immanuel Semelfort
- *
  */
 public class MovieCover {
 
