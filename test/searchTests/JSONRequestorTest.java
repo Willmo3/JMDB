@@ -3,11 +3,15 @@ package searchTests;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 import org.junit.Test;
 
+import list.MovieList;
 import search.JSONRequestor;
 import search.JSONRequestor.QueryTypes;
 
@@ -21,33 +25,24 @@ public class JSONRequestorTest
 {
   // opens the testSearch.json file which is the JSON made
   // from the search query to all titles using query "inception 2010"
-  static File searchJSON = new File("test/searchTests/testSearch.json");
-  static String searchJSONText = "";
+  static File testFile = new File("test/searchTests/testSearch.json");
+  static MovieList testList;
   static
   {
-    Scanner fileReader = null;
     try
     {
-      fileReader = new Scanner(searchJSON);
+      InputStream testStream = new FileInputStream(testFile);
+      testList = new MovieList(testStream);
     }
     catch (FileNotFoundException e)
     {
-      System.err.println("Cannot find searchJSON in test");
+      System.err
+          .println("Couldn't create stream for testFile in JSONRequestorTest");
     }
-    finally
+    catch (IOException e)
     {
-      if (fileReader != null)
-      {
-        while (fileReader.hasNextLine())
-        {
-          searchJSONText += fileReader.nextLine();
-        }
-        if (searchJSONText == "")
-        {
-          System.err.println("JSON text is empty");
-        }
-        fileReader.close();
-      }
+      System.err.println(
+          "Failed to parse the testStream into MovieList in JSONRequestorTest");
     }
   }
   static String queryText = "inception 2010";
@@ -55,9 +50,10 @@ public class JSONRequestorTest
   @Test
   public void testRequestJSON()
   {
-    assertEquals(searchJSONText, JSONRequestor.search(queryText));
-    assertEquals(searchJSONText,
-        JSONRequestor.search(QueryTypes.TITLE, queryText));
+    assertEquals(testList.getMovieList(),
+        JSONRequestor.search(queryText).getMovieList());
+    assertEquals(testList.getMovieList(),
+        JSONRequestor.search(QueryTypes.TITLE, queryText).getMovieList());
 
   }
 

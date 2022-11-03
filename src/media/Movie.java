@@ -1,11 +1,11 @@
-package list.movie;
+package media;
 
 /**
  * Represents a single movie as specified in the IMDB Api.
  * Note: Currently, only supports json files as described in the Title Search Results.
  * This may be changed later.
  *
- * @author Will Morirs
+ * @author Will Morris
  * @version 11/1/2022
  */
 public class Movie {

@@ -1,11 +1,11 @@
 package search;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import list.MovieList;
 
 /**
  * Utility class for querying the Internet in order to receive JSON files that
@@ -27,11 +27,11 @@ public final class JSONRequestor
    * 
    * @param queryText
    *          the text to be searched for using the IMDb API
-   * @return the String representation of the JSON file received from the web
+   * @return a MovieList containing the movies defined by the received JSON
    */
-  public static String search(String queryText)
+  public static MovieList search(String queryText)
   {
-    return search(null, queryText);
+    return search(QueryTypes.TITLE, queryText);
   }
 
   /**
@@ -43,9 +43,9 @@ public final class JSONRequestor
    *          the type of query to base the search on
    * @param queryText
    *          the text to be searched for using the IMDb API
-   * @return the String representation of the JSON file received from the web
+   * @return a MovieList containing the movies defined by the received JSON
    */
-  public static String search(QueryTypes queryType, String queryText)
+  public static MovieList search(QueryTypes queryType, String queryText)
   {
     // formatted url based on associated queryType and queryText TODO
     String urlString = String
@@ -65,18 +65,7 @@ public final class JSONRequestor
       // if the request succeeded
       if (responseCode == 200 || responseCode == 201)
       {
-        BufferedReader reader = new BufferedReader(
-            // read the input stream of the HTTP request
-            new InputStreamReader(connection.getInputStream()));
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null)
-        {
-          builder.append(line);
-        }
-        reader.close();
-        // returns string containing JSON information as a string
-        return builder.toString();
+        return new MovieList(connection.getInputStream());
       }
     }
     catch (MalformedURLException e)
