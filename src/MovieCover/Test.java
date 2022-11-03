@@ -1,12 +1,9 @@
 package MovieCover;
 import java.io.IOException;
-
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+
 /**
  * Test class
- * @author Immanuel Semelfort
- *
  */
 public class Test extends JFrame {
     public Test() throws IOException {
@@ -15,6 +12,7 @@ public class Test extends JFrame {
         this.setSize(400, 400);
         this.setContentPane(new Panel(new MovieCover(
                 "MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg")));
+        this.revalidate();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
