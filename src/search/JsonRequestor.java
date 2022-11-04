@@ -74,7 +74,9 @@ public final class JsonRequestor
       // if the request succeeded
       if (responseCode == 200 || responseCode == 201)
       {
-        return new MovieList(connection.getInputStream());
+        MovieList list = new MovieList(connection.getInputStream());
+        connection.disconnect();
+        return list;
       }
     }
     catch (MalformedURLException e)

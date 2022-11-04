@@ -21,9 +21,9 @@ public class SearchBarTest
   public static void main(String[] args)
   {
     JFrame frame = new JFrame("Searchbar Test");
-    frame.add(new Searchbar());
-    frame.setVisible(true);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    frame.pack();
+//    frame.add(new Searchbar());
+//    frame.setVisible(true);
+//    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//    frame.pack();
   }
 }

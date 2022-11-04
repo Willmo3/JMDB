@@ -57,7 +57,7 @@ public class Movie {
     if (imdb_rating == Double.NEGATIVE_INFINITY) {
       System.err.println("Rating was unable to be received");
     }
-    return -1.0;
+    return imdb_rating;
   }
 
   @Override
