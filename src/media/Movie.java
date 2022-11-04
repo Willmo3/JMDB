@@ -71,4 +71,15 @@ public class Movie {
 
     return false;
   }
+
+  /**
+   * Returns String representation of this movie.
+   * Format: title description;
+   *
+   * @return The formatted String.
+   */
+  @Override
+  public String toString() {
+    return title + " " + description;
+  }
 }
