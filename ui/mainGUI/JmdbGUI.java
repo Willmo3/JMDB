@@ -31,7 +31,7 @@ import javax.swing.SwingConstants;
 /**
  * Main GUI for the JMDb program.
  * 
- * @author
+ * @author Sean Talbot and Matthew Potter
  * @version 11/04/2022
  */
 public class JmdbGUI extends JFrame
