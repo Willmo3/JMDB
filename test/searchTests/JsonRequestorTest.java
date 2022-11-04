@@ -1,18 +1,17 @@
 package searchTests;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.junit.Test;
-
 import list.MovieList;
+import org.junit.jupiter.api.Test;
 import search.JsonRequestor;
 import search.JsonRequestor.QueryTypes;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * A test class for when requesting JSON through the IMDB api.
