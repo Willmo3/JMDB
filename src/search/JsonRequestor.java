@@ -91,22 +91,14 @@ public final class JsonRequestor
    */
   public static MovieList search(QueryTypes queryType, String queryText)
   {
-    // formatted url based on associated queryType and queryText TODO
-    String urlString = String.format(
+    // formatted url based on associated queryType and queryText
+    String url = String.format(
         "https://imdb-api.com/en/API/Search%s/k_mcx0w8kk/%s", queryType,
         queryText);
-    URL url;
     try
     {
-      url = new URL(urlString);
       MovieList list = new MovieList(fetch(url));
       return list;
-    }
-    catch (MalformedURLException e)
-    {
-      System.err.println(String.format(
-          "Error occurred in creating the URL during search for %s",
-          queryText));
     }
     catch (IOException e)
     {
@@ -126,26 +118,48 @@ public final class JsonRequestor
    */
   public static double queryRating(String id)
   {
-    String urlString = String
+    String url = String
         .format("https://imdb-api.com/en/API/Ratings/k_mcx0w8kk/%s", id);
     try
     {
-      URL url = new URL(urlString);
       ObjectMapper mapper = new ObjectMapper();
       JsonNode ratings = mapper.readTree(fetch(url));
       return ratings.get("imDb").asDouble();
     }
-    catch (MalformedURLException e)
-    {
-      System.err.println(String.format(
-          "Error occurred in URL creation in rating query for ID: %s", id));
-    }
     catch (IOException e)
     {
       System.err.println(String.format(
-          "Error occurred in reading stream in rating query for ID: %s", id));
+          "Error occurred in reading stream in rating query for ID: %s\n", id));
     }
     return Double.NEGATIVE_INFINITY;
+  }
+
+  /**
+   * Connects to the passed URL through an HttpURLConnection, expecting a
+   * raw-data JSON file to be present at the location in order to duplicate its
+   * InputStream to be parsed for information.
+   * 
+   * @param url
+   *          a String containing the URL web address that itself contains a
+   *          raw-data JSON file to connect to
+   * @return an InputStream containing the pulled JSON information
+   */
+  public static InputStream fetch(String url)
+  {
+    URL webURL;
+    try
+    {
+      webURL = new URL(url);
+      return fetch(webURL);
+    }
+    catch (MalformedURLException e)
+    {
+      System.err.println(String.format(
+          "Error occurred in creating the URL to fetch for data at URL:\n%s\n",
+          url));
+      e.printStackTrace(System.err);
+    }
+    return null;
   }
 
   /**

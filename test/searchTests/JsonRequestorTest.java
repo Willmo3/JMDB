@@ -21,9 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 public class JsonRequestorTest
 {
-  // opens the testSearch.json file which is the JSON made
-  // from the search query to all titles using query "inception 2010"
+  /**
+   * Opens the testSearch.json file which is the JSON made from the search query
+   * to all titles using query "inception 2010".
+   */
   static File testFile = new File("test/searchTests/testSearch.json");
+  /**
+   * 
+   */
   static MovieList testList;
   static
   {
@@ -43,8 +48,22 @@ public class JsonRequestorTest
           "Failed to parse the testStream into MovieList in JSONRequestorTest");
     }
   }
+
+  /**
+   * queryText used to do the search for the test JSON.
+   */
   static String queryText = "inception 2010";
 
+  /**
+   * Made for coverage purposes.
+   */
+  JsonRequestor coverage = new JsonRequestor();
+
+  /**
+   * Checks to ensure the pulled JSON file's data can be read into a MovieList
+   * and hold the correct information. Technically contingent on MovieList's
+   * functionality, but whatever, it works.
+   */
   @Test
   public void testQueryList()
   {
@@ -54,6 +73,11 @@ public class JsonRequestorTest
         JsonRequestor.search(QueryTypes.TITLE, queryText).getMovieList());
   }
 
+  /**
+   * Checks to ensure the pulled JSON file's rating information can be pulled
+   * and hold the correct information. Contingent on Jackson reading properly,
+   * but we can assume such.
+   */
   @Test
   public void testQueryRating()
   {
