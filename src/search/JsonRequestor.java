@@ -18,7 +18,7 @@ import list.MovieList;
  * present on IMDb, all as queried through the IMDb API.
  * 
  * @author Matthew Potter, Will Morris
- * @version 11/10/2022
+ * @version 11/11/2022
  */
 public final class JsonRequestor
 {
@@ -97,7 +97,9 @@ public final class JsonRequestor
         queryText);
     try
     {
-      MovieList list = new MovieList(fetch(url));
+      InputStream stream = fetch(url);
+      MovieList list = new MovieList(stream);
+      stream.close();
       return list;
     }
     catch (IOException e)
@@ -123,7 +125,9 @@ public final class JsonRequestor
     try
     {
       ObjectMapper mapper = new ObjectMapper();
-      JsonNode ratings = mapper.readTree(fetch(url));
+      InputStream stream = fetch(url);
+      JsonNode ratings = mapper.readTree(stream);
+      stream.close();
       return ratings.get("imDb").asDouble();
     }
     catch (IOException e)
@@ -137,7 +141,8 @@ public final class JsonRequestor
   /**
    * Queries the IMDb web API in order to get the trailer of a film.
    *
-   * @param id the movie ID to get the rating of
+   * @param id
+   *          the movie ID to get the rating of
    * @return the IMDb rating of the passed movie
    */
   public static String queryTrailer(String id)
@@ -147,7 +152,9 @@ public final class JsonRequestor
     try
     {
       ObjectMapper mapper = new ObjectMapper();
-      JsonNode ratings = mapper.readTree(fetch(url));
+      InputStream stream = fetch(url);
+      JsonNode ratings = mapper.readTree(stream);
+      stream.close();
       return ratings.get("videoUrl").asText();
     }
     catch (IOException e)
@@ -207,7 +214,6 @@ public final class JsonRequestor
           "application/json; charset=utf-8");
       connection.connect();
       int responseCode = connection.getResponseCode();
-
       // if the request succeeded
       if (responseCode == 200 || responseCode == 201)
       {

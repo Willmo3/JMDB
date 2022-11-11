@@ -1,4 +1,4 @@
-package ui.mainGUI;
+package mainGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -17,8 +17,8 @@ import javax.swing.event.ListSelectionListener;
 import controller.JmdbController;
 import list.MovieList;
 import media.Movie;
-import ui.mediaDisplay.MediaDisplayPanel;
-import ui.searchbar.Searchbar;
+import mediaDisplay.MediaDisplayPanel;
+import searchbar.Searchbar;
 import javax.swing.*;
 import javax.swing.SwingConstants;
 
@@ -88,7 +88,7 @@ public class JmdbGUI extends JFrame
     MovieList list = null;
     try
     {
-      startupList = new FileInputStream("src/ui/mainGUI/startupList.json");
+      startupList = new FileInputStream("ui/mainGUI/startupList.json");
       list = new MovieList(startupList);
     }
     catch (FileNotFoundException e1)

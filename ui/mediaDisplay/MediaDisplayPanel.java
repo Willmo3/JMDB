@@ -1,4 +1,4 @@
-package ui.mediaDisplay;
+package mediaDisplay;
 
 import java.awt.BorderLayout;
 import java.awt.Image;

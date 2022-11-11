@@ -1,4 +1,4 @@
-package ui.searchbar;
+package searchbar;
 
 import java.awt.BorderLayout;
 
@@ -47,8 +47,7 @@ public class Searchbar extends JPanel
     submit = new JButton("Submit");
     // on pressing the submit button, if new text was passed, then search with
     // that query and update the GUI
-    submit.addActionListener((action) -> 
-    {
+    submit.addActionListener((action) -> {
       String text = textField.getText();
       if (text.isBlank() || text.equals(prevText))
       {
@@ -59,8 +58,7 @@ public class Searchbar extends JPanel
     });
 
     typeSelector = new JComboBox<>(QueryTypes.values());
-    typeSelector.addActionListener((action) -> 
-    {
+    typeSelector.addActionListener((action) -> {
       Object source = action.getSource();
       if (source instanceof JComboBox<?>)
       {

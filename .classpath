@@ -8,6 +8,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="ui"/>
 	<classpathentry kind="lib" path="lib/jackson-annotations-2.13.3.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core-2.13.3.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-databind-2.13.3.jar"/>

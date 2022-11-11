@@ -4,7 +4,7 @@ import java.awt.EventQueue;
 
 import controller.JmdbController;
 //import mainGUI.JmdbGUI;
-import ui.mainGUI.JmdbGUI;
+import mainGUI.JmdbGUI;
 
 /**
  * Driver for the JMDb program.
