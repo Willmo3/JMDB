@@ -1,6 +1,8 @@
 package search;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,7 +18,7 @@ import list.MovieList;
  * present on IMDb, all as queried through the IMDb API.
  * 
  * @author Matthew Potter
- * @version 11/03/2022
+ * @version 11/10/2022
  */
 public final class JsonRequestor
 {
@@ -24,12 +26,45 @@ public final class JsonRequestor
    * An enum of all the acceptable Query Types that can be made in a search.
    * 
    * @author Matthew Potter
-   * @version 11/03/2022
+   * @version 11/10/2022
    */
-  public static enum QueryTypes {
-    TITLE, MOVIE, SERIES, NAME, ALL
+  public static enum QueryTypes
+  {
+    /**
+     * The query for searching by title.
+     */
+    TITLE("Title"),
+    /**
+     * The query for searching by movie.
+     */
+    MOVIE("Movie"),
+    /**
+     * The query for searching by TV series.
+     */
+    SERIES("Series"),
+    /**
+     * The query for searching by the name of all people on IMDb.
+     */
+    NAME("Name"),
+    /**
+     * The query for searching into all criteria.
+     */
+    ALL("All");
+
+    private final String typeText;
+
+    QueryTypes(final String type)
+    {
+      this.typeText = type;
+    }
+
+    @Override
+    public String toString()
+    {
+      return typeText;
+    }
   }
-  
+
   /**
    * Queries the IMDb API for a JSON text containing a list of films that match
    * the search criteria. Searches are based on title.
@@ -57,13 +92,77 @@ public final class JsonRequestor
   public static MovieList search(QueryTypes queryType, String queryText)
   {
     // formatted url based on associated queryType and queryText TODO
+    String urlString = String.format(
+        "https://imdb-api.com/en/API/Search%s/k_mcx0w8kk/%s", queryType,
+        queryText);
+    URL url;
+    try
+    {
+      url = new URL(urlString);
+      MovieList list = new MovieList(fetch(url));
+      return list;
+    }
+    catch (MalformedURLException e)
+    {
+      System.err.println(String.format(
+          "Error occurred in creating the URL during search for %s",
+          queryText));
+    }
+    catch (IOException e)
+    {
+      System.err.println(String.format(
+          "Error occurred in creating the MovieList during search for %s",
+          queryText));
+    }
+    return null;
+  }
+
+  /**
+   * Queries the IMDb web API in order to get the rating of a film.
+   * 
+   * @param id
+   *          the movie ID to get the rating of
+   * @return the IMDb rating of the passed movie
+   */
+  public static double queryRating(String id)
+  {
     String urlString = String
-        .format("https://imdb-api.com/en/API/Search/k_mcx0w8kk/%s", queryText);
+        .format("https://imdb-api.com/en/API/Ratings/k_mcx0w8kk/%s", id);
+    try
+    {
+      URL url = new URL(urlString);
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode ratings = mapper.readTree(fetch(url));
+      return ratings.get("imDb").asDouble();
+    }
+    catch (MalformedURLException e)
+    {
+      System.err.println(String.format(
+          "Error occurred in URL creation in rating query for ID: %s", id));
+    }
+    catch (IOException e)
+    {
+      System.err.println(String.format(
+          "Error occurred in reading stream in rating query for ID: %s", id));
+    }
+    return Double.NEGATIVE_INFINITY;
+  }
+
+  /**
+   * Connects to the passed URL through an HttpURLConnection, expecting a
+   * raw-data JSON file to be present at the location in order to duplicate its
+   * InputStream to be parsed for information.
+   * 
+   * @param url
+   *          the url containing a raw-data JSON file to connect to
+   * @return an InputStream containing the pulled JSON information
+   */
+  public static InputStream fetch(URL url)
+  {
     HttpURLConnection connection = null;
     try
     {
       // open a new HTTP connection to get the raw data at the URL
-      URL url = new URL(urlString);
       connection = (HttpURLConnection) url.openConnection();
       connection.setRequestMethod("GET");
       connection.setRequestProperty("Content-Type",
@@ -74,20 +173,17 @@ public final class JsonRequestor
       // if the request succeeded
       if (responseCode == 200 || responseCode == 201)
       {
-        MovieList list = new MovieList(connection.getInputStream());
+        InputStream content = new ByteArrayInputStream(
+            connection.getInputStream().readAllBytes());
         connection.disconnect();
-        return list;
+        return content;
       }
-    }
-    catch (MalformedURLException e)
-    {
-      System.err.println("Improper URL passed to requestJSON");
-      e.printStackTrace(System.err);
     }
     catch (IOException e)
     {
-      System.err.println(
-          "url.openConnection encountered an IO exception in requestJSON");
+      System.err.println("Error has occurred in fetch:\n"
+          + "\tEither the connection encountered an I/O error during connection"
+          + "\n\t or during the reading of the InputStream");
       e.printStackTrace(System.err);
     }
     finally
@@ -98,56 +194,5 @@ public final class JsonRequestor
       }
     }
     return null;
-  }
-  
-  /**
-   * Queries the IMDb web API in order to get the rating of a film
-   * 
-   * @param id the movie ID to get the rating of
-   * @return the IMDb rating of the passed movie
-   */
-  public static double queryRating(String id) {
-    String urlString = String
-        .format("https://imdb-api.com/en/API/Ratings/k_mcx0w8kk/%s", id);
-    HttpURLConnection connection = null;
-    try
-    {
-      // open a new HTTP connection to get the raw data at the URL
-      URL url = new URL(urlString);
-      connection = (HttpURLConnection) url.openConnection();
-      connection.setRequestMethod("GET");
-      connection.setRequestProperty("Content-Type",
-          "application/json; charset=utf-8");
-      connection.connect();
-      int responseCode = connection.getResponseCode();
-
-      // if the request succeeded
-      if (responseCode == 200 || responseCode == 201)
-      {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonNode ratings = mapper.readTree(connection.getInputStream());
-        return ratings.get("imDb").asDouble();
-      }
-    }
-    catch (MalformedURLException e)
-    {
-      System.err.println("Improper URL passed to requestJSON");
-      e.printStackTrace(System.err);
-    }
-    catch (IOException e)
-    {
-      System.err.println(
-          "url.openConnection encountered an IO exception in requestJSON");
-      e.printStackTrace(System.err);
-    }
-    finally
-    {
-      if (connection != null)
-      {
-        connection.disconnect();
-      }
-    }
-    
-    return Double.NEGATIVE_INFINITY;
   }
 }

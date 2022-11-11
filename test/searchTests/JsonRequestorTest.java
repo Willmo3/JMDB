@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * A test class for when requesting JSON through the IMDB api.
  * 
  * @author Matthew Potter
- * @version 11/03/2022
+ * @version 11/10/2022
  */
 public class JsonRequestorTest
 {
