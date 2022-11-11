@@ -2,7 +2,7 @@ package searchTests;
 
 import javax.swing.JFrame;
 
-import searchbar.Searchbar;
+import ui.searchbar.Searchbar;
 
 /**
  * A test class that creates a Searchbar object for the developer to check it's

@@ -4,7 +4,7 @@ import java.io.IOException;
 import javax.swing.JFrame;
 
 import media.Movie;
-import mediaDisplay.MediaDisplayPanel;
+import ui.mediaDisplay.MediaDisplayPanel;
 
 /**
  * Test class

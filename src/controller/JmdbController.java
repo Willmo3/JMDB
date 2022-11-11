@@ -1,7 +1,8 @@
 package controller;
 
 import list.MovieList;
-import mainGUI.JmdbGUI;
+//import mainGUI.JmdbGUI;
+import ui.mainGUI.JmdbGUI;
 
 /**
  * The controller for the JMDb program. Interfaces with the GUI and Model.

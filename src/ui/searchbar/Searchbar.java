@@ -1,4 +1,4 @@
-package searchbar;
+package ui.searchbar;
 
 import java.awt.BorderLayout;
 
