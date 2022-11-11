@@ -17,7 +17,7 @@ import list.MovieList;
  * include information about searches, ratings, and other aspects of media
  * present on IMDb, all as queried through the IMDb API.
  * 
- * @author Matthew Potter
+ * @author Matthew Potter, Will Morris
  * @version 11/10/2022
  */
 public final class JsonRequestor
@@ -132,6 +132,30 @@ public final class JsonRequestor
           "Error occurred in reading stream in rating query for ID: %s\n", id));
     }
     return Double.NEGATIVE_INFINITY;
+  }
+
+  /**
+   * Queries the IMDb web API in order to get the trailer of a film.
+   *
+   * @param id the movie ID to get the rating of
+   * @return the IMDb rating of the passed movie
+   */
+  public static String queryTrailer(String id)
+  {
+    String url = String
+        .format("https://imdb-api.com/en/API/YouTubeTrailer/k_mcx0w8kk/%s", id);
+    try
+    {
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode ratings = mapper.readTree(fetch(url));
+      return ratings.get("videoUrl").asText();
+    }
+    catch (IOException e)
+    {
+      System.err.println(String.format(
+          "Error occurred in reading stream in rating query for ID: %s\n", id));
+    }
+    return null;
   }
 
   /**

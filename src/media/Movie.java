@@ -10,13 +10,15 @@ import search.JsonRequestor;
  * @author Will Morris, Matthew Potter
  * @version 11/10/2022
  */
-public class Movie
-{
+public class Movie {
+  public static final Double DEFAULT_RATING = Double.NEGATIVE_INFINITY;
+  public static final String DEFAULT_TRAILER = "DEFAULT_TRAILER";
   private final String id;
   private final String imageLink;
   private final String title;
   private final String description;
   private double imdbRating;
+  private String trailerLink;
 
   /**
    * Explicit value constructor. Sets up a Movie with the associated
@@ -37,16 +39,11 @@ public class Movie
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
-    this.imdbRating = Double.NEGATIVE_INFINITY;
+    this.imdbRating = DEFAULT_RATING;
+    this.trailerLink = DEFAULT_TRAILER;
   }
 
-  /**
-   * Getter for id.
-   * 
-   * @return the id
-   */
-  public String getId()
-  {
+  public String getId() {
     return id;
   }
 
@@ -81,22 +78,37 @@ public class Movie
   }
 
   /**
-   * Getter for rating. As rating is not instantly viewable on a search, any
-   * movie that doesn't have a rating set must query the IMDb API to get it.
-   * 
-   * @return the id as queried from the IMDb API based on the Movie's ID
+   * Fetches the rating for a movie.
+   * Grabs from internet if one does not already exist.
+   *
+   * @return The rating.
    */
-  public double getRating()
-  {
-    if (imdbRating == Double.NEGATIVE_INFINITY)
-    {
+  public double getRating() {
+    if (imdbRating == DEFAULT_RATING) {
       imdbRating = JsonRequestor.queryRating(id);
     }
-    if (imdbRating == Double.NEGATIVE_INFINITY)
-    {
+    if (imdbRating == DEFAULT_RATING) {
       System.err.println("Rating was unable to be received");
     }
     return imdbRating;
+  }
+
+  /**
+   * Fetches the trailer for a movie.
+   * Grabs one from the internet if one does not already exist.
+   *
+   * @return Link to the trailer.
+   */
+  public String getTrailer() {
+    if (trailerLink != null && trailerLink.equals(DEFAULT_TRAILER)) {
+      trailerLink = JsonRequestor.queryTrailer(id);
+    }
+
+    if (trailerLink == null) {
+      System.err.println("Trailer link not present.");
+    }
+
+    return trailerLink;
   }
 
   @Override
