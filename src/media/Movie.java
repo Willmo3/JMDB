@@ -8,13 +8,16 @@ import search.JsonRequestor;
  * This may be changed later.
  *
  * @author Will Morris, Matthew Potter
- * @version 11/03/2022
+ * @version 11/10/2022
  */
 public class Movie {
+  public static final Double DEFAULT_RATING = Double.NEGATIVE_INFINITY;
+  public static final String DEFAULT_TRAILER = "DEFAULT_TRAILER";
   private final String id;
   private final String imageLink;
   private final String title;
   private final String description;
+  private String trailerLink;
   private double imdb_rating;
 
   public Movie(String id, String imageLink, String title, String description) {
@@ -22,16 +25,8 @@ public class Movie {
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
-    this.imdb_rating = Double.NEGATIVE_INFINITY;
-  }
-
-  /**
-   * Sets the IMDB_Rating of this movie.
-   *
-   * @param imdb_rating New rating.
-   */
-  private void setRating(int imdb_rating) {
-    this.imdb_rating = imdb_rating;
+    this.imdb_rating = DEFAULT_RATING;
+    this.trailerLink = DEFAULT_TRAILER;
   }
 
   public String getId() {
@@ -49,15 +44,39 @@ public class Movie {
   public String getDescription() {
     return description;
   }
-  
+
+  /**
+   * Fetches the rating for a movie.
+   * Grabs from internet if one does not already exist.
+   *
+   * @return The rating.
+   */
   public double getRating() {
-    if (imdb_rating == Double.NEGATIVE_INFINITY) {
+    if (imdb_rating == DEFAULT_RATING) {
       imdb_rating = JsonRequestor.queryRating(id);
     }
-    if (imdb_rating == Double.NEGATIVE_INFINITY) {
+    if (imdb_rating == DEFAULT_RATING) {
       System.err.println("Rating was unable to be received");
     }
     return imdb_rating;
+  }
+
+  /**
+   * Fetches the trailer for a movie.
+   * Grabs one from the internet if one does not already exist.
+   *
+   * @return Link to the trailer.
+   */
+  public String getTrailer() {
+    if (trailerLink != null && trailerLink.equals(DEFAULT_TRAILER)) {
+      trailerLink = JsonRequestor.queryTrailer(id);
+    }
+
+    if (trailerLink == null) {
+      System.err.println("Trailer link not present.");
+    }
+
+    return trailerLink;
   }
 
   @Override
