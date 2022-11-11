@@ -10,8 +10,16 @@ import search.JsonRequestor;
  * @author Will Morris, Matthew Potter
  * @version 11/10/2022
  */
-public class Movie {
+public class Movie
+{
+  /**
+   * Sentinel value for ratings.
+   */
   public static final Double DEFAULT_RATING = Double.NEGATIVE_INFINITY;
+  
+  /**
+   * Sentinel string for trailer links.
+   */
   public static final String DEFAULT_TRAILER = "DEFAULT_TRAILER";
   private final String id;
   private final String imageLink;
@@ -43,7 +51,13 @@ public class Movie {
     this.trailerLink = DEFAULT_TRAILER;
   }
 
-  public String getId() {
+  /**
+   * Getter for id.
+   * 
+   * @return the id
+   */
+  public String getId()
+  {
     return id;
   }
 
@@ -78,33 +92,39 @@ public class Movie {
   }
 
   /**
-   * Fetches the rating for a movie.
-   * Grabs from internet if one does not already exist.
+   * Fetches the rating for a movie. Grabs from internet if one does not already
+   * exist.
    *
    * @return The rating.
    */
-  public double getRating() {
-    if (imdbRating == DEFAULT_RATING) {
+  public double getRating()
+  {
+    if (imdbRating == DEFAULT_RATING)
+    {
       imdbRating = JsonRequestor.queryRating(id);
     }
-    if (imdbRating == DEFAULT_RATING) {
+    if (imdbRating == DEFAULT_RATING)
+    {
       System.err.println("Rating was unable to be received");
     }
     return imdbRating;
   }
 
   /**
-   * Fetches the trailer for a movie.
-   * Grabs one from the internet if one does not already exist.
+   * Fetches the trailer for a movie. Grabs one from the internet if one does
+   * not already exist.
    *
    * @return Link to the trailer.
    */
-  public String getTrailer() {
-    if (trailerLink != null && trailerLink.equals(DEFAULT_TRAILER)) {
+  public String getTrailer()
+  {
+    if (trailerLink != null && trailerLink.equals(DEFAULT_TRAILER))
+    {
       trailerLink = JsonRequestor.queryTrailer(id);
     }
 
-    if (trailerLink == null) {
+    if (trailerLink == null)
+    {
       System.err.println("Trailer link not present.");
     }
 

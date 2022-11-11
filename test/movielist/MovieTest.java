@@ -40,7 +40,8 @@ public class MovieTest
   }
 
   @Test
-  void getValidRatingTest() {
+  void getValidRatingTest()
+  {
     Movie Inception = new Movie("tt1375666",
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
         "Inception", "(2010)");
@@ -48,26 +49,30 @@ public class MovieTest
   }
 
   @Test
-  void getInvalidRatingTest() {
+  void getInvalidRatingTest()
+  {
     Movie invalid = new Movie("12345", "Test", "Silly Movie", "2002");
     assertEquals(0.0, invalid.getRating());
   }
 
   @Test
-  void toStringTest() {
+  void toStringTest()
+  {
     Movie silly = new Movie("12345", "Test", "Silly Movie", "2002");
     assertEquals("Silly Movie 2002", silly.toString());
   }
 
   @Test
-  void trailerFromRealMovieTest() {
+  void trailerFromRealMovieTest()
+  {
     Movie movie = new Movie("tt1375666", "TestLink", "Inception", "(2010)");
     String trailerLink = "https://www.youtube.com/watch?v=Jvurpf91omw";
     assertEquals(trailerLink, movie.getTrailer());
   }
 
   @Test
-  void invalidTrailerTest() {
+  void invalidTrailerTest()
+  {
     Movie invalid = new Movie("12345", "Test", "Silly Movie", "2002");
     // For some reason, this test is failing.
     // What is going on? It flat out says they're both null.
