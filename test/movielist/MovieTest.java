@@ -13,12 +13,15 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
  * @author Will Morris
  * @version 11/4/22
  */
-public class MovieTest {
+public class MovieTest
+{
   // Test that the constructor works properly and that equals works properly.
   @Test
-  void constructMovie() {
+  void constructMovie()
+  {
     Movie movie = new Movie("tt1375666", "TestLink", "Inception", "(2010)");
-    Movie otherMovie = new Movie("tt1375666", "TestLink", "Inception", "(2010)");
+    Movie otherMovie = new Movie("tt1375666", "TestLink", "Inception",
+        "(2010)");
     Movie wrongMovie = new Movie("WRONG!", "WRONG!", "WRONG!", "WRONG!");
 
     assertEquals(movie, movie);
@@ -28,7 +31,8 @@ public class MovieTest {
   }
 
   @Test
-  void gettersTest() {
+  void gettersTest()
+  {
     Movie silly = new Movie("12345", "Test", "Silly Movie", "2002");
     assertEquals("12345", silly.getId());
     assertEquals("Test", silly.getImageLink());
@@ -37,7 +41,8 @@ public class MovieTest {
   }
 
   @Test
-  void toStringTest() {
+  void toStringTest()
+  {
     Movie silly = new Movie("12345", "Test", "Silly Movie", "2002");
     assertEquals("Silly Movie 2002", silly.toString());
   }

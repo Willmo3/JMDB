@@ -20,20 +20,26 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * @author Will Morris
  * @version 11/1/2022
  */
-public class MovieListTest {
+public class MovieListTest
+{
   private static MovieList list;
 
-  static {
+  static
+  {
     MovieFile file = new MovieFile(new File("test/movielist/results.json"));
-    try {
+    try
+    {
       list = new MovieList(file.getStream());
-    } catch (IOException e) {
+    }
+    catch (IOException e)
+    {
       throw new RuntimeException(e);
     }
   }
 
   @Test
-  void testListAccurate() throws IOException {
+  void testListAccurate() throws IOException
+  {
     List<Movie> movieList = list.getMovieList();
     List<Movie> expected = new ArrayList<Movie>();
 
@@ -46,20 +52,25 @@ public class MovieListTest {
     expected.add(new Movie("tt5295990",
         "https://m.media-amazon.com/images/M/MV5BZGFjOTRiYjgtYjEzMS00ZjQ2LTkzY2YtOGQ0NDI2NTVjOGFmXkEyXkFqcGdeQXVyNDQ5MDYzMTk@._V1_Ratio0.6800_AL_.jpg",
         "Inception: Jump Right Into the Action", "(2010 Video)"));
-    expected.add(new Movie("tt1686778", "https://imdb-api.com/images/original/nopicture.jpg",
+    expected.add(new Movie("tt1686778",
+        "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception: 4Movie Premiere Special", "(2010 TV Movie)"));
-    expected.add(new Movie("tt12960252", "https://imdb-api.com/images/original/nopicture.jpg",
+    expected.add(new Movie("tt12960252",
+        "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception Premiere", "(2010)"));
 
     assertEquals(expected.size(), movieList.size());
-    for (int i = 0; i < expected.size(); i++) {
+    for (int i = 0; i < expected.size(); i++)
+    {
       assertEquals(expected.get(i), movieList.get(i));
     }
   }
 
   @Test
-  void searchByMovieID() {
-    Movie beThere = new Movie("tt12960252", "https://imdb-api.com/images/original/nopicture.jpg",
+  void searchByMovieID()
+  {
+    Movie beThere = new Movie("tt12960252",
+        "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception Premiere", "(2010)");
     assertEquals(beThere, list.queryMovie(beThere.getId()));
     assertNull(list.queryMovie("Nill!"));
@@ -67,12 +78,15 @@ public class MovieListTest {
   }
 
   @Test
-  void searchByMovie() {
-    Movie beThere = new Movie("tt12960252", "https://imdb-api.com/images/original/nopicture.jpg",
+  void searchByMovie()
+  {
+    Movie beThere = new Movie("tt12960252",
+        "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception Premiere", "(2010)");
     assertEquals(beThere, list.queryMovie(beThere));
 
-    Movie notThere = new Movie("tt1er2960252", "https://imdb-api.com/images/original/nopicture.jpg",
+    Movie notThere = new Movie("tt1er2960252",
+        "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception Premiere", "(2010)");
     assertNull(list.queryMovie(notThere));
     assertNull(list.queryMovie((Movie) null));

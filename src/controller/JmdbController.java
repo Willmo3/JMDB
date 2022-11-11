@@ -13,19 +13,27 @@ import ui.mainGUI.JmdbGUI;
 public class JmdbController
 {
   private JmdbGUI gui;
-  
-  
+
   /**
    * Constructor for the JmdbController.
    * 
-   * @param gui the gui this controls
+   * @param gui
+   *          the gui this controls
    */
-  public JmdbController(JmdbGUI gui) {
+  public JmdbController(JmdbGUI gui)
+  {
     this.gui = gui;
     gui.buildFunctionality(this);
   }
-  
-  public void updateList(MovieList list) {
+
+  /**
+   * Tells the GUI to update its movie list based on the list that is given.
+   * 
+   * @param list
+   *          the movieList to update the search list based on
+   */
+  public void updateList(MovieList list)
+  {
     gui.updateList(list.generateJList());
   }
 }

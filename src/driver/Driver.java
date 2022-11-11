@@ -16,7 +16,7 @@ public class Driver
 {
 
   /**
-   * Runs the JMDb program
+   * Runs the JMDb program.
    * 
    * @param args
    *          the commandline arguments

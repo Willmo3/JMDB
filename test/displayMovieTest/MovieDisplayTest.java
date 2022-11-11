@@ -7,7 +7,7 @@ import media.Movie;
 import ui.mediaDisplay.MediaDisplayPanel;
 
 /**
- * Test class
+ * Test class for MovieDisplay.
  */
 public class MovieDisplayTest extends JFrame
 {

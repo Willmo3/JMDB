@@ -13,15 +13,20 @@ import java.io.IOException;
  * @author William Morris
  * @version 11/4/2022
  */
-public class MovieJListTest {
+public class MovieJListTest
+{
 
-  public static void main(String[] args) {
+  public static void main(String[] args)
+  {
     MovieFile file = new MovieFile(new File("test/movielist/results.json"));
     MovieList list = null;
 
-    try {
+    try
+    {
       list = new MovieList(file.getStream());
-    } catch (IOException e) {
+    }
+    catch (IOException e)
+    {
       throw new RuntimeException(e);
     }
 

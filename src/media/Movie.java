@@ -3,83 +3,125 @@ package media;
 import search.JsonRequestor;
 
 /**
- * Represents a single movie as specified in the IMDB Api.
- * Note: Currently, only supports json files as described in the Title Search Results.
- * This may be changed later.
+ * Represents a single movie as specified in the IMDB Api. Note: Currently, only
+ * supports json files as described in the Title Search Results. This may be
+ * changed later.
  *
  * @author Will Morris, Matthew Potter
- * @version 11/03/2022
+ * @version 11/10/2022
  */
-public class Movie {
+public class Movie
+{
   private final String id;
   private final String imageLink;
   private final String title;
   private final String description;
-  private double imdb_rating;
+  private double imdbRating;
 
-  public Movie(String id, String imageLink, String title, String description) {
+  /**
+   * Explicit value constructor. Sets up a Movie with the associated
+   * information.
+   * 
+   * @param id
+   *          the Movie's ID on IMDb
+   * @param imageLink
+   *          the link to the Movie's cover image
+   * @param title
+   *          the title of the Movie
+   * @param description
+   *          the IMDb search description of the Movie
+   */
+  public Movie(String id, String imageLink, String title, String description)
+  {
     this.id = id;
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
-    this.imdb_rating = Double.NEGATIVE_INFINITY;
+    this.imdbRating = Double.NEGATIVE_INFINITY;
   }
 
   /**
-   * Sets the IMDB_Rating of this movie.
-   *
-   * @param imdb_rating New rating.
+   * Getter for id.
+   * 
+   * @return the id
    */
-  private void setRating(int imdb_rating) {
-    this.imdb_rating = imdb_rating;
-  }
-
-  public String getId() {
+  public String getId()
+  {
     return id;
   }
 
-  public String getImageLink() {
+  /**
+   * Getter for imageLink.
+   * 
+   * @return the image link string
+   */
+  public String getImageLink()
+  {
     return imageLink;
   }
 
-  public String getTitle() {
+  /**
+   * Getter for title.
+   * 
+   * @return the title
+   */
+  public String getTitle()
+  {
     return title;
   }
 
-  public String getDescription() {
+  /**
+   * Getter for the search description.
+   * 
+   * @return the search description
+   */
+  public String getDescription()
+  {
     return description;
   }
-  
-  public double getRating() {
-    if (imdb_rating == Double.NEGATIVE_INFINITY) {
-      imdb_rating = JsonRequestor.queryRating(id);
+
+  /**
+   * Getter for rating. As rating is not instantly viewable on a search, any
+   * movie that doesn't have a rating set must query the IMDb API to get it.
+   * 
+   * @return the id as queried from the IMDb API based on the Movie's ID
+   */
+  public double getRating()
+  {
+    if (imdbRating == Double.NEGATIVE_INFINITY)
+    {
+      imdbRating = JsonRequestor.queryRating(id);
     }
-    if (imdb_rating == Double.NEGATIVE_INFINITY) {
+    if (imdbRating == Double.NEGATIVE_INFINITY)
+    {
       System.err.println("Rating was unable to be received");
     }
-    return imdb_rating;
+    return imdbRating;
   }
 
   @Override
-  public boolean equals(Object o) {
-    if (o instanceof Movie) {
-      // Make sure to not use pattern variables, since some versions of java will complain.
+  public boolean equals(Object o)
+  {
+    if (o instanceof Movie)
+    {
+      // Make sure to not use pattern variables, since some versions of java
+      // will complain.
       Movie movie = (Movie) o;
-      return id.equals(movie.id) && imageLink.equals(movie.imageLink) && title.equals(movie.title)
-          && description.equals(movie.description);
+      return id.equals(movie.id) && imageLink.equals(movie.imageLink)
+          && title.equals(movie.title) && description.equals(movie.description);
     }
 
     return false;
   }
 
   /**
-   * Returns String representation of this movie.
-   * Format: title description;
+   * Returns String representation of this movie. Format: title description;
    *
    * @return The formatted String.
    */
   @Override
-  public String toString() {
+  public String toString()
+  {
     return title + " " + description;
   }
 }
