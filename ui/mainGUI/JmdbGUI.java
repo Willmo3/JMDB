@@ -2,6 +2,8 @@ package mainGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,7 +30,7 @@ import javax.swing.SwingConstants;
  * @author Sean Talbot and Matthew Potter
  * @version 11/10/2022
  */
-public class JmdbGUI extends JFrame
+public class JmdbGUI extends JFrame 
 {
   private static JMenuBar mb;
   private static JMenu x;
@@ -56,7 +58,7 @@ public class JmdbGUI extends JFrame
   /**
    * Create the frame.
    */
-  public JmdbGUI()
+  public JmdbGUI() 
   {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 1280, 720);
@@ -77,10 +79,24 @@ public class JmdbGUI extends JFrame
     m3 = new JMenuItem("Cast & Crew");
     m4 = new JMenuItem("Reviews & Ratings");
     x.add(m1);
+    x.addSeparator();
     x.add(m2);
+    x.addSeparator();
     x.add(m3);
+    x.addSeparator();
     x.add(m4);
-
+    m4.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JFrame frame2 = new JFrame();
+            String rating = String.format("IMDb rating: %2.1f",  jlist.getSelectedValue().getRating());
+            JLabel label = new JLabel(rating);
+            frame2.add(label);
+            frame2.setSize(200, 100);
+            frame2.setVisible(true);
+        }
+    });
+   
     mb.add(x);
     setJMenuBar(mb);
 
@@ -146,4 +162,6 @@ public class JmdbGUI extends JFrame
     searchbar = new Searchbar(controller);
     add(searchbar, BorderLayout.NORTH);
   }
+
+
 }
