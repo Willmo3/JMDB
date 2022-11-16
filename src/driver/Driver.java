@@ -2,6 +2,8 @@ package driver;
 
 import java.awt.EventQueue;
 
+import com.formdev.flatlaf.FlatDarkLaf;
+import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
 import controller.JmdbController;
 //import mainGUI.JmdbGUI;
 import mainGUI.JmdbGUI;
@@ -29,9 +31,11 @@ public class Driver
       {
         try
         {
+          FlatDarkLaf.setup(); // I believe this is all we need, might revisit
           JmdbGUI gui = new JmdbGUI();
           JmdbController controller = new JmdbController(gui);
           gui.setVisible(true);
+          gui.setLocationRelativeTo(null); // centers main GUI window
         }
         catch (Exception e)
         {

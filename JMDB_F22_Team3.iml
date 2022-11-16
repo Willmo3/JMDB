@@ -72,5 +72,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="flatlaf-intellij-themes-2.6" level="project" />
+    <orderEntry type="library" name="flatlaf-2.6" level="project" />
   </component>
 </module>
