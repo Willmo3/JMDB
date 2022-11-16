@@ -21,6 +21,8 @@ import list.MovieList;
 import media.Movie;
 import mediaDisplay.MediaDisplayPanel;
 import searchbar.Searchbar;
+import trailer.TrailerButton;
+
 import javax.swing.*;
 import javax.swing.SwingConstants;
 
@@ -83,9 +85,20 @@ public class JmdbGUI extends JFrame
      @Override
      public void actionPerformed(ActionEvent e) {
          JFrame frame = new JFrame();
+         if (jlist.getSelectedValue().getTrailer() == null || jlist.getSelectedValue().getTrailer().equals("null")) {
+           frame.add(new JLabel("Trailer not present!"));
+         } else {
+           try {
+             frame.add(new TrailerButton(jlist.getSelectedValue().getTrailer()));
+           } catch (Exception E) {
+             frame.add(new JLabel("Trailer not present!"));
+           }
+         }
+
+         /*
          String trailer = jlist.getSelectedValue().getTrailer();
          JLabel label = new JLabel(trailer);
-         frame.add(label);
+         frame.add(label);*/
          frame.setSize(400, 100);
          frame.setVisible(true);
      }
