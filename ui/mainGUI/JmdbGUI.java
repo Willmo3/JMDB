@@ -74,18 +74,29 @@ public class JmdbGUI extends JFrame
 
     mb = new JMenuBar();
     x = new JMenu("Menu");
-//    m1 = new JMenuItem("Trailer");
+    m1 = new JMenuItem("Trailer");
 //    m2 = new JMenuItem("Awards");
 //    m3 = new JMenuItem("Cast & Crew");
     m4 = new JMenuItem("Reviews & Ratings");
-//    x.add(m1);
-//    x.addSeparator();
+    x.add(m1);
+    m1.addActionListener(new ActionListener() {
+     @Override
+     public void actionPerformed(ActionEvent e) {
+         JFrame frame = new JFrame();
+         String trailer = jlist.getSelectedValue().getTrailer();
+         JLabel label = new JLabel(trailer);
+         frame.add(label);
+         frame.setSize(400, 100);
+         frame.setVisible(true);
+     }
+     });
+    x.addSeparator();
 //    x.add(m2);
 //    x.addSeparator();
 //    x.add(m3);
 //    x.addSeparator();
-    x.add(m4);
-    m4.addActionListener(new ActionListener() {
+        x.add(m4);
+        m4.addActionListener(new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFrame frame2 = new JFrame();
