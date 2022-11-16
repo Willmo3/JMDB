@@ -111,8 +111,8 @@ public class JmdbGUI extends JFrame
          * String trailer = jlist.getSelectedValue().getTrailer(); JLabel label
          * = new JLabel(trailer); frame.add(label);
          */
-        frame.setSize(400, 100);
-        frame.setVisible(true);
+        //frame.setSize(400, 100);
+        //frame.setVisible(true);
       }
     });
     x.addSeparator();
