@@ -44,13 +44,18 @@ public class MovieListTest
     List<Movie> expected = new ArrayList<Movie>();
 
     expected.add(new Movie("tt1375666",
-        "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
+        "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkF"
+        + "tZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
         "Inception", "(2010)"));
     expected.add(new Movie("tt1790736",
-        "https://m.media-amazon.com/images/M/MV5BMjE0NGIwM2EtZjQxZi00ZTE5LWExN2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3Mjk@._V1_Ratio0.6800_AL_.jpg",
+        "https://m.media-amazon.com/images/M/MV5BMjE0NGIwM2EtZjQxZi00ZTE5LWEx"
+        + "N2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3M"
+        + "jk@._V1_Ratio0.6800_AL_.jpg",
         "Inception: The Cobol Job", "(2010 Video)"));
     expected.add(new Movie("tt5295990",
-        "https://m.media-amazon.com/images/M/MV5BZGFjOTRiYjgtYjEzMS00ZjQ2LTkzY2YtOGQ0NDI2NTVjOGFmXkEyXkFqcGdeQXVyNDQ5MDYzMTk@._V1_Ratio0.6800_AL_.jpg",
+        "https://m.media-amazon.com/images/M/MV5BZGFjOTRiYjgtYjEzMS00ZjQ2LTkz"
+        + "Y2YtOGQ0NDI2NTVjOGFmXkEyXkFqcGdeQXVyNDQ5MDYzM"
+        + "Tk@._V1_Ratio0.6800_AL_.jpg",
         "Inception: Jump Right Into the Action", "(2010 Video)"));
     expected.add(new Movie("tt1686778",
         "https://imdb-api.com/images/original/nopicture.jpg",

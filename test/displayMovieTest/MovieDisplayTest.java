@@ -11,6 +11,11 @@ import mediaDisplay.MediaDisplayPanel;
  */
 public class MovieDisplayTest extends JFrame
 {
+  /**
+   * Generated serial UID.
+   */
+  private static final long serialVersionUID = 3702168543757074945L;
+
   public MovieDisplayTest() throws IOException
   {
     this.setVisible(true);

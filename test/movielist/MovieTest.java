@@ -43,7 +43,8 @@ public class MovieTest
   void getValidRatingTest()
   {
     Movie Inception = new Movie("tt1375666",
-        "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
+        "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnX"
+        + "kFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
         "Inception", "(2010)");
     assertEquals(8.8, Inception.getRating());
   }

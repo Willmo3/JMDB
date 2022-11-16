@@ -23,6 +23,10 @@ import media.Movie;
  */
 public class MediaDisplayPanel extends JPanel
 {
+  /**
+   * Generated serial UID.
+   */
+  private static final long serialVersionUID = 8348996138626439630L;
   private JLabel picLabel;
 
   /**

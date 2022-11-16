@@ -16,7 +16,7 @@ public class Movie
    * Sentinel value for ratings.
    */
   public static final Double DEFAULT_RATING = Double.NEGATIVE_INFINITY;
-  
+
   /**
    * Sentinel string for trailer links.
    */
