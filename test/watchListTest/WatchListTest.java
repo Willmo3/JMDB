@@ -54,70 +54,65 @@ public class WatchListTest
 
     // calling their internet fetch methods here so that save won't need to call
     // them.
-    // inception.getRating();
-    // inception.getTrailer();
-    // inception.getAwards();
-    // cobol.getRating();
-    // cobol.getTrailer();
-    // cobol.getAwards();
+    inception.getRating();
+    inception.getTrailer();
+    inception.getAwards();
+    cobol.getRating();
+    cobol.getTrailer();
+    cobol.getAwards();
 
-    // testMap.put(silly.getId(), silly);
+    testMap.put(silly.getId(), silly);
     testMap.put(inception.getId(), inception);
     testMap.put(cobol.getId(), cobol);
   }
 
-  // static
-  // {
-  // // clear any present watch-list in order to start from same place in all
-  // // test runs
-  // if (testFile.exists())
-  // {
-  // testFile.delete();
-  // }
-  // model = new WatchListModel();
-  // }
-  //
-  // @Test
-  // @Order(1)
-  // void testAdd()
-  // {
-  // // silly movie
-  // assertTrue(model.add(testMap.get("12345")));
-  // // inception
-  // assertTrue(model.add(testMap.get("tt1375666")));
-  // // wrong movie
-  // assertTrue(model.add(testMap.get("tt1790736")));
-  // assertFalse(model.add(testMap.get("tt1790736")));
-  //
-  // // assert model has all added movies
-  // assertTrue(model.getWatchList().containsAll(testMap.values()));
-  // }
-  //
-  // @Test
-  // @Order(2)
-  // void testRemove()
-  // {
-  // assertTrue(model.remove(testMap.get("12345")));
-  // assertFalse(model.remove(testMap.get("12345")));
-  // testMap.remove("12345");
-  //
-  // // assert model has removed silly movie (key 12345)
-  // assertTrue(model.getWatchList().containsAll(testMap.values()));
-  // assertTrue(model.getWatchList().size() == testMap.values().size());
-  //
-  // for (Movie mov : model.getWatchList())
-  // {
-  // System.out.println(mov.getTitle());
-  // }
-  // }
-  //
-  // @Test
-  // @Order(3)
-  // void testSave()
-  // {
-  // model.save();
-  // assertTrue(testFile.exists());
-  // }
+  static
+  {
+    // clear any present watch-list in order to start from same place in all
+    // test runs
+    if (testFile.exists())
+    {
+      testFile.delete();
+    }
+    model = new WatchListModel();
+  }
+
+  @Test
+  @Order(1)
+  void testAdd()
+  {
+    // silly movie
+    assertTrue(model.add(testMap.get("12345")));
+    // inception
+    assertTrue(model.add(testMap.get("tt1375666")));
+    // wrong movie
+    assertTrue(model.add(testMap.get("tt1790736")));
+    assertFalse(model.add(testMap.get("tt1790736")));
+
+    // assert model has all added movies
+    assertTrue(model.watchList().containsAll(testMap.values()));
+  }
+
+  @Test
+  @Order(2)
+  void testRemove()
+  {
+    assertTrue(model.remove(testMap.get("12345")));
+    assertFalse(model.remove(testMap.get("12345")));
+    testMap.remove("12345");
+
+    // assert model has removed silly movie (key 12345)
+    assertTrue(model.watchList().containsAll(testMap.values()));
+    assertTrue(model.watchList().size() == testMap.values().size());
+  }
+
+  @Test
+  @Order(3)
+  void testSave()
+  {
+    model.save();
+    assertTrue(testFile.exists());
+  }
 
   @Test
   @Order(4)
@@ -126,12 +121,12 @@ public class WatchListTest
     // load in the watch list that was just saved
     WatchListModel loaded = new WatchListModel();
 
-    for (Movie mov : loaded.getWatchList())
+    for (Movie mov : loaded.watchList())
     {
-      System.err.println(mov.getTitle());
+      System.out.println(mov.getTitle());
     }
-    // assertTrue(loaded.getWatchList().size() == testMap.values().size());
-    // assertTrue(loaded.getWatchList().containsAll(testMap.values()));
+    assertTrue(loaded.watchList().size() == testMap.values().size());
+    assertTrue(loaded.watchList().containsAll(testMap.values()));
   }
 
   // @Test
@@ -139,6 +134,6 @@ public class WatchListTest
   // void testClear()
   // {
   // model.clear();
-  // assertTrue(model.getWatchList().isEmpty());
+  // assertTrue(model.watchList().isEmpty());
   // }
 }

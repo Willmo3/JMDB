@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import media.Movie;
@@ -18,7 +19,10 @@ import media.Movie;
  */
 public class WatchListModel
 {
-  public final static String WATCH_LIST_PATH = ".\\data\\watchlist.json";
+  /**
+   * The path that should store the watch-list JSON file.
+   */
+  public static final String WATCH_LIST_PATH = ".\\data\\watchlist.json";
 
   private HashMap<String, Movie> watchList;
 
@@ -63,10 +67,21 @@ public class WatchListModel
     // file exists, so try to read it
     try
     {
-      TypeReference<HashMap<String, Movie>> typeRef = new TypeReference<HashMap<String, Movie>>()
+      HashMap<String, Movie> loadedMap = new HashMap<String, Movie>();
+      JsonNode loadedNode = mapper.readTree(watchListFile);
+      for (int i = 0; i < loadedNode.size(); i++)
       {
-      };
-      return mapper.readValue(watchListFile, typeRef);
+        JsonNode onePair = loadedNode.get(i);
+        if (onePair == null)
+        {
+          break;
+        }
+        loadedMap.put(onePair.asText(), new Movie(onePair.get("id").asText(),
+            onePair.get("imageLink").asText(), onePair.get("title").asText(),
+            onePair.get("description").asText(), onePair.get("awards").asText(),
+            onePair.get("trailer").asText(), onePair.get("rating").asDouble()));
+      }
+      return loadedMap;
     }
     catch (IOException e)
     {
@@ -161,8 +176,18 @@ public class WatchListModel
    * @return the collection of movies that is the movies on the model's stored
    *         watch-list
    */
-  public Collection<Movie> getWatchList()
+  public Collection<Movie> watchList()
   {
     return watchList.values();
+  }
+
+  /**
+   * Getter for watchList.
+   * 
+   * @return the hashmap that defines this storage of a watch-list
+   */
+  public HashMap<String, Movie> getWatchList()
+  {
+    return watchList;
   }
 }
