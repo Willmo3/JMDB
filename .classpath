@@ -12,5 +12,7 @@
 	<classpathentry kind="lib" path="lib/jackson-annotations-2.13.3.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-core-2.13.3.jar"/>
 	<classpathentry kind="lib" path="lib/jackson-databind-2.13.3.jar"/>
+	<classpathentry kind="lib" path="lib/flatlaf-2.6.jar"/>
+	<classpathentry kind="lib" path="lib/flatlaf-intellij-themes-2.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -3,9 +3,7 @@ package driver;
 import java.awt.EventQueue;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import com.formdev.flatlaf.intellijthemes.FlatArcOrangeIJTheme;
 import controller.JmdbController;
-//import mainGUI.JmdbGUI;
 import mainGUI.JmdbGUI;
 
 /**

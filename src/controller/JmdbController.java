@@ -1,18 +1,29 @@
 package controller;
 
 import list.MovieList;
-//import mainGUI.JmdbGUI;
 import mainGUI.JmdbGUI;
+import watchlist.WatchListModel;
 
 /**
  * The controller for the JMDb program. Interfaces with the GUI and Model.
  * 
  * @author Matthew Potter
- * @version 11/04/2022
+ * @version 11/17/2022
  */
 public class JmdbController
 {
   private JmdbGUI gui;
+  private WatchListModel watchListModel;
+
+  /**
+   * Empty constructor. Made for testing non-GUI function and so none of the GUI
+   * related methods will work.
+   */
+  public JmdbController()
+  {
+    this.gui = null;
+    this.watchListModel = new WatchListModel();
+  }
 
   /**
    * Constructor for the JmdbController.
@@ -23,6 +34,7 @@ public class JmdbController
   public JmdbController(JmdbGUI gui)
   {
     this.gui = gui;
+    this.watchListModel = new WatchListModel();
     gui.buildFunctionality(this);
   }
 
@@ -35,5 +47,14 @@ public class JmdbController
   public void updateList(MovieList list)
   {
     gui.updateList(list.generateJList());
+  }
+
+  /**
+   * Saves the watch list. Should be called when the watch list's GUI element is
+   * exited on close of the whole program.
+   */
+  public void saveWatchList()
+  {
+    watchListModel.save();
   }
 }

@@ -8,7 +8,7 @@ import search.JsonRequestor;
  * changed later.
  *
  * @author Will Morris, Matthew Potter
- * @version 11/10/2022
+ * @version 11/17/2022
  */
 public class Movie
 {
@@ -21,8 +21,16 @@ public class Movie
    * Sentinel string for trailer links.
    */
   public static final String DEFAULT_TRAILER = "DEFAULT_TRAILER";
-  
-  public static final String DEFAULT_AWARD = "DEFAULT_AWARD"; 
+
+  /**
+   * String indicating that a queried movie has no YouTube trailer on IMDb.
+   */
+  public static final String NO_TRAILER = "NO_TRAILER";
+
+  /**
+   * Sentinel string for awards.
+   */
+  public static final String DEFAULT_AWARD = "DEFAULT_AWARD";
   private final String id;
   private final String imageLink;
   private final String title;
@@ -53,6 +61,37 @@ public class Movie
     this.imdbRating = DEFAULT_RATING;
     this.trailerLink = DEFAULT_TRAILER;
     this.award = DEFAULT_AWARD;
+  }
+
+  /**
+   * Explicit value constructor for every value. Sets up a Movie with the
+   * associated information.
+   * 
+   * @param id
+   *          the Movie's ID on IMDb
+   * @param imageLink
+   *          the link to the Movie's cover image
+   * @param title
+   *          the title of the Movie
+   * @param description
+   *          the IMDb search description of the Movie
+   * @param awards
+   *          the awards this Movie has won
+   * @param trailer
+   *          the link to the trailer of this Movie
+   * @param rating
+   *          the IMDb rating of this Movie
+   */
+  public Movie(String id, String imageLink, String title, String description,
+      String awards, String trailer, double rating)
+  {
+    this.id = id;
+    this.imageLink = imageLink;
+    this.title = title;
+    this.description = description;
+    this.imdbRating = rating;
+    this.trailerLink = trailer;
+    this.award = awards;
   }
 
   /**
@@ -115,44 +154,52 @@ public class Movie
   }
 
   /**
-   * Fetches the trailer for a movie. Grabs one from the internet if one does
-   * not already exist.
+   * Fetches the trailer for a movie. Grabs one from the internet if the link's
+   * information has not already been retrieved from the internet.
    *
-   * @return Link to the trailer.
+   * @return The link to the trailer on YouTube, NO_TRAILER if no trailer
+   *         exists, or null if it wouldn't make sense to have a trailer in the
+   *         first place e.g. a trailer for an actor.
    */
   public String getTrailer()
   {
-    if (trailerLink != null && trailerLink.equals(DEFAULT_TRAILER))
+    if (trailerLink == null || trailerLink.equals(NO_TRAILER))
     {
-      trailerLink = JsonRequestor.queryTrailer(id);
+      return trailerLink;
     }
 
-    if (trailerLink == null)
+    if (trailerLink.isEmpty())
     {
-      System.err.println("Trailer link not present.");
+      trailerLink = NO_TRAILER;
+    }
+
+    if (trailerLink.equals(DEFAULT_TRAILER))
+    {
+      trailerLink = JsonRequestor.queryTrailer(id);
     }
 
     return trailerLink;
   }
 
   /**
-   * Fetches the Awards for a movie. Grabs one from the Internet if one does
-   * not already exist.
+   * Fetches the Awards for a movie. Grabs one from the Internet if one does not
+   * already exist.
    *
    * @return Awards.
    */
-  public String getAwards() {
-      if (award != null && award.equals(DEFAULT_AWARD))
-      {
-        award = JsonRequestor.queryAwards(id);
-      }
+  public String getAwards()
+  {
+    if (award != null && award.equals(DEFAULT_AWARD))
+    {
+      award = JsonRequestor.queryAwards(id);
+    }
 
-      if (award == null)
-      {
-        System.err.println("award not present.");
-      }
+    if (award == null)
+    {
+      System.err.println("award not present.");
+    }
 
-      return award;
+    return award;
   }
 
   @Override
