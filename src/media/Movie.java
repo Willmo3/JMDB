@@ -21,12 +21,15 @@ public class Movie
    * Sentinel string for trailer links.
    */
   public static final String DEFAULT_TRAILER = "DEFAULT_TRAILER";
+  
+  public static final String DEFAULT_AWARD = "DEFAULT_AWARD"; 
   private final String id;
   private final String imageLink;
   private final String title;
   private final String description;
   private double imdbRating;
   private String trailerLink;
+  private String award;
 
   /**
    * Explicit value constructor. Sets up a Movie with the associated
@@ -49,6 +52,7 @@ public class Movie
     this.description = description;
     this.imdbRating = DEFAULT_RATING;
     this.trailerLink = DEFAULT_TRAILER;
+    this.award = DEFAULT_AWARD;
   }
 
   /**
@@ -129,6 +133,26 @@ public class Movie
     }
 
     return trailerLink;
+  }
+
+  /**
+   * Fetches the Awards for a movie. Grabs one from the Internet if one does
+   * not already exist.
+   *
+   * @return Awards.
+   */
+  public String getAwards() {
+      if (award != null && award.equals(DEFAULT_AWARD))
+      {
+        award = JsonRequestor.queryAwards(id);
+      }
+
+      if (award == null)
+      {
+        System.err.println("award not present.");
+      }
+
+      return award;
   }
 
   @Override

@@ -45,7 +45,6 @@ public class JmdbGUI extends JFrame
   private Searchbar searchbar;
   private JScrollPane scrollPane;
   private JList<Movie> jlist;
-
   private class DisplaySelectionListener implements ListSelectionListener
   {
     @Override
@@ -79,7 +78,7 @@ public class JmdbGUI extends JFrame
     mb = new JMenuBar();
     x = new JMenu("Menu");
     m1 = new JMenuItem("Trailer");
-    // m2 = new JMenuItem("Awards");
+    m2 = new JMenuItem("Awards");
     // m3 = new JMenuItem("Cast & Crew");
     m4 = new JMenuItem("Reviews & Ratings");
     x.add(m1);
@@ -106,7 +105,7 @@ public class JmdbGUI extends JFrame
           System.out.println("Error opening trailer");
           System.out.println(movie.getTrailer());
         }
-
+        
         /*
          * String trailer = jlist.getSelectedValue().getTrailer(); JLabel label
          * = new JLabel(trailer); frame.add(label);
@@ -115,9 +114,31 @@ public class JmdbGUI extends JFrame
         //frame.setVisible(true);
       }
     });
+    
     x.addSeparator();
-    // x.add(m2);
-    // x.addSeparator();
+     x.add(m2);
+     m2.addActionListener(new ActionListener()
+     {
+       @Override
+       public void actionPerformed(ActionEvent e)
+       {
+         JFrame frame2 = new JFrame();
+         try
+         {
+           String award = jlist.getSelectedValue().getAwards();
+           JLabel label = new JLabel(award);
+           frame2.add(label);
+           frame2.setSize(400, 100);
+           frame2.setLocationRelativeTo(null); // centers frame
+           frame2.setVisible(true);
+         }
+         catch (Exception ex)
+         {
+           System.out.println("Error opening award");
+         }
+       }
+     });
+    x.addSeparator();
     // x.add(m3);
     // x.addSeparator();
     x.add(m4);
@@ -127,10 +148,12 @@ public class JmdbGUI extends JFrame
       public void actionPerformed(ActionEvent e)
       {
         JFrame frame2 = new JFrame();
+
         try
         {
           String rating = String.format("IMDb rating: %2.1f",
               jlist.getSelectedValue().getRating());
+
           JLabel label = new JLabel(rating);
           frame2.add(label);
           frame2.setSize(200, 100);
@@ -143,7 +166,6 @@ public class JmdbGUI extends JFrame
         }
       }
     });
-
     mb.add(x);
     setJMenuBar(mb);
 
