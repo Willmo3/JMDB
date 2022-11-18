@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Collection;
+
 import list.MovieList;
 import mainGUI.JmdbGUI;
 import media.Movie;
@@ -51,6 +53,16 @@ public class JmdbController
   }
 
   /**
+   * Gets the watchList.
+   * 
+   * @return the watchList
+   */
+  public Collection<Movie> getWatchList()
+  {
+    return watchListModel.watchList();
+  }
+
+  /**
    * Saves the watch list. Should be called when the watch list's GUI element is
    * exited on close of the whole program.
    */
@@ -62,7 +74,8 @@ public class JmdbController
   /**
    * Adds the passed movie to the watch-list.
    * 
-   * @param selectedMovie the movie to add to watch-list
+   * @param selectedMovie
+   *          the movie to add to watch-list
    */
   public boolean addToWatchList(Movie selectedMovie)
   {

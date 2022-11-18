@@ -4,9 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collection;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -50,13 +53,21 @@ public class JmdbGUI extends JFrame
   private JList<Movie> jlist;
   private JList<Movie> watchList;
   private AddToWatchButton add;
+  private boolean wListView;
 
   private class DisplaySelectionListener implements ListSelectionListener
   {
     @Override
     public void valueChanged(ListSelectionEvent e)
     {
-      selectedMovie = jlist.getSelectedValue();
+      if (wListView)
+      {
+        selectedMovie = watchList.getSelectedValue();
+      }
+      else
+      {
+        selectedMovie = jlist.getSelectedValue();
+      }
       contentPane.remove(selectedMoviePanel);
       selectedMoviePanel = new MediaDisplayPanel(selectedMovie);
       contentPane.add(selectedMoviePanel, BorderLayout.CENTER);
@@ -82,11 +93,13 @@ public class JmdbGUI extends JFrame
     movieListLabel.setHorizontalAlignment(SwingConstants.LEFT);
     contentPane.add(movieListLabel, BorderLayout.NORTH);
 
+    wListView = false;
+
     mb = new JMenuBar();
     x = new JMenu("Menu");
     m1 = new JMenuItem("Trailer");
     m2 = new JMenuItem("Awards");
-    // m3 = new JMenuItem("Cast & Crew");
+    m3 = new JMenuItem("Watch List");
     m4 = new JMenuItem("Reviews & Ratings");
     x.add(m1);
     m1.addActionListener(new ActionListener()
@@ -146,8 +159,20 @@ public class JmdbGUI extends JFrame
       }
     });
     x.addSeparator();
-    // x.add(m3);
-    // x.addSeparator();
+    x.add(m3);
+    m3.addActionListener((action) -> {
+      if (wListView)
+      {
+        wListView = false;
+        scrollPane.setViewportView(jlist);
+      }
+      else
+      {
+        wListView = true;
+        scrollPane.setViewportView(watchList);
+      }
+    });
+    x.addSeparator();
     x.add(m4);
     m4.addActionListener(new ActionListener()
     {
@@ -237,6 +262,9 @@ public class JmdbGUI extends JFrame
    */
   public void buildFunctionality(JmdbController controller)
   {
+    Collection<Movie> wList = controller.getWatchList();
+    watchList = new JList<Movie>(wList.toArray(new Movie[wList.size()]));
+    watchList.addListSelectionListener(new DisplaySelectionListener());
     upperButtons = new JPanel();
     searchbar = new Searchbar(controller);
     upperButtons.add(searchbar, BorderLayout.CENTER);
@@ -244,12 +272,22 @@ public class JmdbGUI extends JFrame
     // add the movie to the watch-list and update the display if it was changed
     upperButtons.add(add, BorderLayout.EAST);
     add.addActionListener((action) -> {
-      if (controller.addToWatchList(selectedMovie) && watchList.isShowing())
+      if (controller.addToWatchList(selectedMovie))
       {
-        watchList.repaint();
+        Collection<Movie> wList2 = controller.getWatchList();
+        watchList = new JList<Movie>(wList.toArray(new Movie[wList.size()]));
+        watchList.addListSelectionListener(new DisplaySelectionListener());
       }
     });
     add(upperButtons, BorderLayout.NORTH);
+    addWindowListener( new java.awt.event.WindowAdapter() {
+      @Override
+      public void windowClosing(WindowEvent e)
+      {
+        super.windowClosing(e);
+        controller.saveWatchList();
+      }
+    });
   }
 
 }
