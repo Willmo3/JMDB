@@ -46,7 +46,7 @@ public class MediaDisplayPanel extends JPanel
       add(picLabel, BorderLayout.WEST);
       add(new JLabel(media.getTitle()), BorderLayout.NORTH);
       add(new JLabel(media.getDescription()), BorderLayout.NORTH);
-      add(new JLabel(String.format("IMDb rating: %2.1f", media.getRating())),
+      add(new JLabel(String.format("IMDb rating: %2.1f", media.getImdbRating())),
           BorderLayout.SOUTH);
     }
   }

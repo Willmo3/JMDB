@@ -46,14 +46,14 @@ public class MovieTest
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnX"
             + "kFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
         "Inception", "(2010)");
-    assertEquals(8.8, Inception.getRating());
+    assertEquals(8.8, Inception.getImdbRating());
   }
 
   @Test
   void getInvalidRatingTest()
   {
     Movie invalid = new Movie("12345", "Test", "Silly Movie", "2002");
-    assertEquals(0.0, invalid.getRating());
+    assertEquals(0.0, invalid.getImdbRating());
   }
 
   @Test
@@ -68,7 +68,7 @@ public class MovieTest
   {
     Movie movie = new Movie("tt1375666", "TestLink", "Inception", "(2010)");
     String trailerLink = "https://www.youtube.com/watch?v=Jvurpf91omw";
-    assertEquals(trailerLink, movie.getTrailer());
+    assertEquals(trailerLink, movie.getTrailerLink());
   }
 
   @Test

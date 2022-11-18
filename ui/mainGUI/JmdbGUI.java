@@ -42,6 +42,7 @@ public class JmdbGUI extends JFrame
   private static JMenuItem m1, m2, m3, m4;
   private static final long serialVersionUID = 6407031954885012174L;
   private JPanel contentPane;
+  private JPanel upperButtons;
   private MediaDisplayPanel selectedMoviePanel;
   private Movie selectedMovie;
   private Searchbar searchbar;
@@ -102,14 +103,14 @@ public class JmdbGUI extends JFrame
         }
         try
         {
-          TrailerButton trailerBtn = new TrailerButton(movie.getTrailer());
+          TrailerButton trailerBtn = new TrailerButton(movie.getTrailerLink());
           trailerBtn.openPage();
 
         }
         catch (Exception ex)
         {
           System.out.println("Error opening trailer");
-          System.out.println(movie.getTrailer());
+          System.out.println(movie.getTrailerLink());
         }
 
         /*
@@ -131,7 +132,7 @@ public class JmdbGUI extends JFrame
         JFrame frame2 = new JFrame();
         try
         {
-          String award = jlist.getSelectedValue().getAwards();
+          String award = jlist.getSelectedValue().getAward();
           JLabel label = new JLabel(award);
           frame2.add(label);
           frame2.setSize(400, 100);
@@ -158,7 +159,7 @@ public class JmdbGUI extends JFrame
         try
         {
           String rating = String.format("IMDb rating: %2.1f",
-              jlist.getSelectedValue().getRating());
+              jlist.getSelectedValue().getImdbRating());
 
           JLabel label = new JLabel(rating);
           frame2.add(label);
@@ -236,16 +237,19 @@ public class JmdbGUI extends JFrame
    */
   public void buildFunctionality(JmdbController controller)
   {
+    upperButtons = new JPanel();
     searchbar = new Searchbar(controller);
-    add(searchbar, BorderLayout.NORTH);
+    upperButtons.add(searchbar, BorderLayout.CENTER);
     add = new AddToWatchButton(controller);
     // add the movie to the watch-list and update the display if it was changed
+    upperButtons.add(add, BorderLayout.EAST);
     add.addActionListener((action) -> {
       if (controller.addToWatchList(selectedMovie) && watchList.isShowing())
       {
         watchList.repaint();
       }
     });
+    add(upperButtons, BorderLayout.NORTH);
   }
 
 }
