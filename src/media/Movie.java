@@ -8,7 +8,7 @@ import search.JsonRequestor;
  * changed later.
  *
  * @author Will Morris, Matthew Potter
- * @version 11/17/2022
+ * @version 11/18/2022
  */
 public class Movie
 {
@@ -31,13 +31,27 @@ public class Movie
    * Sentinel string for awards.
    */
   public static final String DEFAULT_AWARD = "DEFAULT_AWARD";
-  private final String id;
-  private final String imageLink;
-  private final String title;
-  private final String description;
+  private String id;
+  private String imageLink;
+  private String title;
+  private String description;
   private double imdbRating;
   private String trailerLink;
   private String award;
+
+  /**
+   * Default constructor.
+   */
+  public Movie()
+  {
+    id = null;
+    imageLink = null;
+    title = null;
+    description = null;
+    imdbRating = DEFAULT_RATING;
+    trailerLink = DEFAULT_TRAILER;
+    award = DEFAULT_AWARD;
+  }
 
   /**
    * Explicit value constructor. Sets up a Movie with the associated
@@ -140,7 +154,7 @@ public class Movie
    *
    * @return The rating.
    */
-  public double getRating()
+  public double getImdbRating()
   {
     if (imdbRating == DEFAULT_RATING)
     {
@@ -161,7 +175,7 @@ public class Movie
    *         exists, or null if it wouldn't make sense to have a trailer in the
    *         first place e.g. a trailer for an actor.
    */
-  public String getTrailer()
+  public String getTrailerLink()
   {
     if (trailerLink == null || trailerLink.equals(NO_TRAILER))
     {
@@ -187,7 +201,7 @@ public class Movie
    *
    * @return Awards.
    */
-  public String getAwards()
+  public String getAward()
   {
     if (award != null && award.equals(DEFAULT_AWARD))
     {
@@ -200,6 +214,41 @@ public class Movie
     }
 
     return award;
+  }
+  
+  public void setId(String id)
+  {
+    this.id = id;
+  }
+  
+  public void setImageLink(String imageLink)
+  {
+    this.imageLink = imageLink;
+  }
+  
+  public void setTitle(String title)
+  {
+    this.title = title;
+  }
+  
+  public void setDescription(String description)
+  {
+    this.description = description;
+  }
+  
+  public void setImdbRating(double imdbRating)
+  {
+    this.imdbRating = imdbRating;
+  }
+  
+  public void setTrailerLink(String trailerLink)
+  {
+    this.trailerLink = trailerLink;
+  }
+  
+  public void setAward(String award)
+  {
+    this.award = award;
   }
 
   @Override

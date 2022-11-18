@@ -9,7 +9,7 @@ import java.awt.*;
 /**
  * Button to add a movie to the watch list.
  *
- * @author William Morris
+ * @author William Morris, Matthew Potter
  * @version 11/18/2022
  */
 public class AddToWatchButton extends JButton
@@ -26,14 +26,5 @@ public class AddToWatchButton extends JButton
     this.controller = controller;
     setText("Add to Watch List");
     setPreferredSize(new Dimension(100, 100));
-  }
-  /**
-   * Calls the Add to Watch List method, using information from the specified movie.
-   *
-   * @param movie Movie to add.
-   */
-  public void addToList(Movie movie)
-  {
-    controller.addToWatchList(movie);
   }
 }

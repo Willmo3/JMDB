@@ -54,12 +54,12 @@ public class WatchListTest
 
     // calling their internet fetch methods here so that save won't need to call
     // them.
-    inception.getRating();
-    inception.getTrailer();
-    inception.getAwards();
-    cobol.getRating();
-    cobol.getTrailer();
-    cobol.getAwards();
+    inception.getImdbRating();
+    inception.getTrailerLink();
+    inception.getAward();
+    cobol.getImdbRating();
+    cobol.getTrailerLink();
+    cobol.getAward();
 
     testMap.put(silly.getId(), silly);
     testMap.put(inception.getId(), inception);
@@ -129,11 +129,11 @@ public class WatchListTest
     assertTrue(loaded.watchList().containsAll(testMap.values()));
   }
 
-  // @Test
-  // @Order(5)
-  // void testClear()
-  // {
-  // model.clear();
-  // assertTrue(model.watchList().isEmpty());
-  // }
+   @Test
+   @Order(5)
+   void testClear()
+   {
+   model.clear();
+   assertTrue(model.watchList().isEmpty());
+   }
 }

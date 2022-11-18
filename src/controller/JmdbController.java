@@ -2,6 +2,7 @@ package controller;
 
 import list.MovieList;
 import mainGUI.JmdbGUI;
+import media.Movie;
 import watchlist.WatchListModel;
 
 /**
@@ -56,5 +57,15 @@ public class JmdbController
   public void saveWatchList()
   {
     watchListModel.save();
+  }
+
+  /**
+   * Adds the passed movie to the watch-list.
+   * 
+   * @param selectedMovie the movie to add to watch-list
+   */
+  public boolean addToWatchList(Movie selectedMovie)
+  {
+    return watchListModel.add(selectedMovie);
   }
 }

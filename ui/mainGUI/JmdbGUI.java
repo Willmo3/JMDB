@@ -24,6 +24,7 @@ import media.Movie;
 import mediaDisplay.MediaDisplayPanel;
 import searchbar.Searchbar;
 import trailer.TrailerButton;
+import watchlist.AddToWatchButton;
 
 import javax.swing.*;
 import javax.swing.SwingConstants;
@@ -42,16 +43,21 @@ public class JmdbGUI extends JFrame
   private static final long serialVersionUID = 6407031954885012174L;
   private JPanel contentPane;
   private MediaDisplayPanel selectedMoviePanel;
+  private Movie selectedMovie;
   private Searchbar searchbar;
   private JScrollPane scrollPane;
   private JList<Movie> jlist;
+  private JList<Movie> watchList;
+  private AddToWatchButton add;
+
   private class DisplaySelectionListener implements ListSelectionListener
   {
     @Override
     public void valueChanged(ListSelectionEvent e)
     {
+      selectedMovie = jlist.getSelectedValue();
       contentPane.remove(selectedMoviePanel);
-      selectedMoviePanel = new MediaDisplayPanel(jlist.getSelectedValue());
+      selectedMoviePanel = new MediaDisplayPanel(selectedMovie);
       contentPane.add(selectedMoviePanel, BorderLayout.CENTER);
       repaint();
       pack();
@@ -105,39 +111,39 @@ public class JmdbGUI extends JFrame
           System.out.println("Error opening trailer");
           System.out.println(movie.getTrailer());
         }
-        
+
         /*
          * String trailer = jlist.getSelectedValue().getTrailer(); JLabel label
          * = new JLabel(trailer); frame.add(label);
          */
-        //frame.setSize(400, 100);
-        //frame.setVisible(true);
+        // frame.setSize(400, 100);
+        // frame.setVisible(true);
       }
     });
-    
+
     x.addSeparator();
-     x.add(m2);
-     m2.addActionListener(new ActionListener()
-     {
-       @Override
-       public void actionPerformed(ActionEvent e)
-       {
-         JFrame frame2 = new JFrame();
-         try
-         {
-           String award = jlist.getSelectedValue().getAwards();
-           JLabel label = new JLabel(award);
-           frame2.add(label);
-           frame2.setSize(400, 100);
-           frame2.setLocationRelativeTo(null); // centers frame
-           frame2.setVisible(true);
-         }
-         catch (Exception ex)
-         {
-           System.out.println("Error opening award");
-         }
-       }
-     });
+    x.add(m2);
+    m2.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+        JFrame frame2 = new JFrame();
+        try
+        {
+          String award = jlist.getSelectedValue().getAwards();
+          JLabel label = new JLabel(award);
+          frame2.add(label);
+          frame2.setSize(400, 100);
+          frame2.setLocationRelativeTo(null); // centers frame
+          frame2.setVisible(true);
+        }
+        catch (Exception ex)
+        {
+          System.out.println("Error opening award");
+        }
+      }
+    });
     x.addSeparator();
     // x.add(m3);
     // x.addSeparator();
@@ -232,6 +238,14 @@ public class JmdbGUI extends JFrame
   {
     searchbar = new Searchbar(controller);
     add(searchbar, BorderLayout.NORTH);
+    add = new AddToWatchButton(controller);
+    // add the movie to the watch-list and update the display if it was changed
+    add.addActionListener((action) -> {
+      if (controller.addToWatchList(selectedMovie) && watchList.isShowing())
+      {
+        watchList.repaint();
+      }
+    });
   }
 
 }

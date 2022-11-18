@@ -67,21 +67,10 @@ public class WatchListModel
     // file exists, so try to read it
     try
     {
-      HashMap<String, Movie> loadedMap = new HashMap<String, Movie>();
-      JsonNode loadedNode = mapper.readTree(watchListFile);
-      for (int i = 0; i < loadedNode.size(); i++)
+      TypeReference<HashMap<String, Movie>> typeRef = new TypeReference<HashMap<String, Movie>>()
       {
-        JsonNode onePair = loadedNode.get(i);
-        if (onePair == null)
-        {
-          break;
-        }
-        loadedMap.put(onePair.asText(), new Movie(onePair.get("id").asText(),
-            onePair.get("imageLink").asText(), onePair.get("title").asText(),
-            onePair.get("description").asText(), onePair.get("awards").asText(),
-            onePair.get("trailer").asText(), onePair.get("rating").asDouble()));
-      }
-      return loadedMap;
+      };
+      return mapper.readValue(watchListFile, typeRef);
     }
     catch (IOException e)
     {
