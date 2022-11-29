@@ -210,6 +210,34 @@ public final class JsonRequestor
     }
     return null;
   }
+  
+  /**
+   * Queries the IMDb web API in order to get the Wikipedia page of a film.
+   *
+   * @param id
+   *          the movie ID to get the rating of
+   * @return the IMDb Wikipedia page of the passed movie
+   */
+  public static String queryWiki(String id)
+  {
+    String url = String
+        .format("https://imdb-api.com/en/API/Wikipedia/k_mcx0w8kk/%s", id);
+    try
+    {
+      ObjectMapper mapper = new ObjectMapper();
+      InputStream stream = fetch(url);
+      JsonNode wiki = mapper.readTree(stream);
+      stream.close();
+      return wiki.get("url").asText();
+    }
+    catch (IOException e)
+    {
+      System.err.println(String.format(
+          "Error occurred in reading stream in wiki query for ID: %s\n", id));
+    }
+    return null;
+  }
+
 
   /**
    * Connects to the passed URL through an HttpURLConnection, expecting a

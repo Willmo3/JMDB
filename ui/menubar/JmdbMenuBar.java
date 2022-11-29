@@ -1,7 +1,9 @@
 package menubar;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -28,7 +30,7 @@ public class JmdbMenuBar extends JMenuBar
   private static final long serialVersionUID = 974458634623052710L;
   private JmdbGUI gui;
   private JMenu items;
-  private JMenuItem trailer, awards, watch, reviews;
+  private JMenuItem trailer, awards, watch, reviews, wiki;
 
   /**
    * Constructs a MenuBar item with no controller-based functionality.
@@ -45,6 +47,7 @@ public class JmdbMenuBar extends JMenuBar
     awards = new JMenuItem("Awards");
     watch = new JMenuItem("Watch List");
     reviews = new JMenuItem("Reviews & Ratings");
+    wiki = new JMenuItem("Wikipedia Page");
     items.add(trailer);
     items.addSeparator();
     items.add(awards);
@@ -52,6 +55,8 @@ public class JmdbMenuBar extends JMenuBar
     items.add(watch);
     items.addSeparator();
     items.add(reviews);
+    items.addSeparator();
+    items.add(wiki);
     addFunctionality();
     add(items);
   }
@@ -138,6 +143,29 @@ public class JmdbMenuBar extends JMenuBar
         {
           System.out.println("Error opening rating");
         }
+      }
+    });
+    
+    wiki.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+        Movie movie = gui.getSelectedMovie();
+        if (movie == null)
+        {
+          System.out.println("Movie is null, please select a movie.");
+          return;
+        }
+            try {
+                Desktop.getDesktop().browse(new URL(movie.getWiki()).toURI());
+        }
+        catch (Exception ex)
+        {
+          System.out.println("Error opening wiki");
+          System.out.println(movie.getWiki());
+        }
+        
       }
     });
   }

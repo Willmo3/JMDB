@@ -26,11 +26,22 @@ public class Movie
    * String indicating that a queried movie has no YouTube trailer on IMDb.
    */
   public static final String NO_TRAILER = "NO_TRAILER";
+  
+  /**
+   * String indicating that a queried movie has no YouTube trailer on IMDb.
+   */
+  public static final String NO_WIKI = "NO_WIKI";
 
   /**
    * Sentinel string for awards.
    */
   public static final String DEFAULT_AWARD = "DEFAULT_AWARD";
+  
+  /**
+   * Sentinel string for wiki links.
+   */
+  public static final String DEFAULT_WIKI = "DEFAULT_WIKI";
+  
   private String id;
   private String imageLink;
   private String title;
@@ -38,6 +49,7 @@ public class Movie
   private double imdbRating;
   private String trailerLink;
   private String award;
+  private String wiki;
 
   /**
    * Default constructor.
@@ -51,6 +63,7 @@ public class Movie
     imdbRating = DEFAULT_RATING;
     trailerLink = DEFAULT_TRAILER;
     award = DEFAULT_AWARD;
+    wiki = DEFAULT_WIKI;
   }
 
   /**
@@ -75,6 +88,7 @@ public class Movie
     this.imdbRating = DEFAULT_RATING;
     this.trailerLink = DEFAULT_TRAILER;
     this.award = DEFAULT_AWARD;
+    this.wiki = DEFAULT_WIKI;
   }
 
   /**
@@ -215,6 +229,35 @@ public class Movie
 
     return award;
   }
+  
+  /**
+   * Fetches the wikipedia page for a movie. Grabs one from the internet if the link's
+   * information has not already been retrieved from the internet.
+   *
+   * @return The link to the wikipedia page, NO_TRAILER if no wikipedia page
+   *         exists, or null if it wouldn't make sense to have a wikipedia page in the
+   *         first place e.g. a wikipedia page for an actor.
+   */
+  public String getWiki()
+  {
+    if (wiki == null || wiki.equals(NO_TRAILER))
+    {
+      return wiki;
+    }
+
+    if (wiki.isEmpty())
+    {
+      wiki = NO_WIKI;
+    }
+
+    if (wiki.equals(DEFAULT_WIKI))
+    {
+      wiki = JsonRequestor.queryWiki(id);
+    }
+
+    return wiki;
+  }
+  
   
   public void setId(String id)
   {
