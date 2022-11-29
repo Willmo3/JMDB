@@ -1,17 +1,22 @@
 package controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 
 import list.MovieList;
 import mainGUI.JmdbGUI;
 import media.Movie;
+import search.JsonRequestor;
 import watchlist.WatchListModel;
 
 /**
  * The controller for the JMDb program. Interfaces with the GUI and Model.
  * 
  * @author Matthew Potter
- * @version 11/17/2022
+ * @version 11/28/2022
  */
 public class JmdbController
 {
@@ -19,8 +24,8 @@ public class JmdbController
   private WatchListModel watchListModel;
 
   /**
-   * Empty constructor. Made for testing non-GUI function and so none of the GUI
-   * related methods will work.
+   * Empty constructor. Made for testing non-GUI function and, as such, none of
+   * the GUI related methods will work.
    */
   public JmdbController()
   {
@@ -29,16 +34,39 @@ public class JmdbController
   }
 
   /**
-   * Constructor for the JmdbController.
+   * Sets the JmdbGUI that this controller is meant to update.
    * 
    * @param gui
-   *          the gui this controls
+   *          the GUI to set the current one to be
    */
-  public JmdbController(JmdbGUI gui)
+  public void setGui(JmdbGUI gui)
   {
     this.gui = gui;
-    this.watchListModel = new WatchListModel();
-    gui.buildFunctionality(this);
+  }
+
+  /**
+   * Requests data from the model for startup content.
+   * 
+   * @return the InputStream containing the content to be shown on startup
+   */
+  public MovieList startupListContent()
+  {
+    MovieList startupList = null;
+    try
+    {
+      FileInputStream downloadedList;
+      downloadedList = new FileInputStream("ui/mainGUI/startupList.json");
+      startupList = new MovieList(downloadedList);
+    }
+    catch (FileNotFoundException e1)
+    {
+      System.err.println("Startup list not found");
+    }
+    catch (IOException e1)
+    {
+      System.err.println("MovieList couldn't be made from startupList");
+    }
+    return startupList;
   }
 
   /**
@@ -47,9 +75,9 @@ public class JmdbController
    * @param list
    *          the movieList to update the search list based on
    */
-  public void updateList(MovieList list)
+  public void updateSearchList(MovieList list)
   {
-    gui.updateList(list.generateJList());
+    gui.updateSearchList(list.generateJList());
   }
 
   /**
@@ -76,6 +104,7 @@ public class JmdbController
    * 
    * @param selectedMovie
    *          the movie to add to watch-list
+   * @return true if the movie was added, false if not
    */
   public boolean addToWatchList(Movie selectedMovie)
   {

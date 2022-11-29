@@ -16,7 +16,7 @@ import search.JsonRequestor.QueryTypes;
  * film on IMDb.
  * 
  * @author Matthew Potter
- * @version 11/10/2022
+ * @version 11/20/2022
  */
 public class Searchbar extends JPanel
 {
@@ -54,7 +54,7 @@ public class Searchbar extends JPanel
         return;
       }
       prevText = text;
-      controller.updateList(JsonRequestor.search(selectedType, prevText));
+      controller.updateSearchList(JsonRequestor.search(selectedType, prevText));
     });
 
     typeSelector = new JComboBox<>(QueryTypes.values());

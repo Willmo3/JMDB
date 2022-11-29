@@ -129,11 +129,11 @@ public class WatchListTest
     assertTrue(loaded.watchList().containsAll(testMap.values()));
   }
 
-   @Test
-   @Order(5)
-   void testClear()
-   {
-   model.clear();
-   assertTrue(model.watchList().isEmpty());
-   }
+  @Test
+  @Order(5)
+  void testClear()
+  {
+    model.clear();
+    assertTrue(model.watchList().isEmpty());
+  }
 }

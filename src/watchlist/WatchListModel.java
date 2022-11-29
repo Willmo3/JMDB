@@ -6,7 +6,6 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import media.Movie;

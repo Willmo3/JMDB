@@ -30,8 +30,8 @@ public class Driver
         try
         {
           FlatDarkLaf.setup(); // I believe this is all we need, might revisit
-          JmdbGUI gui = new JmdbGUI();
-          JmdbController controller = new JmdbController(gui);
+          JmdbController controller = new JmdbController();
+          JmdbGUI gui = new JmdbGUI(controller);
           gui.setVisible(true);
           gui.setLocationRelativeTo(null); // centers main GUI window
         }

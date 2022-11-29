@@ -46,6 +46,7 @@ public class MovieList
           .add(new Movie(movie.get("id").asText(), movie.get("image").asText(),
               movie.get("title").asText(), movie.get("description").asText()));
     }
+    source.close();
   }
 
   /**
