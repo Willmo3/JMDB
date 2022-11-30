@@ -1,4 +1,4 @@
-package watchListTest;
+package storedMoviesTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -11,27 +11,27 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
 import media.Movie;
-import watchlist.WatchListModel;
+import storedcache.StoredMovies;
 
 /**
- * Test class for the WatchListModel. Deletes any existing watch-list for the
- * test.
+ * Test class for the StoredMovies cache. Deletes any existing cache files for
+ * the test.
  * 
  * @author Matthew Potter
- * @version 11/17/2022
+ * @version 11/30/2022
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WatchListTest
+public class StoredMoviesTest
 {
   /**
    * A file to test loading and saving WatchListModels.
    */
-  static File testFile = new File(WatchListModel.WATCH_LIST_PATH);
+  static File testFile = new File(StoredMovies.CACHE_FILE_PATH);
 
   /**
-   * The WatchListModel to test.
+   * The StoredMovies cache to test.
    */
-  static WatchListModel model;
+  static StoredMovies cache;
 
   /**
    * The test HashMap that stores expected data.
@@ -41,25 +41,21 @@ public class WatchListTest
   // set up the testMap
   static
   {
-    Movie silly = new Movie("12345", "Test", "Silly Movie", "2002");
+    Movie silly = new Movie("12345", "Test", "Silly Movie", "2002", 1.0,
+        "trailer-link", "silly award", "wiki-link");
     Movie inception = new Movie("tt1375666",
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnX"
             + "kFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
-        "Inception", "(2010)");
+        "Inception", "(2010)", 8.8,
+        "https://www.youtube.com/watch?v=Jvurpf91omw",
+        "Academy Awards, USA, 2011, Winner, Oscar",
+        "https://en.wikipedia.org/wiki/Inception");
     Movie cobol = new Movie("tt1790736",
         "https://m.media-amazon.com/images/M/MV5BMjE0NGIwM2EtZjQxZi00ZTE5LWEx"
             + "N2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3Mjk"
             + "@._V1_Ratio0.6800_AL_.jpg",
-        "Inception: The Cobol Job", "(2010 Video)");
-
-    // calling their internet fetch methods here so that save won't need to call
-    // them.
-    inception.getImdbRating();
-    inception.getTrailerLink();
-    inception.getAward();
-    cobol.getImdbRating();
-    cobol.getTrailerLink();
-    cobol.getAward();
+        "Inception: The Cobol Job", "(2010 Video)", 7.5, "no link",
+        "This film did not win any awards", "no link");
 
     testMap.put(silly.getId(), silly);
     testMap.put(inception.getId(), inception);
@@ -74,7 +70,7 @@ public class WatchListTest
     {
       testFile.delete();
     }
-    model = new WatchListModel();
+    cache = new StoredMovies();
   }
 
   @Test
@@ -82,35 +78,35 @@ public class WatchListTest
   void testAdd()
   {
     // silly movie
-    assertTrue(model.add(testMap.get("12345")));
+    assertTrue(cache.add(testMap.get("12345")));
     // inception
-    assertTrue(model.add(testMap.get("tt1375666")));
+    assertTrue(cache.add(testMap.get("tt1375666")));
     // wrong movie
-    assertTrue(model.add(testMap.get("tt1790736")));
-    assertFalse(model.add(testMap.get("tt1790736")));
+    assertTrue(cache.add(testMap.get("tt1790736")));
+    assertFalse(cache.add(testMap.get("tt1790736")));
 
     // assert model has all added movies
-    assertTrue(model.watchList().containsAll(testMap.values()));
+    assertTrue(cache.cache().containsAll(testMap.values()));
   }
 
   @Test
   @Order(2)
   void testRemove()
   {
-    assertTrue(model.remove(testMap.get("12345")));
-    assertFalse(model.remove(testMap.get("12345")));
+    assertTrue(cache.remove(testMap.get("12345")));
+    assertFalse(cache.remove(testMap.get("12345")));
     testMap.remove("12345");
 
     // assert model has removed silly movie (key 12345)
-    assertTrue(model.watchList().containsAll(testMap.values()));
-    assertTrue(model.watchList().size() == testMap.values().size());
+    assertTrue(cache.cache().containsAll(testMap.values()));
+    assertTrue(cache.cache().size() == testMap.values().size());
   }
 
   @Test
   @Order(3)
   void testSave()
   {
-    model.save();
+    cache.save();
     assertTrue(testFile.exists());
   }
 
@@ -119,21 +115,29 @@ public class WatchListTest
   void testLoad()
   {
     // load in the watch list that was just saved
-    WatchListModel loaded = new WatchListModel();
+    StoredMovies loaded = new StoredMovies();
 
-    for (Movie mov : loaded.watchList())
+    for (Movie mov : loaded.cache())
     {
       System.out.println(mov.getTitle());
     }
-    assertTrue(loaded.watchList().size() == testMap.values().size());
-    assertTrue(loaded.watchList().containsAll(testMap.values()));
+    assertTrue(loaded.cache().size() == testMap.values().size());
+    assertTrue(loaded.cache().containsAll(testMap.values()));
+  }
+  
+  @Test
+  @Order(5)
+  void testCopyConstructor()
+  {
+    StoredMovies other = new StoredMovies(cache.getMovieCache());
+    assertTrue(other.getMovieCache().equals(cache.getMovieCache()));
   }
 
   @Test
-  @Order(5)
+  @Order(6)
   void testClear()
   {
-    model.clear();
-    assertTrue(model.watchList().isEmpty());
+    cache.clear();
+    assertTrue(cache.cache().isEmpty());
   }
 }

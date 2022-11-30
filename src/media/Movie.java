@@ -7,8 +7,8 @@ import search.JsonRequestor;
  * supports json files as described in the Title Search Results. This may be
  * changed later.
  *
- * @author Will Morris, Matthew Potter
- * @version 11/18/2022
+ * @author Will Morris, Matthew Potter, Immanuel Semelfort
+ * @version 11/30/2022
  */
 public class Movie
 {
@@ -26,7 +26,7 @@ public class Movie
    * String indicating that a queried movie has no YouTube trailer on IMDb.
    */
   public static final String NO_TRAILER = "NO_TRAILER";
-  
+
   /**
    * String indicating that a queried movie has no YouTube trailer on IMDb.
    */
@@ -36,12 +36,12 @@ public class Movie
    * Sentinel string for awards.
    */
   public static final String DEFAULT_AWARD = "DEFAULT_AWARD";
-  
+
   /**
    * Sentinel string for wiki links.
    */
   public static final String DEFAULT_WIKI = "DEFAULT_WIKI";
-  
+
   private String id;
   private String imageLink;
   private String title;
@@ -67,8 +67,8 @@ public class Movie
   }
 
   /**
-   * Explicit value constructor. Sets up a Movie with the associated
-   * information.
+   * Explicit value constructor. Sets up a Movie with the information given by a
+   * single search query.
    * 
    * @param id
    *          the Movie's ID on IMDb
@@ -103,23 +103,26 @@ public class Movie
    *          the title of the Movie
    * @param description
    *          the IMDb search description of the Movie
-   * @param awards
-   *          the awards this Movie has won
-   * @param trailer
-   *          the link to the trailer of this Movie
-   * @param rating
+   * @param imdbRating
    *          the IMDb rating of this Movie
+   * @param trailerLink
+   *          the link to the trailer of this Movie
+   * @param award
+   *          the awards this Movie has won
+   * @param wiki
+   *          the wikipedia link of this Movie
    */
   public Movie(String id, String imageLink, String title, String description,
-      String awards, String trailer, double rating)
+      double imdbRating, String trailerLink, String award, String wiki)
   {
     this.id = id;
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
-    this.imdbRating = rating;
-    this.trailerLink = trailer;
-    this.award = awards;
+    this.imdbRating = imdbRating;
+    this.trailerLink = trailerLink;
+    this.award = award;
+    this.wiki = wiki;
   }
 
   /**
@@ -229,14 +232,14 @@ public class Movie
 
     return award;
   }
-  
+
   /**
-   * Fetches the wikipedia page for a movie. Grabs one from the internet if the link's
-   * information has not already been retrieved from the internet.
+   * Fetches the wikipedia page for a movie. Grabs one from the internet if the
+   * link's information has not already been retrieved from the internet.
    *
    * @return The link to the wikipedia page, NO_TRAILER if no wikipedia page
-   *         exists, or null if it wouldn't make sense to have a wikipedia page in the
-   *         first place e.g. a wikipedia page for an actor.
+   *         exists, or null if it wouldn't make sense to have a wikipedia page
+   *         in the first place e.g. a wikipedia page for an actor.
    */
   public String getWiki()
   {
@@ -257,41 +260,45 @@ public class Movie
 
     return wiki;
   }
-  
-  
+
   public void setId(String id)
   {
     this.id = id;
   }
-  
+
   public void setImageLink(String imageLink)
   {
     this.imageLink = imageLink;
   }
-  
+
   public void setTitle(String title)
   {
     this.title = title;
   }
-  
+
   public void setDescription(String description)
   {
     this.description = description;
   }
-  
+
   public void setImdbRating(double imdbRating)
   {
     this.imdbRating = imdbRating;
   }
-  
+
   public void setTrailerLink(String trailerLink)
   {
     this.trailerLink = trailerLink;
   }
-  
+
   public void setAward(String award)
   {
     this.award = award;
+  }
+
+  public void setWiki(String wiki)
+  {
+    this.wiki = wiki;
   }
 
   @Override

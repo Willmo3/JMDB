@@ -82,7 +82,8 @@ public class WatchListModel
   }
 
   /**
-   * Saves the current watch-list as a JSON file at WATCH_LIST_PATH.
+   * Saves the current list of movies in the cache as a JSON file at
+   * CACHE_PATH.
    */
   public void save()
   {
