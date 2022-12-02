@@ -19,7 +19,7 @@ import trailer.TrailerButton;
 /**
  * The MenuBar for the JMDb GUI.
  * 
- * @author Immanuel Semelfort
+ * @author Immanuel Semelfort, Matthew Potter
  * @version 11/18/2022
  */
 public class JmdbMenuBar extends JMenuBar
@@ -30,7 +30,7 @@ public class JmdbMenuBar extends JMenuBar
   private static final long serialVersionUID = 974458634623052710L;
   private JmdbGUI gui;
   private JMenu items;
-  private JMenuItem trailer, awards, watch, reviews, wiki;
+  private JMenuItem trailer, awards, watch, reviews, wiki, featured;
 
   /**
    * Constructs a MenuBar item with no controller-based functionality.
@@ -48,6 +48,7 @@ public class JmdbMenuBar extends JMenuBar
     watch = new JMenuItem("Watch List");
     reviews = new JMenuItem("Reviews & Ratings");
     wiki = new JMenuItem("Wikipedia Page");
+    featured = new JMenuItem("Featured Movies");
     items.add(trailer);
     items.addSeparator();
     items.add(awards);
@@ -57,6 +58,8 @@ public class JmdbMenuBar extends JMenuBar
     items.add(reviews);
     items.addSeparator();
     items.add(wiki);
+    items.addSeparator();
+    items.add(featured);
     addFunctionality();
     add(items);
   }
@@ -119,6 +122,14 @@ public class JmdbMenuBar extends JMenuBar
       public void actionPerformed(ActionEvent e)
       {
         gui.switchListView(ListViews.WATCHLIST);
+      }
+    });
+
+    featured.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent)
+      {
+        gui.switchListView(ListViews.FEATURED);
       }
     });
     

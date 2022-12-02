@@ -20,14 +20,14 @@ import media.Movie;
 import mediaDisplay.MediaDisplayPanel;
 import menubar.JmdbMenuBar;
 import searchbar.Searchbar;
-import watchlist.AddToWatchButton;
+import listmodel.AddToWatchButton;
 
 import javax.swing.SwingConstants;
 
 /**
  * Main GUI for the JMDb program.
  *
- * @author Sean Talbot, Matthew Potter, Immanuel Semelfort
+ * @author Sean Talbot, Matthew Potter, Immanuel Semelfort, William Morris
  * @version 11/28/2022
  */
 public class JmdbGUI extends JFrame
@@ -44,8 +44,10 @@ public class JmdbGUI extends JFrame
   private JmdbMenuBar menu;
   private JList<Movie> jlist;
   private JList<Movie> watchList;
+  private JList<Movie> featuredMovieList;
   private AddToWatchButton add;
   private boolean watchListShown;
+  private boolean featuredListShown;
 
   /**
    * An enumerated class of all the possible views that the List of Movies may
@@ -64,13 +66,18 @@ public class JmdbGUI extends JFrame
     /**
      * The view showing the user-made watch-list of Movies.
      */
-    WATCHLIST;
+    WATCHLIST,
+
+    /**
+     * The view shown when using the featured movies list.
+     */
+    FEATURED;
   }
 
   /**
    * The selection listener that updates the display of the film.
    * 
-   * @author ADD AUTHOR TODO
+   * @author Matthew Potter
    * @version 11/18/2022
    */
   private class DisplaySelectionListener implements ListSelectionListener
@@ -81,6 +88,10 @@ public class JmdbGUI extends JFrame
       if (watchListShown)
       {
         selectedMovie = watchList.getSelectedValue();
+      }
+      else if (featuredListShown)
+      {
+        selectedMovie = featuredMovieList.getSelectedValue();
       }
       else
       {
@@ -176,6 +187,11 @@ public class JmdbGUI extends JFrame
       }
     });
 
+    // Initializes Featured Movie List.
+    Collection<Movie> fList = controller.getFeaturedMovieList();
+    featuredMovieList = new JList<Movie>(fList.toArray(new Movie[fList.size()]));
+    featuredMovieList.addListSelectionListener(new DisplaySelectionListener());
+
     searchbar = new Searchbar(controller);
 
     upperButtons.add(searchbar, BorderLayout.CENTER);
@@ -223,6 +239,7 @@ public class JmdbGUI extends JFrame
       case SEARCH:
         // set all booleans for toggle-able views to false
         watchListShown = false;
+        featuredListShown = false;
         scrollPane.setViewportView(jlist);
         break;
       case WATCHLIST:
@@ -237,6 +254,16 @@ public class JmdbGUI extends JFrame
           switchListView(ListViews.SEARCH);
         }
         break;
+      case FEATURED:
+        if (!featuredListShown)
+        {
+          featuredListShown = true;
+          scrollPane.setViewportView(featuredMovieList);
+        }
+        else
+        {
+          switchListView(ListViews.SEARCH);
+        }
       default:
         System.err.println("Impossible list view requested");
         break;

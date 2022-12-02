@@ -6,20 +6,22 @@ import java.io.IOException;
 import java.util.Collection;
 
 import list.MovieList;
+import listmodel.FeaturedListModel;
 import mainGUI.JmdbGUI;
 import media.Movie;
-import watchlist.WatchListModel;
+import listmodel.WatchListModel;
 
 /**
  * The controller for the JMDb program. Interfaces with the GUI and Model.
  * 
- * @author Matthew Potter
- * @version 11/28/2022
+ * @author Matthew Potter, William Morris
+ * @version 12/1/2022
  */
 public class JmdbController
 {
   private JmdbGUI gui;
   private WatchListModel watchListModel;
+  private FeaturedListModel featuredListModel;
 
   /**
    * Empty constructor. Made for testing non-GUI function and, as such, none of
@@ -29,6 +31,7 @@ public class JmdbController
   {
     this.gui = null;
     this.watchListModel = new WatchListModel();
+    this.featuredListModel = new FeaturedListModel();
   }
 
   /**
@@ -85,7 +88,17 @@ public class JmdbController
    */
   public Collection<Movie> getWatchList()
   {
-    return watchListModel.watchList();
+    return watchListModel.list();
+  }
+
+  /**
+   * Gets the featured movie list.
+   *
+   * @return the featured movie list.
+   */
+  public Collection<Movie> getFeaturedMovieList()
+  {
+    return featuredListModel.list();
   }
 
   /**
