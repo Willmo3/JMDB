@@ -1,7 +1,6 @@
-package watchlist;
+package listmodel;
 
 import controller.JmdbController;
-import media.Movie;
 
 import javax.swing.*;
 import java.awt.*;
