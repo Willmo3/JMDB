@@ -19,12 +19,14 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author William Morris
  * @version 12/1/2022
  */
-public class WatchListTest {
+public class WatchListTest
+{
 
   private static final String TEST_PATH = "./data/watchlisttest.json";
 
   @Test
-  void testListLoadsExplicitPath() {
+  void testListLoadsExplicitPath()
+  {
     WatchListModel model = new WatchListModel(TEST_PATH);
     HashMap<String, Movie> movies = model.getMap();
 
@@ -36,12 +38,14 @@ public class WatchListTest {
   }
 
   @Test
-  void testListLoadsDefaultPath() {
+  void testListLoadsDefaultPath()
+  {
     new WatchListModel();
   }
 
   @Test
-  void testListLoadsInvalidPath() {
+  void testListLoadsInvalidPath()
+  {
     WatchListModel model = new WatchListModel("Invalid");
     assertEquals(0, model.getMap().size());
   }
@@ -49,7 +53,8 @@ public class WatchListTest {
   // Save data and delete data tests do not use the standard test file.
   // This is due to the intrusive nature of the tests.
   @Test
-  void testSavesData() throws IOException {
+  void testSavesData() throws IOException
+  {
     WatchListModel model = new WatchListModel("./data/watchlistadd.json");
     Movie sentiMovie = new Movie("Sentinel", "Sentinel", "Sentinel", "Sentinel",
         8, "Sentinel", "Sentinel", "800");
@@ -59,9 +64,10 @@ public class WatchListTest {
 
     FileInputStream file = new FileInputStream("./data/watchlistadd.json");
     Scanner input = new Scanner(file);
-    assertEquals("{\"Sentinel\":{\"id\":\"Sentinel\",\"imageLink\"" +
-        ":\"Sentinel\",\"title\":\"Sentinel\",\"description\":\"Sentinel\",\"" +
-        "imdbRating\":8.0,\"trailerLink\":\"Sentinel\",\"award\":\"Sentinel\",\"wiki\":\"800\"}}", input.next());
+    assertEquals("{\"Sentinel\":{\"id\":\"Sentinel\",\"imageLink\""
+        + ":\"Sentinel\",\"title\":\"Sentinel\",\"description\":\"Sentinel\",\""
+        + "imdbRating\":8.0,\"trailerLink\":\"Sentinel\",\"award\":\"Sentinel\",\"wiki\":\"800\"}}",
+        input.next());
     input.close();
     file.close();
 
@@ -73,9 +79,11 @@ public class WatchListTest {
     assertEquals("{}", emptyScanner.next());
   }
 
-  // Also sees that the file will save if a path without an existing file is specified.
+  // Also sees that the file will save if a path without an existing file is
+  // specified.
   @Test
-  void testSavesDataAfterDeletion() {
+  void testSavesDataAfterDeletion()
+  {
     String path = "./data/watchlistdelete.json";
 
     WatchListModel model = new WatchListModel(path);
@@ -93,10 +101,11 @@ public class WatchListTest {
   }
 
   @Test
-  void testDoesNotAllowDuplicateMovies() {
+  void testDoesNotAllowDuplicateMovies()
+  {
     WatchListModel model = new WatchListModel(TEST_PATH);
-    Movie sentiMovie = new Movie("Sentinel2", "Sentinel", "Sentinel", "Sentinel",
-        8, "Sentinel", "Sentinel", "800");
+    Movie sentiMovie = new Movie("Sentinel2", "Sentinel", "Sentinel",
+        "Sentinel", 8, "Sentinel", "Sentinel", "800");
 
     assertTrue(model.add(sentiMovie));
     assertFalse(model.add(sentiMovie));
@@ -104,21 +113,24 @@ public class WatchListTest {
   }
 
   @Test
-  void testDontDeleteNonExistentMovies() {
+  void testDontDeleteNonExistentMovies()
+  {
     WatchListModel model = new WatchListModel(TEST_PATH);
-    assertFalse(model.remove(new Movie("InvalidMovie", "Sentinel", "Sentinel", "Sentinel",
-        8, "Sentinel", "Sentinel", "800")));
+    assertFalse(model.remove(new Movie("InvalidMovie", "Sentinel", "Sentinel",
+        "Sentinel", 8, "Sentinel", "Sentinel", "800")));
   }
 
   @Test
-  void testClearTestWatchlist() {
+  void testClearTestWatchlist()
+  {
     WatchListModel model = new WatchListModel(TEST_PATH);
     model.clear();
     assertEquals(0, model.getMap().size());
   }
 
   @Test
-  void testWatchListValues() {
+  void testWatchListValues()
+  {
     WatchListModel model = new WatchListModel(TEST_PATH);
     Collection<Movie> movies = model.list();
 

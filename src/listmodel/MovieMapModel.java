@@ -10,15 +10,15 @@ import java.util.Collection;
 import java.util.HashMap;
 
 /**
- * ListModel represents a list of movies derived from a file.
+ * Represents
  *
  * @author William Morris, Matthew Potter
  * @version 12/1/2022
  */
-public abstract class ListModel
+public abstract class MovieMapModel
 {
-  private final String PATH;
   protected HashMap<String, Movie> list;
+  private final String contentPath;
 
   /**
    * Default ListModel constructor. Sets the path to file to provided path..
@@ -27,9 +27,9 @@ public abstract class ListModel
    * @param path
    *          Path of the file to load.
    */
-  public ListModel(String path)
+  public MovieMapModel(String path)
   {
-    this.PATH = path;
+    this.contentPath = path;
     list = load();
   }
 
@@ -39,25 +39,22 @@ public abstract class ListModel
    * Explicit value constructor. Sets the model to have the passed map of ID,
    * Movie pairs.
    *
-   * @param list
-   *          the list to initialize this model with
+   * @param list the list to initialize this model with
    *
-  public ListModel(String path, HashMap<String, Movie> list)
-  {
-    this.PATH = path;
-    this.list = list;
-  }*/
+   * public ListModel(String path, HashMap<String, Movie> list) { this.PATH =
+   * path; this.list = list; }
+   */
 
   /**
-   * Loads the provided file into a movie HashMap.
-   * If no file exists at the specified path, or there are issues with file processing,
-   * a new empty list is created.
+   * Loads the provided file into a movie HashMap. If no file exists at the
+   * specified path, or there are issues with file processing, a new empty list
+   * is created.
    *
    * @return A list containing the information stored at the defined path.
    */
   protected HashMap<String, Movie> load()
   {
-    File listFile = new File(PATH);
+    File listFile = new File(contentPath);
 
     // no file exists, so make an empty watch-list
     if (!listFile.exists())
@@ -69,7 +66,8 @@ public abstract class ListModel
     {
       ObjectMapper mapper = new ObjectMapper();
       // file exists, so try to read it
-      TypeReference<HashMap<String, Movie>> typeRef = new TypeReference<HashMap<String, Movie>>() {
+      TypeReference<HashMap<String, Movie>> typeRef = new TypeReference<HashMap<String, Movie>>()
+      {
       };
       return mapper.readValue(listFile, typeRef);
     }
@@ -88,7 +86,7 @@ public abstract class ListModel
    */
   public void save()
   {
-    File file = new File(PATH);
+    File file = new File(contentPath);
     if (!file.exists())
     {
       try
@@ -110,8 +108,8 @@ public abstract class ListModel
     }
     catch (IOException e)
     {
-      System.err.println(
-          String.format("List data could not be written to disk"));
+      System.err
+          .println(String.format("List data could not be written to disk"));
       e.printStackTrace();
     }
   }

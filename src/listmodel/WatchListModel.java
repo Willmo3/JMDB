@@ -1,13 +1,5 @@
 package listmodel;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import media.Movie;
 
 /**
@@ -16,13 +8,13 @@ import media.Movie;
  * @author Matthew Potter, William Morris
  * @version 12/1/2022
  */
-public class WatchListModel extends ListModel
+public class WatchListModel extends MovieMapModel
 {
   /**
    * The path that should store the watch-list JSON file.
    *
-   * NOTE: Windows should be able to interpret the forward slash, let me know if not.
-   * If not... we may have a slight problem.
+   * NOTE: Windows should be able to interpret the forward slash, let me know if
+   * not. If not... we may have a slight problem.
    */
   public static final String WATCH_LIST_PATH = "./data/watchlist.json";
 
@@ -41,17 +33,17 @@ public class WatchListModel extends ListModel
    * Explicit value constructor. Sets the model to have the passed map of ID,
    * Movie pairs.
    *
-   * @param watchList
-   *          the watch-list to initialize this model with
+   * @param watchList the watch-list to initialize this model with
    *
-  public WatchListModel(HashMap<String, Movie> watchList)
-  {
-    super(WATCH_LIST_PATH, watchList);
-  }*/
+   * public WatchListModel(HashMap<String, Movie> watchList) {
+   * super(WATCH_LIST_PATH, watchList); }
+   */
 
   /**
    * Explicit path constructor. Useful for testing.
-   * @param path Path to grab the WatchList from.
+   * 
+   * @param path
+   *          Path to grab the WatchList from.
    */
   public WatchListModel(String path)
   {
@@ -59,18 +51,17 @@ public class WatchListModel extends ListModel
   }
 
   /*
-  /**
-   * Loads the watch-list at WATCH_LIST_PATH's information into this
+   * /** Loads the watch-list at WATCH_LIST_PATH's information into this
    * WatchListModel. If there is no watch-list saved at WATCH_LIST_PATH, an
    * empty one is created.
    * 
    * @return A watch-list containing the information stored at the defined path,
-   *         or an empty one if no watch-list exists.
+   * or an empty one if no watch-list exists.
    *
-  protected HashMap<String, Movie> load()
-  {
-
-  }*/
+   * protected HashMap<String, Movie> load() {
+   * 
+   * }
+   */
 
   /**
    * Adds the passed movie to the watch-list. If the movie is already in the
