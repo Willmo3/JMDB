@@ -46,6 +46,7 @@ public class JmdbGUI extends JFrame
   private JList<Movie> watchList;
   private JList<Movie> featuredMovieList;
   private AddToWatchButton add;
+  private ListViews currentListView;
   private boolean watchListShown;
   private boolean featuredListShown;
 
@@ -152,6 +153,7 @@ public class JmdbGUI extends JFrame
     {
       return;
     }
+    currentListView = ListViews.FEATURED;
     jlist = startupList.generateJList();
     scrollPane = new JScrollPane();
     scrollPane.setViewportView(jlist);
@@ -238,15 +240,13 @@ public class JmdbGUI extends JFrame
     {
       case SEARCH:
         // set all booleans for toggle-able views to false
-        watchListShown = false;
-        featuredListShown = false;
+        currentListView = ListViews.SEARCH;
         scrollPane.setViewportView(jlist);
         break;
       case WATCHLIST:
         // toggle watch-list display
-        if (!watchListShown)
+        if (currentListView == ListViews.WATCHLIST)
         {
-          watchListShown = true;
           scrollPane.setViewportView(watchList);
         }
         else
