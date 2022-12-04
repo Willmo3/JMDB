@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 
 /**
  * Utility class for serializing and deserializing JMDb data from/into JSON
@@ -52,6 +53,11 @@ public final class JmdbSerializer
       ObjectMapper mapper = new ObjectMapper();
       // file exists, so try to read it
       return mapper.readValue(file, typeRef);
+    }
+    catch (MismatchedInputException e)
+    {
+      // occurs when blank file
+      return null;
     }
     catch (IOException e)
     {

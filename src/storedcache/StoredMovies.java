@@ -22,7 +22,7 @@ public class StoredMovies
   /**
    * The path that should store the cache JSON file.
    */
-  public static final String CACHE_FILE_PATH = ".\\data\\cachedMovies.json";
+  public static final String CACHE_FILE_PATH = "./data/cachedMovies.json";
 
   private HashMap<String, Movie> movieCache;
 

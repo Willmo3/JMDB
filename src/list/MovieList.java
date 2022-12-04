@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import media.Movie;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.List;
  * require a more in-depth knowledge of how we'll access that data.
  *
  * @author William Morris
- * @version 11/4/2022
+ * @version 12/04/2022
  */
 public class MovieList
 {
@@ -99,26 +98,6 @@ public class MovieList
     }
 
     return null;
-  }
-
-  /**
-   * Generates a JList from this list of movies.
-   *
-   * @return the JList.
-   */
-  public JList<Movie> generateJList()
-  {
-    // Note that the list is being copied into an array manually
-    // Because java has complained about casting ArrayList.toArray() to Movie[].
-    int size = movieList.size();
-    Movie[] model = new Movie[size];
-
-    for (int i = 0; i < size; i++)
-    {
-      model[i] = movieList.get(i);
-    }
-
-    return new JList<Movie>(model);
   }
 
   /**

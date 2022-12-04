@@ -1,12 +1,12 @@
 package movielist;
 
-import list.MovieFile;
 import list.MovieList;
 import media.Movie;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * Tests for MovieList.
  *
  * @author Will Morris
- * @version 11/1/2022
+ * @version 12/03/2022
  */
 public class MovieListTest
 {
@@ -26,14 +26,30 @@ public class MovieListTest
 
   static
   {
-    MovieFile file = new MovieFile(new File("test/movielist/results.json"));
+    FileInputStream file = null;
     try
     {
-      list = new MovieList(file.getStream());
+      file = new FileInputStream("test/movielist/results.json");
+      list = new MovieList(file);
+    }
+    catch (FileNotFoundException e)
+    {
+      System.err.println("File not found in MovieListTest");
     }
     catch (IOException e)
     {
       throw new RuntimeException(e);
+    }
+    finally
+    {
+      try
+      {
+        file.close();
+      }
+      catch (IOException e)
+      {
+        System.err.println("Input stream couldn't be closed in MovieListTest");
+      }
     }
   }
 
@@ -45,17 +61,17 @@ public class MovieListTest
 
     expected.add(new Movie("tt1375666",
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkF"
-        + "tZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
+            + "tZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
         "Inception", "(2010)"));
     expected.add(new Movie("tt1790736",
         "https://m.media-amazon.com/images/M/MV5BMjE0NGIwM2EtZjQxZi00ZTE5LWEx"
-        + "N2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3M"
-        + "jk@._V1_Ratio0.6800_AL_.jpg",
+            + "N2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3M"
+            + "jk@._V1_Ratio0.6800_AL_.jpg",
         "Inception: The Cobol Job", "(2010 Video)"));
     expected.add(new Movie("tt5295990",
         "https://m.media-amazon.com/images/M/MV5BZGFjOTRiYjgtYjEzMS00ZjQ2LTkz"
-        + "Y2YtOGQ0NDI2NTVjOGFmXkEyXkFqcGdeQXVyNDQ5MDYzM"
-        + "Tk@._V1_Ratio0.6800_AL_.jpg",
+            + "Y2YtOGQ0NDI2NTVjOGFmXkEyXkFqcGdeQXVyNDQ5MDYzM"
+            + "Tk@._V1_Ratio0.6800_AL_.jpg",
         "Inception: Jump Right Into the Action", "(2010 Video)"));
     expected.add(new Movie("tt1686778",
         "https://imdb-api.com/images/original/nopicture.jpg",
