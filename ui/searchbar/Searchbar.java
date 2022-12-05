@@ -16,7 +16,7 @@ import search.JsonRequestor.QueryTypes;
  * film on IMDb.
  * 
  * @author Matthew Potter
- * @version 11/20/2022
+ * @version 12/03/2022
  */
 public class Searchbar extends JPanel
 {

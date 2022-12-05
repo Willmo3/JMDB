@@ -23,20 +23,11 @@ import storedcache.StoredMovies;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StoredMoviesTest
 {
-  /**
-   * A file to test loading and saving WatchListModels.
-   */
-  static File testFile = new File(StoredMovies.CACHE_FILE_PATH);
+  private static File testFile = new File(StoredMovies.CACHE_FILE_PATH);
 
-  /**
-   * The StoredMovies cache to test.
-   */
-  static StoredMovies cache;
+  private static StoredMovies cache;
 
-  /**
-   * The test HashMap that stores expected data.
-   */
-  static HashMap<String, Movie> testMap = new HashMap<String, Movie>();
+  private static HashMap<String, Movie> testMap = new HashMap<String, Movie>();
 
   // set up the testMap
   static

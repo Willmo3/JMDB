@@ -2,9 +2,14 @@ package mainGUI;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.Collection;
 
+import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -15,20 +20,16 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import controller.JmdbController;
-import list.MovieList;
 import media.Movie;
 import mediaDisplay.MediaDisplayPanel;
 import menubar.JmdbMenuBar;
 import searchbar.Searchbar;
-import listmodel.AddToWatchButton;
-
-import javax.swing.SwingConstants;
 
 /**
  * Main GUI for the JMDb program.
  *
  * @author Sean Talbot, Matthew Potter, Immanuel Semelfort, William Morris
- * @version 11/28/2022
+ * @version 12/03/2022
  */
 public class JmdbGUI extends JFrame
 {
@@ -36,72 +37,123 @@ public class JmdbGUI extends JFrame
 
   private JmdbController controller;
   private JPanel contentPane;
+  // top-side content
   private JPanel upperButtons;
-  private MediaDisplayPanel selectedMoviePanel;
-  private Movie selectedMovie;
   private Searchbar searchbar;
-  private JScrollPane scrollPane;
-  private JmdbMenuBar menu;
-  private JList<Movie> jlist;
-  private JList<Movie> watchList;
-  private JList<Movie> featuredMovieList;
-  private AddToWatchButton add;
-  private boolean watchListShown;
-  private boolean featuredListShown;
+  private JPanel selectedMoviePanel;
+  private Movie selectedMovie;
+  private JButton watchListButton;
+  // list-associated objects
+  private JPanel listPanel;
+  private JLabel listLabel;
+  private JList<Movie> moviesJlist;
+  private ListViews currentListView;
+  private DefaultListModel<Movie> searchListModel;
+  private DefaultListModel<Movie> watchListModel;
+  private DefaultListModel<Movie> featuredListModel;
+  // private DefaultListModel<Movie> popularListModel;
 
   /**
    * An enumerated class of all the possible views that the List of Movies may
    * have.
    * 
    * @author Matthew Potter
-   * @version 11/20/2022
+   * @version 12/03/2022
    */
   public static enum ListViews
   {
     /**
      * The default view shown when doing any search.
      */
-    SEARCH,
+    SEARCH("Search"),
 
     /**
      * The view showing the user-made watch-list of Movies.
      */
-    WATCHLIST,
+    WATCHLIST("Plan To Watch List"),
 
     /**
      * The view shown when using the featured movies list.
      */
-    FEATURED;
+    FEATURED("Featured Movies");
+
+    private final String text;
+
+    ListViews(final String viewText)
+    {
+      this.text = viewText;
+    }
+    
+    /**
+     * Getter for the text of the list view enum.
+     * 
+     * @return the textual label associated with the list view
+     */
+    public String getText()
+    {
+      return text;
+    }
   }
 
   /**
    * The selection listener that updates the display of the film.
    * 
    * @author Matthew Potter
-   * @version 11/18/2022
+   * @version 12/03/2022
    */
   private class DisplaySelectionListener implements ListSelectionListener
   {
     @Override
     public void valueChanged(ListSelectionEvent e)
     {
-      if (watchListShown)
-      {
-        selectedMovie = watchList.getSelectedValue();
-      }
-      else if (featuredListShown)
-      {
-        selectedMovie = featuredMovieList.getSelectedValue();
-      }
-      else
-      {
-        selectedMovie = jlist.getSelectedValue();
-      }
-      contentPane.remove(selectedMoviePanel);
+      selectedMovie = moviesJlist.getSelectedValue();
+      remove(selectedMoviePanel);
       selectedMoviePanel = new MediaDisplayPanel(selectedMovie);
-      contentPane.add(selectedMoviePanel, BorderLayout.CENTER);
+      add(selectedMoviePanel, BorderLayout.CENTER);
       repaint();
       pack();
+      if (selectedMovie != null && currentListView != ListViews.WATCHLIST)
+      {
+        controller.addToCache(selectedMovie);
+      }
+    }
+  }
+
+  /**
+   * Listener for the watch-list button. If the watch-list is not the current
+   * view the button adds the selected movie to the watch-list, else it removed
+   * the selected movie from the watch-list.
+   * 
+   * @author Matthew Potter
+   * @version 12/03/2022
+   */
+  private class WatchListButtonListener implements ActionListener
+  {
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+      if (selectedMovie == null)
+      {
+        return;
+      }
+      // if the current view is the watchlist, the selected movie should be
+      // removed if possible.
+      if (currentListView == ListViews.WATCHLIST)
+      {
+        if (controller.removeFromWatchList(selectedMovie))
+        {
+          watchListModel.removeElement(selectedMovie);
+        }
+      }
+      // if the current view isn't the watchlist, the selected movie should be
+      // added to the watchlist if possible.
+      else
+      {
+        if (controller.addToWatchList(selectedMovie))
+        {
+          watchListModel.addElement(selectedMovie);
+        }
+      }
     }
   }
 
@@ -128,75 +180,24 @@ public class JmdbGUI extends JFrame
     contentPane.setLayout(new BorderLayout(0, 0));
 
     // movie list stuff
-    JLabel movieListLabel = new JLabel("Movie List");
-    movieListLabel.setHorizontalAlignment(SwingConstants.LEFT);
-    contentPane.add(movieListLabel, BorderLayout.NORTH);
-    watchListShown = false;
+    listPanel = new JPanel();
+    moviesJlist = new JList<Movie>();
+    moviesJlist.addListSelectionListener(new DisplaySelectionListener());
+    JScrollPane listScrollPane = new JScrollPane();
+    listScrollPane.setViewportView(moviesJlist);
+    listLabel = new JLabel();
+    listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
+    listPanel.add(listLabel);
+    listPanel.add(listScrollPane);
+    add(listPanel, BorderLayout.WEST);
 
     // menu bar stuff
-    menu = new JmdbMenuBar(this);
+    JmdbMenuBar menu = new JmdbMenuBar(this);
     setJMenuBar(menu);
 
+    buildModels();
     buildStartupDisplay();
-    buildFunctionality();
-    this.setVisible(true);
-  }
-
-  /**
-   * Builds the relevant pieces for displaying the startup content.
-   */
-  public void buildStartupDisplay()
-  {
-    MovieList startupList = controller.startupListContent();
-    if (startupList == null)
-    {
-      return;
-    }
-    jlist = startupList.generateJList();
-    scrollPane = new JScrollPane();
-    scrollPane.setViewportView(jlist);
-    contentPane.add(scrollPane, BorderLayout.WEST);
-    // set the startup display to be the first movie in the startup list
-    jlist.setSelectedIndex(0);
-    selectedMovie = jlist.getSelectedValue();
-    selectedMoviePanel = new MediaDisplayPanel(selectedMovie);
-    contentPane.add(selectedMoviePanel, BorderLayout.CENTER);
-    repaint();
-    jlist.getSelectionModel()
-        .addListSelectionListener(new DisplaySelectionListener());
-  }
-
-  /**
-   * Creates any objects that interact functionally with the controller.
-   */
-  public void buildFunctionality()
-  {
-    upperButtons = new JPanel();
-
-    Collection<Movie> wList = controller.getWatchList();
-    watchList = new JList<Movie>(wList.toArray(new Movie[wList.size()]));
-    watchList.addListSelectionListener(new DisplaySelectionListener());
-    // add the movie to the watch-list and update the display if it was changed
-    add = new AddToWatchButton(controller);
-    add.addActionListener((action) -> {
-      if (controller.addToWatchList(selectedMovie))
-      {
-        // updates the JList that is displayed to show new addition
-        watchList = new JList<Movie>(wList.toArray(new Movie[wList.size()]));
-        watchList.addListSelectionListener(new DisplaySelectionListener());
-      }
-    });
-
-    // Initializes Featured Movie List.
-    Collection<Movie> fList = controller.getFeaturedMovieList();
-    featuredMovieList = new JList<Movie>(fList.toArray(new Movie[fList.size()]));
-    featuredMovieList.addListSelectionListener(new DisplaySelectionListener());
-
-    searchbar = new Searchbar(controller);
-
-    upperButtons.add(searchbar, BorderLayout.CENTER);
-    upperButtons.add(add, BorderLayout.EAST);
-    add(upperButtons, BorderLayout.NORTH);
+    buildButtons();
 
     // make the JMDb application save data on exit
     addWindowListener(new java.awt.event.WindowAdapter()
@@ -205,22 +206,66 @@ public class JmdbGUI extends JFrame
       public void windowClosing(WindowEvent e)
       {
         super.windowClosing(e);
-        controller.saveWatchList();
+        controller.saveData();
       }
     });
+
+    this.setVisible(true);
+  }
+
+  private void buildModels()
+  {
+    searchListModel = new DefaultListModel<Movie>();
+    featuredListModel = new DefaultListModel<Movie>();
+    featuredListModel.addAll(controller.startupListContent());
+    watchListModel = new DefaultListModel<Movie>();
+    watchListModel.addAll(controller.getWatchList());
   }
 
   /**
-   * Updates the displayed list of selectable nodes to display the passed list.
+   * Builds the relevant pieces for displaying the startup content.
+   */
+  public void buildStartupDisplay()
+  {
+    selectedMoviePanel = new JPanel();
+    // set the startup model to be displayed on the JList
+    currentListView = ListViews.FEATURED;
+    listLabel.setText(currentListView.getText());
+    moviesJlist.setModel(featuredListModel);
+    repaint();
+    moviesJlist.getSelectionModel()
+        .addListSelectionListener(new DisplaySelectionListener());
+  }
+
+  /**
+   * Creates any button graphical object along with their associated listeners.
+   * This includes the searchbar object as it has an associated button.
+   */
+  private void buildButtons()
+  {
+    upperButtons = new JPanel();
+    watchListButton = new JButton("Add to Plan to Watch List");
+    watchListButton.addActionListener(new WatchListButtonListener());
+    searchbar = new Searchbar(controller);
+    upperButtons.add(searchbar, BorderLayout.CENTER);
+    upperButtons.add(watchListButton, BorderLayout.EAST);
+    add(upperButtons, BorderLayout.NORTH);
+  }
+
+  /**
+   * Updates the searchListModel to contain the passed list of movies and sets
+   * the current view to be SEARCH.
    *
    * @param list
-   *          the movie list to update the UI with the information of
+   *          the collection of Movies included in the recent search
    */
-  public void updateSearchList(JList<Movie> list)
+  public void updateSearchList(Collection<Movie> list)
   {
-    list.getSelectionModel()
-        .addListSelectionListener(new DisplaySelectionListener());
-    jlist = list;
+    if (!searchListModel.isEmpty())
+    {
+      searchListModel.clear();
+    }
+    searchListModel.addAll(list);
     switchListView(ListViews.SEARCH);
   }
 
@@ -234,36 +279,36 @@ public class JmdbGUI extends JFrame
    */
   public void switchListView(ListViews view)
   {
+    listLabel.setText(view.getText());
     switch (view)
     {
       case SEARCH:
-        // set all booleans for toggle-able views to false
-        watchListShown = false;
-        featuredListShown = false;
-        scrollPane.setViewportView(jlist);
+        currentListView = ListViews.SEARCH;
+        watchListButton.setText("Add to Plan to Watch List");
+        moviesJlist.setModel(searchListModel);
         break;
       case WATCHLIST:
-        // toggle watch-list display
-        if (!watchListShown)
-        {
-          watchListShown = true;
-          scrollPane.setViewportView(watchList);
-        }
-        else
+        // go back to the search display if the watch-list is currently shown
+        if (currentListView == ListViews.WATCHLIST)
         {
           switchListView(ListViews.SEARCH);
+          break;
         }
+        currentListView = ListViews.WATCHLIST;
+        watchListButton.setText("Remove from Plan to Watch List");
+        moviesJlist.setModel(watchListModel);
         break;
       case FEATURED:
-        if (!featuredListShown)
-        {
-          featuredListShown = true;
-          scrollPane.setViewportView(featuredMovieList);
-        }
-        else
+        // go back to the search display if the featured list is currently shown
+        if (currentListView == ListViews.FEATURED)
         {
           switchListView(ListViews.SEARCH);
+          break;
         }
+        currentListView = ListViews.FEATURED;
+        watchListButton.setText("Add to Plan to Watch List");
+        moviesJlist.setModel(featuredListModel);
+        break;
       default:
         System.err.println("Impossible list view requested");
         break;

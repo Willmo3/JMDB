@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,7 +20,7 @@ import media.Movie;
  * Movie.
  * 
  * @author Immanuel Semelfort & Matthew Potter
- * @version 11/10/2022
+ * @version 12/03/2022
  */
 public class MediaDisplayPanel extends JPanel
 {
@@ -28,6 +29,7 @@ public class MediaDisplayPanel extends JPanel
    */
   private static final long serialVersionUID = 8348996138626439630L;
   private JLabel picLabel;
+  private MediaDisplayPanel display;
 
   /**
    * JPanel constructor.
@@ -39,30 +41,39 @@ public class MediaDisplayPanel extends JPanel
    */
   public MediaDisplayPanel(Movie media)
   {
+    display = this;
     if (media != null)
     {
+      ImageIcon loading = new ImageIcon("./images/RetrievingImage.png");
       picLabel = new JLabel();
+      picLabel.setIcon(loading);
       buildCoverImage(media);
-      add(picLabel, BorderLayout.WEST);
-      add(new JLabel(media.getTitle()), BorderLayout.NORTH);
-      add(new JLabel(media.getDescription()), BorderLayout.NORTH);
-      add(new JLabel(String.format("IMDb rating: %2.1f", media.getImdbRating())),
-          BorderLayout.SOUTH);
+      JPanel content = new JPanel();
+      content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+      content.add(picLabel);
+      content.add(new JLabel(media.getTitle()));
+      content.add(new JLabel(media.getDescription()));
+      content.add(new JLabel(
+          String.format("IMDb rating: %2.1f", media.getImdbRating())));
+      add(content, BorderLayout.CENTER);
     }
   }
 
   private void buildCoverImage(Movie media)
   {
-    ImageIcon cover = fetchImage(media);
-    if (cover != null)
-    {
-      Image image = cover.getImage();
-      // resize the image to a consistent size
-      Image scaledImage = image.getScaledInstance(230, 310,
-          java.awt.Image.SCALE_SMOOTH);
-      cover = new ImageIcon(scaledImage);
-    }
-    picLabel.setIcon(cover);
+    new Thread(() -> {
+      ImageIcon cover = fetchImage(media);
+      if (cover != null)
+      {
+        Image image = cover.getImage();
+        // resize the image to a consistent size
+        Image scaledImage = image.getScaledInstance(230, 310,
+            java.awt.Image.SCALE_SMOOTH);
+        cover = new ImageIcon(scaledImage);
+      }
+      picLabel.setIcon(cover);
+      display.repaint();
+    }).start();
   }
 
   private ImageIcon fetchImage(Movie media)
@@ -79,7 +90,7 @@ public class MediaDisplayPanel extends JPanel
     }
     catch (IOException e)
     {
-      System.err.println("Image Address is improper in MediaDisplayPanel");
+      // System.err.println("Image Address is improper in MediaDisplayPanel");
     }
     return null;
   }
