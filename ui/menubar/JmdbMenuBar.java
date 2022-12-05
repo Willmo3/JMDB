@@ -54,15 +54,15 @@ public class JmdbMenuBar extends JMenuBar
     items.addSeparator();
     items.add(awards);
     items.addSeparator();
-    items.add(watch);
-    items.addSeparator();
     items.add(reviews);
     items.addSeparator();
     items.add(wiki);
     items.addSeparator();
-    items.add(featured);
-    items.addSeparator();
     items.add(crew);
+    items.addSeparator();
+    items.add(watch);
+    items.addSeparator();
+    items.add(featured);
     addFunctionality();
     add(items);
   }

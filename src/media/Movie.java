@@ -37,13 +37,11 @@ public class Movie
    * Sentinel string for wiki links.
    */
   public static final String DEFAULT_WIKI = "DEFAULT_WIKI";
-  
 
   /**
    * Sentinel string for crew.
    */
   public static final String DEFAULT_CREW = "DEFAULT_CREW";
-  
 
   private String id;
   private ResultTypes type;
@@ -55,7 +53,6 @@ public class Movie
   private String award;
   private String wiki;
   private String crew;
-  
 
   /**
    * Default constructor.
@@ -71,7 +68,7 @@ public class Movie
     trailerLink = DEFAULT_TRAILER;
     award = DEFAULT_AWARD;
     wiki = DEFAULT_WIKI;
-    this.crew = DEFAULT_CREW;
+    crew = DEFAULT_CREW;
   }
 
   /**
@@ -101,6 +98,7 @@ public class Movie
     this.trailerLink = DEFAULT_TRAILER;
     this.award = DEFAULT_AWARD;
     this.wiki = DEFAULT_WIKI;
+    this.crew = DEFAULT_CREW;
   }
 
   /**
@@ -125,10 +123,12 @@ public class Movie
    *          the awards this Movie has won
    * @param wiki
    *          the wikipedia link of this Movie
+   * @param crew
+   *          the crew list of this Movie
    */
   public Movie(String id, ResultTypes type, String imageLink, String title,
       String description, double imdbRating, String trailerLink, String award,
-      String wiki)
+      String wiki, String crew)
   {
     this.id = id;
     this.type = type;
@@ -139,6 +139,7 @@ public class Movie
     this.trailerLink = trailerLink;
     this.award = award;
     this.wiki = wiki;
+    this.crew = crew;
   }
 
   /**
@@ -219,8 +220,9 @@ public class Movie
   public String getTrailerLink()
   {
     // the Media has no trailer associated with it on IMDb
-    if (trailerLink == null)
+    if (trailerLink == null || trailerLink.isBlank())
     {
+      trailerLink = null;
       return trailerLink;
     }
 
@@ -240,16 +242,15 @@ public class Movie
    */
   public String getAward()
   {
+    if (award == null || award.isBlank())
+    {
+      award = null;
+      return award;
+    }
     if (award != null && award.equals(DEFAULT_AWARD))
     {
       award = JsonRequestor.queryAwards(id);
     }
-
-    if (award == null)
-    {
-      System.err.println("award not present.");
-    }
-
     return award;
   }
 
@@ -262,7 +263,7 @@ public class Movie
    */
   public String getWiki()
   {
-    if (wiki == null || wiki.isEmpty())
+    if (wiki == null || wiki.isBlank())
     {
       wiki = null;
       return wiki;
@@ -272,11 +273,9 @@ public class Movie
     {
       wiki = JsonRequestor.queryWiki(id);
     }
-
     return wiki;
   }
-  
-  
+
   /**
    * Fetches the crew for a movie. Grabs one from the Internet if one does not
    * already exist.
@@ -285,19 +284,18 @@ public class Movie
    */
   public String getCrew()
   {
+    if (crew == null || crew.isBlank())
+    {
+      crew = null;
+      return crew;
+    }
+
     if (crew != null && crew.equals(DEFAULT_CREW))
     {
       crew = JsonRequestor.queryCrew(id);
     }
-
-    if (crew == null)
-    {
-      System.err.println("crew not present.");
-    }
-
     return crew;
   }
-  
 
   /**
    * Setter for ID.
@@ -396,6 +394,17 @@ public class Movie
   public void setWiki(String wiki)
   {
     this.wiki = wiki;
+  }
+
+  /**
+   * Setter for crew.
+   * 
+   * @param crew
+   *          the crew list to set this Media's crew list to
+   */
+  public void setCrew(String crew)
+  {
+    this.crew = crew;
   }
 
   @Override

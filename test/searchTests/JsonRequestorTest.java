@@ -110,4 +110,12 @@ public class JsonRequestorTest
         JsonRequestor.queryWiki(queryID));
   }
 
+  @Test
+  void testQueryCrew()
+  {
+    assertEquals(
+        "(directed by): Christopher Nolan\n(written by): Christopher Nolan",
+        JsonRequestor.queryCrew(queryID));
+  }
+
 }

@@ -251,27 +251,25 @@ public final class JsonRequestor
         .format("https://imdb-api.com/en/API/FullCast/k_mcx0w8kk/%s", id);
     try
     {
-       
+
       ObjectMapper mapper = new ObjectMapper();
       InputStream stream = fetch(url);
       JsonNode crew = mapper.readTree(stream);
       stream.close();
-      
+
       String director, writer, discription1, discription2;
 
-      JsonNode items = crew.get("directors").get("items")
-          .get(0);
-      
+      JsonNode items = crew.get("directors").get("items").get(0);
+
       director = items.get("name").asText();
       discription1 = items.get("description").asText();
-    
-      
-      JsonNode items2 = crew.get("writers").get("items")
-          .get(0);
+
+      JsonNode items2 = crew.get("writers").get("items").get(0);
       writer = items2.get("name").asText();
       discription2 = items2.get("description").asText();
-      return String.format("%s: %s\n %s: %s ", discription1, director, discription2, writer);
-      
+      return String.format("%s: %s\n%s: %s", discription1, director,
+          discription2, writer);
+
     }
     catch (IOException e)
     {
