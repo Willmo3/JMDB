@@ -114,8 +114,10 @@ public class JsonRequestorTest
   void testQueryCrew()
   {
     assertEquals(
-        "(directed by): Christopher Nolan\n(written by): Christopher Nolan",
+        "(directed by): Christopher Nolan, (written by): Christopher Nolan",
         JsonRequestor.queryCrew(queryID));
+    assertEquals("Director: Ian Kirby, Writer: Jordan Goldberg",
+        JsonRequestor.queryCrew("tt1790736"));
   }
 
 }

@@ -35,6 +35,7 @@ public class JmdbGUI extends JFrame
 {
   private static final long serialVersionUID = 6407031954885012174L;
 
+  private JmdbGUI appFrame;
   private JmdbController controller;
   private JPanel contentPane;
   // top-side content
@@ -166,6 +167,7 @@ public class JmdbGUI extends JFrame
    */
   public JmdbGUI(JmdbController controller)
   {
+    appFrame = this;
     // set the controller
     this.controller = controller;
     controller.setGui(this);
@@ -206,6 +208,7 @@ public class JmdbGUI extends JFrame
       public void windowClosing(WindowEvent e)
       {
         super.windowClosing(e);
+        appFrame.setVisible(false);
         controller.saveData();
       }
     });

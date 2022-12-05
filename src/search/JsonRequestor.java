@@ -263,18 +263,26 @@ public final class JsonRequestor
 
       director = items.get("name").asText();
       discription1 = items.get("description").asText();
+      if (discription1.isBlank())
+      {
+        discription1 = "Director";
+      }
 
       JsonNode items2 = crew.get("writers").get("items").get(0);
       writer = items2.get("name").asText();
       discription2 = items2.get("description").asText();
-      return String.format("%s: %s\n%s: %s", discription1, director,
+      if (discription2.isBlank())
+      {
+        discription2 = "Writer";
+      }
+      return String.format("%s: %s, %s: %s", discription1, director,
           discription2, writer);
 
     }
     catch (IOException e)
     {
       System.err.println(String.format(
-          "Error occurred in reading stream in wiki query for ID: %s\n", id));
+          "Error occurred in reading stream in crew query for ID: %s\n", id));
     }
     return null;
   }
