@@ -239,6 +239,49 @@ public final class JsonRequestor
   }
 
   /**
+   * Queries the IMDb web API in order to get the director and writer of a film.
+   *
+   * @param id
+   *          the movie ID to get the crew of
+   * @return the crew of the passed movie
+   */
+  public static String queryCrew(String id)
+  {
+    String url = String
+        .format("https://imdb-api.com/en/API/FullCast/k_mcx0w8kk/%s", id);
+    try
+    {
+       
+      ObjectMapper mapper = new ObjectMapper();
+      InputStream stream = fetch(url);
+      JsonNode crew = mapper.readTree(stream);
+      stream.close();
+      
+      String director, writer, discription1, discription2;
+
+      JsonNode items = crew.get("directors").get("items")
+          .get(0);
+      
+      director = items.get("name").asText();
+      discription1 = items.get("description").asText();
+    
+      
+      JsonNode items2 = crew.get("writers").get("items")
+          .get(0);
+      writer = items2.get("name").asText();
+      discription2 = items2.get("description").asText();
+      return String.format("%s: %s\n %s: %s ", discription1, director, discription2, writer);
+      
+    }
+    catch (IOException e)
+    {
+      System.err.println(String.format(
+          "Error occurred in reading stream in wiki query for ID: %s\n", id));
+    }
+    return null;
+  }
+
+  /**
    * Connects to the passed URL through an HttpURLConnection, expecting a
    * raw-data JSON file to be present at the location in order to duplicate its
    * InputStream to be parsed for information.

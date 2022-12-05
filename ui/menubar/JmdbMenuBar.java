@@ -30,7 +30,7 @@ public class JmdbMenuBar extends JMenuBar
   private static final long serialVersionUID = 974458634623052710L;
   private JmdbGUI gui;
   private JMenu items;
-  private JMenuItem trailer, awards, watch, reviews, wiki, featured;
+  private JMenuItem trailer, awards, watch, reviews, wiki, featured, crew;
 
   /**
    * Constructs a MenuBar item with no controller-based functionality.
@@ -49,6 +49,7 @@ public class JmdbMenuBar extends JMenuBar
     reviews = new JMenuItem("Reviews & Ratings");
     wiki = new JMenuItem("Wikipedia Page");
     featured = new JMenuItem("Featured Movies");
+    crew = new JMenuItem("Crew");
     items.add(trailer);
     items.addSeparator();
     items.add(awards);
@@ -60,6 +61,8 @@ public class JmdbMenuBar extends JMenuBar
     items.add(wiki);
     items.addSeparator();
     items.add(featured);
+    items.addSeparator();
+    items.add(crew);
     addFunctionality();
     add(items);
   }
@@ -177,6 +180,29 @@ public class JmdbMenuBar extends JMenuBar
           System.out.println(movie.getWiki());
         }
         
+      }
+    });
+    
+    
+    crew.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+        JFrame frame2 = new JFrame();
+        try
+        {
+          String crew = gui.getSelectedMovie().getCrew();
+          JLabel label = new JLabel(crew);
+          frame2.add(label);
+          frame2.setSize(400, 100);
+          frame2.setLocationRelativeTo(null); // centers frame
+          frame2.setVisible(true);
+        }
+        catch (Exception ex)
+        {
+          System.out.println("Error opening crew");
+        }
       }
     });
   }

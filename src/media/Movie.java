@@ -37,6 +37,13 @@ public class Movie
    * Sentinel string for wiki links.
    */
   public static final String DEFAULT_WIKI = "DEFAULT_WIKI";
+  
+
+  /**
+   * Sentinel string for crew.
+   */
+  public static final String DEFAULT_CREW = "DEFAULT_CREW";
+  
 
   private String id;
   private ResultTypes type;
@@ -47,6 +54,8 @@ public class Movie
   private String trailerLink;
   private String award;
   private String wiki;
+  private String crew;
+  
 
   /**
    * Default constructor.
@@ -62,6 +71,7 @@ public class Movie
     trailerLink = DEFAULT_TRAILER;
     award = DEFAULT_AWARD;
     wiki = DEFAULT_WIKI;
+    this.crew = DEFAULT_CREW;
   }
 
   /**
@@ -265,6 +275,29 @@ public class Movie
 
     return wiki;
   }
+  
+  
+  /**
+   * Fetches the crew for a movie. Grabs one from the Internet if one does not
+   * already exist.
+   *
+   * @return crew.
+   */
+  public String getCrew()
+  {
+    if (crew != null && crew.equals(DEFAULT_CREW))
+    {
+      crew = JsonRequestor.queryCrew(id);
+    }
+
+    if (crew == null)
+    {
+      System.err.println("crew not present.");
+    }
+
+    return crew;
+  }
+  
 
   /**
    * Setter for ID.
