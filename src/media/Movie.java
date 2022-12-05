@@ -8,10 +8,11 @@ import search.JsonRequestor;
  * changed later.
  *
  * @author Will Morris, Matthew Potter, Immanuel Semelfort
- * @version 11/30/2022
+ * @version 12/04/2022
  */
 public class Movie
 {
+
   /**
    * Sentinel value for ratings.
    */
@@ -21,11 +22,6 @@ public class Movie
    * Sentinel string for trailer links.
    */
   public static final String DEFAULT_TRAILER = "DEFAULT_TRAILER";
-
-  /**
-   * String indicating that a queried movie has no YouTube trailer on IMDb.
-   */
-  public static final String NO_TRAILER = "NO_TRAILER";
 
   /**
    * String indicating that a queried movie has no YouTube trailer on IMDb.
@@ -43,6 +39,7 @@ public class Movie
   public static final String DEFAULT_WIKI = "DEFAULT_WIKI";
 
   private String id;
+  private ResultTypes type;
   private String imageLink;
   private String title;
   private String description;
@@ -57,6 +54,7 @@ public class Movie
   public Movie()
   {
     id = null;
+    type = null;
     imageLink = null;
     title = null;
     description = null;
@@ -72,6 +70,8 @@ public class Movie
    * 
    * @param id
    *          the Movie's ID on IMDb
+   * @param type
+   *          the Media's type as defined by the search
    * @param imageLink
    *          the link to the Movie's cover image
    * @param title
@@ -79,9 +79,11 @@ public class Movie
    * @param description
    *          the IMDb search description of the Movie
    */
-  public Movie(String id, String imageLink, String title, String description)
+  public Movie(String id, ResultTypes type, String imageLink, String title,
+      String description)
   {
     this.id = id;
+    this.type = type;
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
@@ -97,6 +99,8 @@ public class Movie
    * 
    * @param id
    *          the Movie's ID on IMDb
+   * @param type
+   *          the Media's type as defined by the search
    * @param imageLink
    *          the link to the Movie's cover image
    * @param title
@@ -112,10 +116,12 @@ public class Movie
    * @param wiki
    *          the wikipedia link of this Movie
    */
-  public Movie(String id, String imageLink, String title, String description,
-      double imdbRating, String trailerLink, String award, String wiki)
+  public Movie(String id, ResultTypes type, String imageLink, String title,
+      String description, double imdbRating, String trailerLink, String award,
+      String wiki)
   {
     this.id = id;
+    this.type = type;
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
@@ -133,6 +139,16 @@ public class Movie
   public String getId()
   {
     return id;
+  }
+
+  /**
+   * Getter for the Media's type.
+   * 
+   * @return the Media's type
+   */
+  public ResultTypes getType()
+  {
+    return type;
   }
 
   /**
@@ -188,27 +204,21 @@ public class Movie
    * Fetches the trailer for a movie. Grabs one from the internet if the link's
    * information has not already been retrieved from the internet.
    *
-   * @return The link to the trailer on YouTube, NO_TRAILER if no trailer
-   *         exists, or null if it wouldn't make sense to have a trailer in the
-   *         first place e.g. a trailer for an actor.
+   * @return The link to the trailer on YouTube, or null if no trailer exists.
    */
   public String getTrailerLink()
   {
-    if (trailerLink == null || trailerLink.equals(NO_TRAILER))
+    // the Media has no trailer associated with it on IMDb
+    if (trailerLink == null)
     {
       return trailerLink;
     }
 
-    if (trailerLink.isEmpty())
-    {
-      trailerLink = NO_TRAILER;
-    }
-
+    // the Media hasn't had its trailer set yet
     if (trailerLink.equals(DEFAULT_TRAILER))
     {
       trailerLink = JsonRequestor.queryTrailer(id);
     }
-
     return trailerLink;
   }
 
@@ -237,20 +247,15 @@ public class Movie
    * Fetches the wikipedia page for a movie. Grabs one from the internet if the
    * link's information has not already been retrieved from the internet.
    *
-   * @return The link to the wikipedia page, NO_TRAILER if no wikipedia page
-   *         exists, or null if it wouldn't make sense to have a wikipedia page
-   *         in the first place e.g. a wikipedia page for an actor.
+   * @return The link to the wikipedia page, or null if no Wikipedia page
+   *         exists.
    */
   public String getWiki()
   {
-    if (wiki == null || wiki.equals(NO_TRAILER))
+    if (wiki == null || wiki.isEmpty())
     {
+      wiki = null;
       return wiki;
-    }
-
-    if (wiki.isEmpty())
-    {
-      wiki = NO_WIKI;
     }
 
     if (wiki.equals(DEFAULT_WIKI))
@@ -261,41 +266,100 @@ public class Movie
     return wiki;
   }
 
+  /**
+   * Setter for ID.
+   * 
+   * @param id
+   *          the ID to set this Media's ID to
+   */
   public void setId(String id)
   {
     this.id = id;
   }
 
+  /**
+   * Setter for type.
+   * 
+   * @param type
+   *          the ResultType to set this Media's type to
+   */
+  public void setType(ResultTypes type)
+  {
+    this.type = type;
+  }
+
+  /**
+   * Setter for imageLink.
+   * 
+   * @param imageLink
+   *          the String URL to set this Media's imageLink to
+   */
   public void setImageLink(String imageLink)
   {
     this.imageLink = imageLink;
   }
 
+  /**
+   * Setter for title.
+   * 
+   * @param title
+   *          the title to set this Media's title to
+   */
   public void setTitle(String title)
   {
     this.title = title;
   }
 
+  /**
+   * Setter for description.
+   * 
+   * @param description
+   *          the description to set this Media's description to
+   */
   public void setDescription(String description)
   {
     this.description = description;
   }
 
+  /**
+   * Setter for imdbRating.
+   * 
+   * @param imdbRating
+   *          the imdbRating to set this Media's imdbRating to
+   */
   public void setImdbRating(double imdbRating)
   {
     this.imdbRating = imdbRating;
   }
 
+  /**
+   * Setter for trailerLink.
+   * 
+   * @param trailerLink
+   *          the YouTube trailer URL to set this Media's trailerLink to
+   */
   public void setTrailerLink(String trailerLink)
   {
     this.trailerLink = trailerLink;
   }
 
+  /**
+   * Setter for award.
+   * 
+   * @param award
+   *          the award to set this Media's award to
+   */
   public void setAward(String award)
   {
     this.award = award;
   }
 
+  /**
+   * Setter for wiki.
+   * 
+   * @param wiki
+   *          the Wikipedia URL to set this Media's Wikipedia link to
+   */
   public void setWiki(String wiki)
   {
     this.wiki = wiki;

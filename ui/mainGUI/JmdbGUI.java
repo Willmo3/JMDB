@@ -83,7 +83,7 @@ public class JmdbGUI extends JFrame
     {
       this.text = viewText;
     }
-    
+
     /**
      * Getter for the text of the list view enum.
      * 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import media.Movie;
+import media.ResultTypes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,8 +42,10 @@ public class MovieList
 
     for (JsonNode movie : results)
     {
-      movieList
-          .add(new Movie(movie.get("id").asText(), movie.get("image").asText(),
+      ResultTypes type = ResultTypes.INVALID;
+      type = type.matchType(movie.get("resultType").asText());
+      movieList.add(
+          new Movie(movie.get("id").asText(), type, movie.get("image").asText(),
               movie.get("title").asText(), movie.get("description").asText()));
     }
     source.close();

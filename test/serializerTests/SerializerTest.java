@@ -69,6 +69,7 @@ public class SerializerTest
   {
     assertFalse(JmdbSerializer.serialize(invalidPath, testMap));
     assertTrue(JmdbSerializer.serialize(savePath, testMap));
+    assertTrue(JmdbSerializer.serialize(savePath, testMap));
   }
 
   @SuppressWarnings("unchecked")

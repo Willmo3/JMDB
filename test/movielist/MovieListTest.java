@@ -2,6 +2,7 @@ package movielist;
 
 import list.MovieList;
 import media.Movie;
+import media.ResultTypes;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * Tests for MovieList.
  *
  * @author Will Morris
- * @version 12/03/2022
+ * @version 12/04/2022
  */
 public class MovieListTest
 {
@@ -59,24 +60,24 @@ public class MovieListTest
     List<Movie> movieList = list.getMovieList();
     List<Movie> expected = new ArrayList<Movie>();
 
-    expected.add(new Movie("tt1375666",
+    expected.add(new Movie("tt1375666", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkF"
             + "tZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
         "Inception", "(2010)"));
-    expected.add(new Movie("tt1790736",
+    expected.add(new Movie("tt1790736", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjE0NGIwM2EtZjQxZi00ZTE5LWEx"
             + "N2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3M"
             + "jk@._V1_Ratio0.6800_AL_.jpg",
         "Inception: The Cobol Job", "(2010 Video)"));
-    expected.add(new Movie("tt5295990",
+    expected.add(new Movie("tt5295990", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BZGFjOTRiYjgtYjEzMS00ZjQ2LTkz"
             + "Y2YtOGQ0NDI2NTVjOGFmXkEyXkFqcGdeQXVyNDQ5MDYzM"
             + "Tk@._V1_Ratio0.6800_AL_.jpg",
         "Inception: Jump Right Into the Action", "(2010 Video)"));
-    expected.add(new Movie("tt1686778",
+    expected.add(new Movie("tt1686778", ResultTypes.TITLE,
         "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception: 4Movie Premiere Special", "(2010 TV Movie)"));
-    expected.add(new Movie("tt12960252",
+    expected.add(new Movie("tt12960252", ResultTypes.TITLE,
         "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception Premiere", "(2010)"));
 
@@ -90,7 +91,7 @@ public class MovieListTest
   @Test
   void searchByMovieID()
   {
-    Movie beThere = new Movie("tt12960252",
+    Movie beThere = new Movie("tt12960252", ResultTypes.TITLE,
         "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception Premiere", "(2010)");
     assertEquals(beThere, list.queryMovie(beThere.getId()));
@@ -101,12 +102,12 @@ public class MovieListTest
   @Test
   void searchByMovie()
   {
-    Movie beThere = new Movie("tt12960252",
+    Movie beThere = new Movie("tt12960252", ResultTypes.TITLE,
         "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception Premiere", "(2010)");
     assertEquals(beThere, list.queryMovie(beThere));
 
-    Movie notThere = new Movie("tt1er2960252",
+    Movie notThere = new Movie("tt1er2960252", ResultTypes.TITLE,
         "https://imdb-api.com/images/original/nopicture.jpg",
         "Inception Premiere", "(2010)");
     assertNull(list.queryMovie(notThere));

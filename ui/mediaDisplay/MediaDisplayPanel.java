@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import media.Movie;
 
@@ -28,6 +29,7 @@ public class MediaDisplayPanel extends JPanel
    * Generated serial UID.
    */
   private static final long serialVersionUID = 8348996138626439630L;
+  private JTabbedPane tabbedPanel;
   private JLabel picLabel;
   private MediaDisplayPanel display;
 
@@ -42,21 +44,28 @@ public class MediaDisplayPanel extends JPanel
   public MediaDisplayPanel(Movie media)
   {
     display = this;
-    if (media != null)
+    if (media == null)
     {
-      ImageIcon loading = new ImageIcon("./images/RetrievingImage.png");
-      picLabel = new JLabel();
-      picLabel.setIcon(loading);
-      buildCoverImage(media);
-      JPanel content = new JPanel();
-      content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-      content.add(picLabel);
-      content.add(new JLabel(media.getTitle()));
-      content.add(new JLabel(media.getDescription()));
-      content.add(new JLabel(
-          String.format("IMDb rating: %2.1f", media.getImdbRating())));
-      add(content, BorderLayout.CENTER);
+      return;
     }
+    // laying out for later
+    buildStartTab(media);
+  }
+
+  private void buildStartTab(Movie media)
+  {
+    ImageIcon loading = new ImageIcon("./images/RetrievingImage.png");
+    picLabel = new JLabel();
+    picLabel.setIcon(loading);
+    buildCoverImage(media);
+    JPanel content = new JPanel();
+    content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+    content.add(picLabel);
+    content.add(new JLabel(media.getTitle()));
+    content.add(new JLabel(media.getDescription()));
+    content.add(
+        new JLabel(String.format("IMDb rating: %2.1f", media.getImdbRating())));
+    add(content, BorderLayout.CENTER);
   }
 
   private void buildCoverImage(Movie media)

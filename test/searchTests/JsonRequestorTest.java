@@ -55,6 +55,11 @@ public class JsonRequestorTest
   static String queryText = "inception 2010";
 
   /**
+   * ID used to do the search for the Media's data.
+   */
+  static String queryID = "tt1375666";
+
+  /**
    * Made for coverage purposes.
    */
   JsonRequestor coverage = new JsonRequestor();
@@ -65,7 +70,7 @@ public class JsonRequestorTest
    * functionality, but whatever, it works.
    */
   @Test
-  public void testQueryList()
+  void testQueryList()
   {
     assertEquals(testList.getMovieList(),
         JsonRequestor.search(queryText).getMovieList());
@@ -79,9 +84,30 @@ public class JsonRequestorTest
    * but we can assume such.
    */
   @Test
-  public void testQueryRating()
+  void testQueryRating()
   {
-    assertEquals(88, Math.round(JsonRequestor.queryRating("tt1375666") * 10));
+    assertEquals(88, Math.round(JsonRequestor.queryRating(queryID) * 10));
+  }
+
+  @Test
+  void testQueryTrailer()
+  {
+    assertEquals("https://www.youtube.com/watch?v=Jvurpf91omw",
+        JsonRequestor.queryTrailer(queryID));
+  }
+
+  @Test
+  void testQueryAwards()
+  {
+    assertEquals("Academy Awards, USA, 2011, Oscar, Winner",
+        JsonRequestor.queryAwards(queryID));
+  }
+
+  @Test
+  void testQueryWiki()
+  {
+    assertEquals("https://en.wikipedia.org/wiki/Inception",
+        JsonRequestor.queryWiki(queryID));
   }
 
 }

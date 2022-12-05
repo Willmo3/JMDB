@@ -18,7 +18,7 @@ import list.MovieList;
  * present on IMDb, all as queried through the IMDb API.
  * 
  * @author Matthew Potter, Will Morris
- * @version 11/11/2022
+ * @version 12/04/2022
  */
 public final class JsonRequestor
 {
@@ -155,7 +155,7 @@ public final class JsonRequestor
       InputStream stream = fetch(url);
       JsonNode ratings = mapper.readTree(stream);
       stream.close();
-      return ratings.get("videoUrl").asText();
+      return ratings.get("videoUrl").textValue();
     }
     catch (IOException e)
     {
@@ -195,12 +195,12 @@ public final class JsonRequestor
           .get(0);
 
       // fill in the award information
-      event = firstEvent.get("eventTitle").asText();
-      year = firstEvent.get("eventYear").asText();
-      outcome = firstAward.get("outcomeTitle").asText();
-      category = firstAward.get("outcomeCategory").asText();
+      event = firstEvent.get("eventTitle").textValue();
+      year = firstEvent.get("eventYear").textValue();
+      outcome = firstAward.get("outcomeTitle").textValue();
+      category = firstAward.get("outcomeCategory").textValue();
 
-      result = String.format("%s, %s, %s %s", event, year, category, outcome);
+      result = String.format("%s, %s, %s, %s", event, year, category, outcome);
       return result;
     }
     catch (IOException e)
@@ -210,7 +210,7 @@ public final class JsonRequestor
     }
     return null;
   }
-  
+
   /**
    * Queries the IMDb web API in order to get the Wikipedia page of a film.
    *
@@ -228,7 +228,7 @@ public final class JsonRequestor
       InputStream stream = fetch(url);
       JsonNode wiki = mapper.readTree(stream);
       stream.close();
-      return wiki.get("url").asText();
+      return wiki.get("url").textValue();
     }
     catch (IOException e)
     {
@@ -237,7 +237,6 @@ public final class JsonRequestor
     }
     return null;
   }
-
 
   /**
    * Connects to the passed URL through an HttpURLConnection, expecting a

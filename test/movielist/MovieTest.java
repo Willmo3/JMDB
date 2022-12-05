@@ -1,82 +1,144 @@
 package movielist;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import media.Movie;
+import media.ResultTypes;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 
 /**
  * Test for movie class.
  *
- * @author Will Morris
- * @version 11/4/22
+ * @author Will Morris, Matthew Potter
+ * @version 12/04/22
  */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class MovieTest
 {
-  // Test that the constructor works properly and that equals works properly.
-  @Test
-  void constructMovie()
-  {
-    Movie movie = new Movie("tt1375666", "TestLink", "Inception", "(2010)");
-    Movie otherMovie = new Movie("tt1375666", "TestLink", "Inception",
-        "(2010)");
-    Movie wrongMovie = new Movie("WRONG!", "WRONG!", "WRONG!", "WRONG!");
+  private static Movie inception;
+  private static Movie inceptionCopy;
+  private static Movie cobol;
 
-    assertEquals(movie, movie);
-    assertEquals(movie, otherMovie);
-    assertNotEquals(movie, null);
-    assertNotEquals(movie, wrongMovie);
-  }
-
-  @Test
-  void gettersTest()
+  static
   {
-    Movie silly = new Movie("12345", "Test", "Silly Movie", "2002");
-    assertEquals("12345", silly.getId());
-    assertEquals("Test", silly.getImageLink());
-    assertEquals("Silly Movie", silly.getTitle());
-    assertEquals("2002", silly.getDescription());
-  }
+    // for coverage
+    new Movie();
+    new Movie("WRONG!", ResultTypes.INVALID, "WRONG!", "WRONG!", "WRONG!");
+    new Movie("12345", ResultTypes.TITLE, "Test", "Silly Movie", "2002", 1.0,
+        "trailer-link", "silly award", "wiki-link");
 
-  @Test
-  void getValidRatingTest()
-  {
-    Movie Inception = new Movie("tt1375666",
+    inception = new Movie("tt1375666", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnX"
             + "kFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
-        "Inception", "(2010)");
-    assertEquals(8.8, Inception.getImdbRating());
+        "Inception", "(2010)", 8.8,
+        "https://www.youtube.com/watch?v=Jvurpf91omw",
+        "Academy Awards, USA, 2011, Winner, Oscar",
+        "https://en.wikipedia.org/wiki/Inception");
+    inceptionCopy = new Movie("tt1375666", ResultTypes.TITLE,
+        "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnX"
+            + "kFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
+        "Inception", "(2010)", 8.8,
+        "https://www.youtube.com/watch?v=Jvurpf91omw",
+        "Academy Awards, USA, 2011, Winner, Oscar",
+        "https://en.wikipedia.org/wiki/Inception");
+    cobol = new Movie("tt1790736", ResultTypes.TITLE,
+        "https://m.media-amazon.com/images/M/MV5BMjE0NGIwM2EtZjQxZi00ZTE5LWEx"
+            + "N2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3Mjk"
+            + "@._V1_Ratio0.6800_AL_.jpg",
+        "Inception: The Cobol Job", "(2010 Video)", 7.5, "no link",
+        "This film did not win any awards", "no link");
   }
 
   @Test
+  @Order(1)
+  void equalsAndSomeSettersTest()
+  {
+    assertEquals(inception, inception);
+    assertEquals(inception, inceptionCopy);
+    assertNotEquals(inception, null);
+    assertNotEquals(inception, cobol);
+    // for coverage of all branches
+    inceptionCopy.setDescription("Different");
+    assertNotEquals(inception, inceptionCopy);
+    inceptionCopy.setTitle("Different");
+    assertNotEquals(inception, inceptionCopy);
+    inceptionCopy.setImageLink("Different");
+    assertNotEquals(inception, inceptionCopy);
+    inceptionCopy.setId("Different");
+    assertNotEquals(inception, inceptionCopy);
+  }
+
+  @Test
+  void gettersAndOtherSettersTest()
+  {
+    Movie silly = new Movie("12345", ResultTypes.TITLE, "image", "Silly Movie",
+        "description", 4.4, "trailer", "award", "wiki");
+    assertEquals("12345", silly.getId());
+    assertEquals("image", silly.getImageLink());
+    assertEquals("Silly Movie", silly.getTitle());
+    assertEquals("description", silly.getDescription());
+    assertEquals(4.4, silly.getImdbRating());
+    assertEquals("trailer", silly.getTrailerLink());
+    assertEquals("award", silly.getAward());
+    assertEquals("wiki", silly.getWiki());
+    assertEquals(ResultTypes.TITLE, silly.getType());
+    silly.setImdbRating(0.0);
+    silly.setTrailerLink("none");
+    silly.setAward("none");
+    silly.setWiki("none");
+    silly.setType(ResultTypes.INVALID);
+    assertEquals(0.0, silly.getImdbRating());
+    assertEquals("none", silly.getTrailerLink());
+    assertEquals("none", silly.getAward());
+    assertEquals("none", silly.getWiki());
+    assertEquals(ResultTypes.INVALID, silly.getType());
+    silly.setWiki("");
+    assertNull(silly.getWiki());
+    assertNull(silly.getWiki());
+  }
+
+  /*
+   * Commented out as these tests make calls to the API
+  @Test
+  @Order(4)
   void getInvalidRatingTest()
   {
-    Movie invalid = new Movie("12345", "Test", "Silly Movie", "2002");
+    Movie invalid = new Movie("12345", ResultTypes.INVALID, "Test",
+        "Silly Movie", "2002");
     assertEquals(0.0, invalid.getImdbRating());
   }
 
   @Test
+  @Order(5)
   void toStringTest()
   {
-    Movie silly = new Movie("12345", "Test", "Silly Movie", "2002");
+    Movie silly = new Movie("12345", ResultTypes.TITLE, "Test", "Silly Movie",
+        "2002");
     assertEquals("Silly Movie 2002", silly.toString());
   }
 
   @Test
+  @Order(6)
   void trailerFromRealMovieTest()
   {
-    Movie movie = new Movie("tt1375666", "TestLink", "Inception", "(2010)");
+    Movie movie = new Movie("tt1375666", ResultTypes.TITLE, "TestLink",
+        "Inception", "(2010)");
     String trailerLink = "https://www.youtube.com/watch?v=Jvurpf91omw";
     assertEquals(trailerLink, movie.getTrailerLink());
   }
 
   @Test
+  @Order(7)
   void invalidTrailerTest()
   {
-    Movie invalid = new Movie("12345", "Test", "Silly Movie", "2002");
-    // For some reason, this test is failing.
-    // What is going on? It flat out says they're both null.
-    // assertNull(invalid.getTrailer());
+    Movie invalid = new Movie("12345", ResultTypes.TITLE, "Test", "Silly Movie",
+        "2002");
+    assertNull(invalid.getTrailerLink());
   }
+  */
 }
