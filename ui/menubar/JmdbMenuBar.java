@@ -30,7 +30,7 @@ public class JmdbMenuBar extends JMenuBar
   private static final long serialVersionUID = 974458634623052710L;
   private JmdbGUI gui;
   private JMenu items;
-  private JMenuItem trailer, awards, watch, reviews, wiki, featured, crew;
+  private JMenuItem watch, featured;
 
   /**
    * Constructs a MenuBar item with no controller-based functionality.
@@ -43,23 +43,10 @@ public class JmdbMenuBar extends JMenuBar
     super();
     this.gui = gui;
     items = new JMenu("Menu");
-    trailer = new JMenuItem("Trailer");
-    awards = new JMenuItem("Awards");
+   
     watch = new JMenuItem("Watch List");
-    reviews = new JMenuItem("Reviews & Ratings");
-    wiki = new JMenuItem("Wikipedia Page");
     featured = new JMenuItem("Featured Movies");
-    crew = new JMenuItem("Crew");
-    items.add(trailer);
-    items.addSeparator();
-    items.add(awards);
-    items.addSeparator();
-    items.add(reviews);
-    items.addSeparator();
-    items.add(wiki);
-    items.addSeparator();
-    items.add(crew);
-    items.addSeparator();
+ 
     items.add(watch);
     items.addSeparator();
     items.add(featured);
@@ -73,52 +60,7 @@ public class JmdbMenuBar extends JMenuBar
    */
   private void addFunctionality()
   {
-    trailer.addActionListener(new ActionListener()
-    {
-      @Override
-      public void actionPerformed(ActionEvent e)
-      {
-        Movie movie = gui.getSelectedMovie();
-        if (movie == null)
-        {
-          System.out.println("Movie is null, please select a movie.");
-          return;
-        }
-        try
-        {
-          TrailerButton trailerBtn = new TrailerButton(movie.getTrailerLink());
-          trailerBtn.openPage();
-        }
-        catch (Exception ex)
-        {
-          System.out.println("Error opening trailer");
-          System.out.println(movie.getTrailerLink());
-        }
-      }
-    });
-    
-    awards.addActionListener(new ActionListener()
-    {
-      @Override
-      public void actionPerformed(ActionEvent e)
-      {
-        JFrame frame2 = new JFrame();
-        try
-        {
-          String award = gui.getSelectedMovie().getAward();
-          JLabel label = new JLabel(award);
-          frame2.add(label);
-          frame2.setSize(400, 100);
-          frame2.setLocationRelativeTo(null); // centers frame
-          frame2.setVisible(true);
-        }
-        catch (Exception ex)
-        {
-          System.out.println("Error opening award");
-        }
-      }
-    });
-    
+   
     watch.addActionListener(new ActionListener()
     {
       @Override
@@ -136,74 +78,8 @@ public class JmdbMenuBar extends JMenuBar
       }
     });
     
-    reviews.addActionListener(new ActionListener()
-    {
-      @Override
-      public void actionPerformed(ActionEvent e)
-      {
-        JFrame frame2 = new JFrame();
-        try
-        {
-          String rating = String.format("IMDb rating: %2.1f",
-              gui.getSelectedMovie().getImdbRating());
-
-          JLabel label = new JLabel(rating);
-          frame2.add(label);
-          frame2.setSize(200, 100);
-          frame2.setLocationRelativeTo(null); // centers frame
-          frame2.setVisible(true);
-        }
-        catch (Exception ex)
-        {
-          System.out.println("Error opening rating");
-        }
-      }
-    });
     
-    wiki.addActionListener(new ActionListener()
-    {
-      @Override
-      public void actionPerformed(ActionEvent e)
-      {
-        Movie movie = gui.getSelectedMovie();
-        if (movie == null)
-        {
-          System.out.println("Movie is null, please select a movie.");
-          return;
-        }
-            try {
-                Desktop.getDesktop().browse(new URL(movie.getWiki()).toURI());
-        }
-        catch (Exception ex)
-        {
-          System.out.println("Error opening wiki");
-          System.out.println(movie.getWiki());
-        }
-        
-      }
-    });
+  
     
-    
-    crew.addActionListener(new ActionListener()
-    {
-      @Override
-      public void actionPerformed(ActionEvent e)
-      {
-        JFrame frame2 = new JFrame();
-        try
-        {
-          String crew = gui.getSelectedMovie().getCrew();
-          JLabel label = new JLabel(crew);
-          frame2.add(label);
-          frame2.setSize(400, 100);
-          frame2.setLocationRelativeTo(null); // centers frame
-          frame2.setVisible(true);
-        }
-        catch (Exception ex)
-        {
-          System.out.println("Error opening crew");
-        }
-      }
-    });
   }
 }

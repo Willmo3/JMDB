@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -24,6 +25,7 @@ import media.Movie;
 import mediaDisplay.MediaDisplayPanel;
 import menubar.JmdbMenuBar;
 import searchbar.Searchbar;
+import tabbedPane.JmdbTabbedPane;
 
 /**
  * Main GUI for the JMDb program.
@@ -171,7 +173,7 @@ public class JmdbGUI extends JFrame
     // set the controller
     this.controller = controller;
     controller.setGui(this);
-
+    
     // generic content stuff
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 1280, 720);
@@ -180,7 +182,7 @@ public class JmdbGUI extends JFrame
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     setContentPane(contentPane);
     contentPane.setLayout(new BorderLayout(0, 0));
-
+    
     // movie list stuff
     listPanel = new JPanel();
     moviesJlist = new JList<Movie>();
@@ -192,11 +194,17 @@ public class JmdbGUI extends JFrame
     listPanel.add(listLabel);
     listPanel.add(listScrollPane);
     add(listPanel, BorderLayout.WEST);
+    
+    JmdbTabbedPane tabs = new JmdbTabbedPane(this);
+    this.add(tabs, BorderLayout.SOUTH);
 
+    
     // menu bar stuff
     JmdbMenuBar menu = new JmdbMenuBar(this);
     setJMenuBar(menu);
+    
 
+    
     buildModels();
     buildStartupDisplay();
     buildButtons();
