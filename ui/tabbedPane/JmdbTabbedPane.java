@@ -109,6 +109,11 @@ public class JmdbTabbedPane extends JTabbedPane {
             catch (Exception ex)
             {
               System.out.println("Error opening rating");
+              JLabel label = new JLabel("No Rating Available");
+              frame2.add(label);
+              frame2.setSize(400, 100);
+              frame2.setLocationRelativeTo(null); // centers frame
+              frame2.setVisible(true);
             }
           }
         });
@@ -131,6 +136,11 @@ public class JmdbTabbedPane extends JTabbedPane {
             catch (Exception ex)
             {
               System.out.println("Error opening crew");
+              JLabel label = new JLabel("No Crew Available");
+              frame2.add(label);
+              frame2.setSize(400, 100);
+              frame2.setLocationRelativeTo(null); // centers frame
+              frame2.setVisible(true);
             }
           }
         });
@@ -184,6 +194,12 @@ public class JmdbTabbedPane extends JTabbedPane {
             {
               System.out.println("Error opening trailer");
               System.out.println(movie.getTrailerLink());
+              JFrame frame2 = new JFrame();
+              JLabel label = new JLabel("No Trailer Link");
+              frame2.add(label);
+              frame2.setSize(400, 100);
+              frame2.setLocationRelativeTo(null); // centers frame
+              frame2.setVisible(true);
             }
           }
         });

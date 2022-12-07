@@ -43,10 +43,8 @@ public class JmdbMenuBar extends JMenuBar
     super();
     this.gui = gui;
     items = new JMenu("Menu");
-   
     watch = new JMenuItem("Watch List");
     featured = new JMenuItem("Featured Movies");
- 
     items.add(watch);
     items.addSeparator();
     items.add(featured);
