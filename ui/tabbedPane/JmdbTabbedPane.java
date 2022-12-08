@@ -5,14 +5,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URL;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import alert.AlertMessage;
 import mainGUI.JmdbGUI;
 import media.Movie;
 import trailer.TrailerButton;
@@ -72,19 +69,19 @@ public class JmdbTabbedPane extends JTabbedPane {
           @Override
           public void actionPerformed(ActionEvent e)
           {
-            JFrame frame2 = new JFrame();
             try
             {
               String award = gui.getSelectedMovie().getAward();
-              JLabel label = new JLabel(award);
-              frame2.add(label);
-              frame2.setSize(400, 100);
-              frame2.setLocationRelativeTo(null); // centers frame
-              frame2.setVisible(true);
+              JDialog awardDialog = new AlertMessage("Awards", award);
+              awardDialog.setLocationRelativeTo(null); // centers frame
+              awardDialog.setVisible(true);
             }
             catch (Exception ex)
             {
               System.out.println("Error opening award");
+              JDialog warning = new AlertMessage("No Awards", "No awards available");
+              warning.setLocationRelativeTo(null); // centers frame
+              warning.setVisible(true);
             }
           }
         });
@@ -94,26 +91,20 @@ public class JmdbTabbedPane extends JTabbedPane {
           @Override
           public void actionPerformed(ActionEvent e)
           {
-            JFrame frame2 = new JFrame();
             try
             {
               String rating = String.format("IMDb rating: %2.1f",
                   gui.getSelectedMovie().getImdbRating());
-
-              JLabel label = new JLabel(rating);
-              frame2.add(label);
-              frame2.setSize(200, 100);
-              frame2.setLocationRelativeTo(null); // centers frame
-              frame2.setVisible(true);
+              JDialog ratingDialog = new AlertMessage("Rating", rating);
+              ratingDialog.setLocationRelativeTo(null); // centers frame
+              ratingDialog.setVisible(true);
             }
             catch (Exception ex)
             {
               System.out.println("Error opening rating");
-              JLabel label = new JLabel("No Rating Available");
-              frame2.add(label);
-              frame2.setSize(400, 100);
-              frame2.setLocationRelativeTo(null); // centers frame
-              frame2.setVisible(true);
+              JDialog warning = new AlertMessage("No Rating", "No ratings available");
+              warning.setLocationRelativeTo(null); // centers frame
+              warning.setVisible(true);
             }
           }
         });
@@ -123,24 +114,19 @@ public class JmdbTabbedPane extends JTabbedPane {
           @Override
           public void actionPerformed(ActionEvent e)
           {
-            JFrame frame2 = new JFrame();
             try
             {
               String crew = gui.getSelectedMovie().getCrew();
-              JLabel label = new JLabel(crew);
-              frame2.add(label);
-              frame2.setSize(400, 100);
-              frame2.setLocationRelativeTo(null); // centers frame
-              frame2.setVisible(true);
+              JDialog crewMessage = new AlertMessage("Crew", crew);
+              crewMessage.setLocationRelativeTo(null); // centers frame
+              crewMessage.setVisible(true);
             }
             catch (Exception ex)
             {
               System.out.println("Error opening crew");
-              JLabel label = new JLabel("No Crew Available");
-              frame2.add(label);
-              frame2.setSize(400, 100);
-              frame2.setLocationRelativeTo(null); // centers frame
-              frame2.setVisible(true);
+              JDialog warning = new AlertMessage("No crew", "Crew unavailable.");
+              warning.setLocationRelativeTo(null);
+              warning.setVisible(true);
             }
           }
         });
@@ -163,12 +149,9 @@ public class JmdbTabbedPane extends JTabbedPane {
             {
               System.out.println("Error opening wiki");
               System.out.println(movie.getWiki());
-              JFrame frame2 = new JFrame();
-              JLabel label = new JLabel("No Wiki Link");
-              frame2.add(label);
-              frame2.setSize(400, 100);
-              frame2.setLocationRelativeTo(null); // centers frame
-              frame2.setVisible(true);
+              JDialog warning = new AlertMessage("No wiki", "Wiki link not found.");
+              warning.setLocationRelativeTo(null);
+              warning.setVisible(true);
             }
             
           }
@@ -194,12 +177,9 @@ public class JmdbTabbedPane extends JTabbedPane {
             {
               System.out.println("Error opening trailer");
               System.out.println(movie.getTrailerLink());
-              JFrame frame2 = new JFrame();
-              JLabel label = new JLabel("No Trailer Link");
-              frame2.add(label);
-              frame2.setSize(400, 100);
-              frame2.setLocationRelativeTo(null); // centers frame
-              frame2.setVisible(true);
+              JDialog warning = new AlertMessage("No trailer", "Trailer link not found.");
+              warning.setLocationRelativeTo(null);
+              warning.setVisible(true);
             }
           }
         });

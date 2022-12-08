@@ -189,6 +189,8 @@ public class JmdbGUI extends JFrame
     moviesJlist.addListSelectionListener(new DisplaySelectionListener());
     JScrollPane listScrollPane = new JScrollPane();
     listScrollPane.setViewportView(moviesJlist);
+    // Ensures no dynamic resizing.
+    listScrollPane.setPreferredSize(new Dimension(400, 300));
     listLabel = new JLabel();
     listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.Y_AXIS));
     listPanel.add(listLabel);
@@ -202,9 +204,6 @@ public class JmdbGUI extends JFrame
     // menu bar stuff
     JmdbMenuBar menu = new JmdbMenuBar(this);
     setJMenuBar(menu);
-    
-
-    
     buildModels();
     buildStartupDisplay();
     buildButtons();
