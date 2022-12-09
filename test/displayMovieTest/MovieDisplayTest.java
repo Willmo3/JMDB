@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 
 import media.Movie;
 import media.ResultTypes;
-import mediaDisplay.MediaDisplayPanel;
+import mediaDisplay.BaseMovieInfo;
 
 /**
  * Test class for MovieDisplay.
@@ -28,7 +28,7 @@ public class MovieDisplayTest extends JFrame
     this.setVisible(true);
     this.setTitle("Movie Cover");
     this.setSize(400, 400);
-    this.setContentPane(new MediaDisplayPanel(new Movie("tt1375666",
+    this.setContentPane(new BaseMovieInfo(new Movie("tt1375666",
         ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnXkFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
         "Inception", "(2010)")));

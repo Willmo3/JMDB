@@ -3,21 +3,20 @@ package media;
 import search.JsonRequestor;
 
 /**
- * Represents a single movie as specified in the IMDB Api. Note: Currently, only
- * supports json files as described in the Title Search Results. This may be
+ * Represents a single movie as specified in the IMDB API. Note: Currently, only
+ * supports JSON files as described in the Title Search Results. This may be
  * changed later.
  *
  * @author Will Morris, Matthew Potter, Immanuel Semelfort
- * @version 12/04/2022
+ * @version 12/08/2022
  */
 public class Movie
 {
 
   /**
-   * Sentinel value for ratings.
+   * Sentinel value for any rating in the ratings array.
    */
-  public static final Double DEFAULT_RATING = Double.NEGATIVE_INFINITY;
-
+  public static final double NO_RATING = Double.NEGATIVE_INFINITY;
   /**
    * Sentinel string for trailer links.
    */
@@ -48,11 +47,12 @@ public class Movie
   private String imageLink;
   private String title;
   private String description;
-  private double imdbRating;
+  private double[] ratings;
   private String trailerLink;
   private String award;
   private String wiki;
   private String crew;
+  private boolean retrievedRatings;
 
   /**
    * Default constructor.
@@ -64,11 +64,12 @@ public class Movie
     imageLink = null;
     title = null;
     description = null;
-    imdbRating = DEFAULT_RATING;
+    ratings = null;
     trailerLink = DEFAULT_TRAILER;
     award = DEFAULT_AWARD;
     wiki = DEFAULT_WIKI;
     crew = DEFAULT_CREW;
+    retrievedRatings = false;
   }
 
   /**
@@ -94,11 +95,12 @@ public class Movie
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
-    this.imdbRating = DEFAULT_RATING;
+    this.ratings = null;
     this.trailerLink = DEFAULT_TRAILER;
     this.award = DEFAULT_AWARD;
     this.wiki = DEFAULT_WIKI;
     this.crew = DEFAULT_CREW;
+    this.retrievedRatings = false;
   }
 
   /**
@@ -115,8 +117,8 @@ public class Movie
    *          the title of the Movie
    * @param description
    *          the IMDb search description of the Movie
-   * @param imdbRating
-   *          the IMDb rating of this Movie
+   * @param ratings
+   *          the list of doubles defining this Movie's ratings
    * @param trailerLink
    *          the link to the trailer of this Movie
    * @param award
@@ -125,21 +127,24 @@ public class Movie
    *          the wikipedia link of this Movie
    * @param crew
    *          the crew list of this Movie
+   * @param retrievedRatings
+   *          whether the movie's ratings have been retrieved yet
    */
   public Movie(String id, ResultTypes type, String imageLink, String title,
-      String description, double imdbRating, String trailerLink, String award,
-      String wiki, String crew)
+      String description, double[] ratings, String trailerLink, String award,
+      String wiki, String crew, boolean retrievedRatings)
   {
     this.id = id;
     this.type = type;
     this.imageLink = imageLink;
     this.title = title;
     this.description = description;
-    this.imdbRating = imdbRating;
+    this.ratings = ratings;
     this.trailerLink = trailerLink;
     this.award = award;
     this.wiki = wiki;
     this.crew = crew;
+    this.retrievedRatings = retrievedRatings;
   }
 
   /**
@@ -193,22 +198,22 @@ public class Movie
   }
 
   /**
-   * Fetches the rating for a movie. Grabs from internet if one does not already
-   * exist.
+   * Fetches the rating list for a movie. Grabs from internet if one does not
+   * already exist. The returned rating list contains the ratings order as:
+   * IMDb, Metacritic, the Movie Database, Rotten Tomatoes, and Film Affinity.
+   * Any rating may be null if that data was not available. If all values are
+   * null, the ratings array itself should be null.
    *
-   * @return The rating.
+   * @return The array of all ratings.
    */
-  public double getImdbRating()
+  public double[] getRatings()
   {
-    if (imdbRating == DEFAULT_RATING)
+    if (!retrievedRatings)
     {
-      imdbRating = JsonRequestor.queryRating(id);
+      ratings = JsonRequestor.queryRating(id);
     }
-    if (imdbRating == DEFAULT_RATING)
-    {
-      System.err.println("Rating was unable to be received");
-    }
-    return imdbRating;
+    retrievedRatings = true;
+    return ratings;
   }
 
   /**
@@ -298,6 +303,16 @@ public class Movie
   }
 
   /**
+   * Getter for retrievedRatings boolean.
+   * 
+   * @return whether the Movie's ratings have been retrieved yet.
+   */
+  public boolean isRetrievedRatings()
+  {
+    return retrievedRatings;
+  }
+
+  /**
    * Setter for ID.
    * 
    * @param id
@@ -353,14 +368,36 @@ public class Movie
   }
 
   /**
-   * Setter for imdbRating.
+   * Setter for ratings list. Makes ratings null if the passed list is
+   * completely empty (all values are NO_RATING).
    * 
-   * @param imdbRating
-   *          the imdbRating to set this Media's imdbRating to
+   * @param ratings
+   *          the array of all ratings to set this array to, or null if the
+   *          passed array is fully empty.
    */
-  public void setImdbRating(double imdbRating)
+  public void setRatings(double[] ratings)
   {
-    this.imdbRating = imdbRating;
+    // state that we have now set the ratings for this object
+    this.retrievedRatings = true;
+    // check for passing null list
+    if (ratings == null)
+    {
+      this.ratings = null;
+      return;
+    }
+    // check to see if the passed array has any ratings that are set
+    for (RatingTypes rating : RatingTypes.values())
+    {
+      double curRating = ratings[rating.ordinal()];
+      if (Double.isFinite(curRating))
+      {
+        // if the passed array has a set value, set ratings to it
+        this.ratings = ratings;
+        return;
+      }
+    }
+    // if the passed array has no ratings, set ratings to null
+    this.ratings = null;
   }
 
   /**
@@ -405,6 +442,17 @@ public class Movie
   public void setCrew(String crew)
   {
     this.crew = crew;
+  }
+
+  /**
+   * Setter for retrievedRatings boolean.
+   * 
+   * @param retrievedRatings
+   *          whether this Movie's ratings list has been set.
+   */
+  public void setRetrievedRatings(boolean retrievedRatings)
+  {
+    this.retrievedRatings = retrievedRatings;
   }
 
   @Override

@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import list.MovieList;
+import media.RatingTypes;
 import org.junit.jupiter.api.Test;
 import search.JsonRequestor;
 import search.JsonRequestor.QueryTypes;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * A test class for when requesting JSON through the IMDB api.
@@ -86,7 +89,11 @@ public class JsonRequestorTest
   @Test
   void testQueryRating()
   {
-    assertEquals(88, Math.round(JsonRequestor.queryRating(queryID) * 10));
+    assertEquals(88, Math.round(
+        JsonRequestor.queryRating(queryID)[RatingTypes.IMDB.ordinal()] * 10));
+    assertTrue(Double.isInfinite(JsonRequestor
+        .queryRating("tt1790736")[RatingTypes.METACRITIC.ordinal()]));
+    assertNull(JsonRequestor.queryRating("nm0000606"));
   }
 
   @Test

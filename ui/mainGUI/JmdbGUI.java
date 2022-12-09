@@ -15,17 +15,15 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import controller.JmdbController;
 import media.Movie;
-import mediaDisplay.MediaDisplayPanel;
+import mediaDisplay.MediaDisplay;
 import menubar.JmdbMenuBar;
 import searchbar.Searchbar;
-import tabbedPane.JmdbTabbedPane;
 
 /**
  * Main GUI for the JMDb program.
@@ -102,7 +100,7 @@ public class JmdbGUI extends JFrame
    * The selection listener that updates the display of the film.
    * 
    * @author Matthew Potter
-   * @version 12/03/2022
+   * @version 12/08/2022
    */
   private class DisplaySelectionListener implements ListSelectionListener
   {
@@ -110,8 +108,12 @@ public class JmdbGUI extends JFrame
     public void valueChanged(ListSelectionEvent e)
     {
       selectedMovie = moviesJlist.getSelectedValue();
+      if (selectedMovie == null)
+      {
+        return;
+      }
       remove(selectedMoviePanel);
-      selectedMoviePanel = new MediaDisplayPanel(selectedMovie);
+      selectedMoviePanel = new MediaDisplay(selectedMovie);
       add(selectedMoviePanel, BorderLayout.CENTER);
       repaint();
       pack();
@@ -173,7 +175,7 @@ public class JmdbGUI extends JFrame
     // set the controller
     this.controller = controller;
     controller.setGui(this);
-    
+
     // generic content stuff
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(100, 100, 1280, 720);
@@ -182,7 +184,7 @@ public class JmdbGUI extends JFrame
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     setContentPane(contentPane);
     contentPane.setLayout(new BorderLayout(0, 0));
-    
+
     // movie list stuff
     listPanel = new JPanel();
     moviesJlist = new JList<Movie>();
@@ -196,11 +198,7 @@ public class JmdbGUI extends JFrame
     listPanel.add(listLabel);
     listPanel.add(listScrollPane);
     add(listPanel, BorderLayout.WEST);
-    
-    JmdbTabbedPane tabs = new JmdbTabbedPane(this);
-    this.add(tabs, BorderLayout.SOUTH);
 
-    
     // menu bar stuff
     JmdbMenuBar menu = new JmdbMenuBar(this);
     setJMenuBar(menu);
@@ -323,6 +321,16 @@ public class JmdbGUI extends JFrame
         System.err.println("Impossible list view requested");
         break;
     }
+  }
+
+  /**
+   * Getter for moviesJlist.
+   * 
+   * @return the GUI's JList that it uses to display Movie lists
+   */
+  public JList<Movie> getMoviesJlist()
+  {
+    return moviesJlist;
   }
 
   /**

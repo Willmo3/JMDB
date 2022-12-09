@@ -24,6 +24,11 @@ public class MovieTest
   private static Movie inceptionCopy;
   private static Movie cobol;
   private static Movie silly;
+  private static double[] inceptionRatings = {8.8, 74, 8.4, 87, 8.0};
+  private static double[] cobolRatings = {7.5, Movie.NO_RATING, Movie.NO_RATING,
+      Movie.NO_RATING, Movie.NO_RATING};
+  private static double[] sillyRatings = {4.4, Movie.NO_RATING, Movie.NO_RATING,
+      Movie.NO_RATING, Movie.NO_RATING};
 
   static
   {
@@ -34,28 +39,30 @@ public class MovieTest
     inception = new Movie("tt1375666", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnX"
             + "kFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
-        "Inception", "(2010)", 8.8,
+        "Inception", "(2010)", inceptionRatings,
         "https://www.youtube.com/watch?v=Jvurpf91omw",
         "Academy Awards, USA, 2011, Winner, Oscar",
         "https://en.wikipedia.org/wiki/Inception",
-        "(directed by): Christopher Nolan\n(written by): Christopher Nolan");
+        "(directed by): Christopher Nolan\n(written by): Christopher Nolan",
+        true);
     inceptionCopy = new Movie("tt1375666", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnX"
             + "kFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
-        "Inception", "(2010)", 8.8,
+        "Inception", "(2010)", inceptionRatings,
         "https://www.youtube.com/watch?v=Jvurpf91omw",
         "Academy Awards, USA, 2011, Winner, Oscar",
         "https://en.wikipedia.org/wiki/Inception",
-        "(directed by): Christopher Nolan\n(written by): Christopher Nolan");
+        "(directed by): Christopher Nolan\n(written by): Christopher Nolan",
+        true);
     cobol = new Movie("tt1790736", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjE0NGIwM2EtZjQxZi00ZTE5LWEx"
             + "N2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3Mjk"
             + "@._V1_Ratio0.6800_AL_.jpg",
-        "Inception: The Cobol Job", "(2010 Video)", 7.5, "no link",
+        "Inception: The Cobol Job", "(2010 Video)", cobolRatings, "no link",
         "This film did not win any awards", "no link",
-        ": Ian Kirby\n: Jordan Goldberg");
+        ": Ian Kirby\n: Jordan Goldberg", true);
     silly = new Movie("12345", ResultTypes.TITLE, "image", "Silly Movie",
-        "description", 4.4, "trailer", "award", "wiki", "crew");
+        "description", sillyRatings, "trailer", "award", "wiki", "crew", true);
   }
 
   @Test
@@ -81,24 +88,32 @@ public class MovieTest
   @Order(1)
   void gettersAndOtherSettersTest()
   {
+    double[] otherRatings = {8.8, 74, 8.4, 87, 8.0};
     assertEquals("12345", silly.getId());
     assertEquals(ResultTypes.TITLE, silly.getType());
     assertEquals("image", silly.getImageLink());
     assertEquals("Silly Movie", silly.getTitle());
     assertEquals("description", silly.getDescription());
-    assertEquals(4.4, silly.getImdbRating());
+    assertEquals(Movie.NO_RATING, silly.getRatings()[1]);
+    assertEquals(4.4, silly.getRatings()[0]);
     assertEquals("trailer", silly.getTrailerLink());
     assertEquals("award", silly.getAward());
     assertEquals("wiki", silly.getWiki());
     assertEquals("crew", silly.getCrew());
+    // want retrievedRatings true so as to not call API
+    assertTrue(silly.isRetrievedRatings());
+    silly.setRetrievedRatings(false);
+    assertFalse(silly.isRetrievedRatings());
+    silly.setRetrievedRatings(true);
+    assertTrue(silly.isRetrievedRatings());
     silly.setType(ResultTypes.INVALID);
-    silly.setImdbRating(0.0);
+    silly.setRatings(otherRatings);
     silly.setTrailerLink("none");
     silly.setAward("none");
     silly.setWiki("none");
     silly.setCrew("none");
     assertEquals(ResultTypes.INVALID, silly.getType());
-    assertEquals(0.0, silly.getImdbRating());
+    assertEquals(8.8, silly.getRatings()[0]);
     assertEquals("none", silly.getTrailerLink());
     assertEquals("none", silly.getAward());
     assertEquals("none", silly.getWiki());
@@ -109,6 +124,12 @@ public class MovieTest
   @Order(2)
   void testNullGetters()
   {
+    double[] emptyRatings = {Movie.NO_RATING, Movie.NO_RATING, Movie.NO_RATING,
+        Movie.NO_RATING, Movie.NO_RATING};
+    silly.setRatings(null);
+    assertNull(silly.getRatings());
+    silly.setRatings(emptyRatings);
+    assertNull(silly.getRatings());
     silly.setTrailerLink("");
     assertNull(silly.getTrailerLink());
     assertNull(silly.getTrailerLink());

@@ -124,7 +124,7 @@ public class JmdbController
   public void addToCache(Movie movie)
   {
     String id = movie.getId();
-    if (cacheModel.containsKey(id))
+    if (cacheModel.containsKey(id) || featuredListModel.containsKey(id))
     {
       return;
     }
@@ -193,7 +193,9 @@ public class JmdbController
    */
   public void updateSearchList(MovieList list)
   {
+    gui.getMoviesJlist().setValueIsAdjusting(true);
     gui.updateSearchList(list.getMovieList());
+    gui.getMoviesJlist().setValueIsAdjusting(false);
   }
 
   /**
@@ -209,7 +211,13 @@ public class JmdbController
     ArrayList<Movie> watchList = new ArrayList<Movie>();
     for (String id : watchListModel)
     {
-      watchList.add(cacheModel.get(id));
+      // if the movie in the watchlist isn't in the cache, it must be in the
+      // featured movies list, the cache was cleared, or some error occurred
+      // Movies won't be added to the list if they aren't present in either list
+      if (!watchList.add(cacheModel.get(id)))
+      {
+        watchList.add(featuredListModel.get(id));
+      }
     }
     return watchList;
   }

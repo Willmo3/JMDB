@@ -11,6 +11,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import list.MovieList;
+import media.Movie;
+import media.RatingTypes;
 
 /**
  * Utility class for querying the Internet in order to receive JSON files that
@@ -112,13 +114,16 @@ public final class JsonRequestor
   }
 
   /**
-   * Queries the IMDb web API in order to get the rating of a film.
+   * Queries the IMDb web API in order to get the ratings of a film. Sets
+   * non-set ratings to Movie.NO_RATING. Will return null if each of the ratings
+   * are non-set.
    * 
    * @param id
    *          the movie ID to get the rating of
-   * @return the IMDb rating of the passed movie
+   * @return the list of ratings of the passed movie, or null if no ratings have
+   *         been set
    */
-  public static double queryRating(String id)
+  public static double[] queryRating(String id)
   {
     String url = String
         .format("https://imdb-api.com/en/API/Ratings/k_mcx0w8kk/%s", id);
@@ -128,14 +133,42 @@ public final class JsonRequestor
       InputStream stream = fetch(url);
       JsonNode ratings = mapper.readTree(stream);
       stream.close();
-      return ratings.get("imDb").asDouble();
+      double[] ratingsArray = new double[5];
+      // set all of the values of the array to their respective rating
+      // uses Jackson's defualtValue asDouble to set invalids to Movie.NO_RATING
+      ratingsArray[RatingTypes.IMDB.ordinal()] = ratings.get("imDb")
+          .asDouble(Movie.NO_RATING);
+      ratingsArray[RatingTypes.METACRITIC.ordinal()] = ratings.get("metacritic")
+          .asDouble(Movie.NO_RATING);
+      ratingsArray[RatingTypes.MOVIEDB.ordinal()] = ratings.get("theMovieDb")
+          .asDouble(Movie.NO_RATING);
+      ratingsArray[RatingTypes.ROTTEN_TOMATOES.ordinal()] = ratings
+          .get("rottenTomatoes").asDouble(Movie.NO_RATING);
+      ratingsArray[RatingTypes.FILM_AFFINITY.ordinal()] = ratings
+          .get("filmAffinity").asDouble(Movie.NO_RATING);
+      // test that at least one rating is not Movie.NO_RATING
+      boolean hasSetValue = false;
+      for (int i = 0; i < 5; i++)
+      {
+        if (Double.isFinite(ratingsArray[i]))
+        {
+          hasSetValue = true;
+          break;
+        }
+      }
+      // if the array has a set rating, return the array
+      if (hasSetValue)
+      {
+        return ratingsArray;
+      }
     }
     catch (IOException e)
     {
       System.err.println(String.format(
           "Error occurred in reading stream in rating query for ID: %s\n", id));
     }
-    return Double.NEGATIVE_INFINITY;
+    // return null if an error has occurred or no rating is set
+    return null;
   }
 
   /**
