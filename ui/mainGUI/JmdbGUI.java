@@ -112,6 +112,16 @@ public class JmdbGUI extends JFrame
       {
         return;
       }
+      if (controller.getCachedMovies().containsKey(selectedMovie.getId()))
+      {
+        selectedMovie = controller.getCachedMovies().get(selectedMovie.getId());
+      }
+      else if (controller.getFeaturedListModel()
+          .containsKey(selectedMovie.getId()))
+      {
+        selectedMovie = controller.getFeaturedListModel()
+            .get(selectedMovie.getId());
+      }
       remove(selectedMoviePanel);
       selectedMoviePanel = new MediaDisplay(selectedMovie);
       add(selectedMoviePanel, BorderLayout.CENTER);
@@ -341,5 +351,15 @@ public class JmdbGUI extends JFrame
   public Movie getSelectedMovie()
   {
     return selectedMovie;
+  }
+
+  /**
+   * Getter for this GUI's controller.
+   * 
+   * @return the controller of this GUI
+   */
+  public JmdbController getController()
+  {
+    return controller;
   }
 }

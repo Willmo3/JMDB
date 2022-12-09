@@ -23,11 +23,6 @@ public class Movie
   public static final String DEFAULT_TRAILER = "DEFAULT_TRAILER";
 
   /**
-   * String indicating that a queried movie has no YouTube trailer on IMDb.
-   */
-  public static final String NO_WIKI = "NO_WIKI";
-
-  /**
    * Sentinel string for awards.
    */
   public static final String DEFAULT_AWARD = "DEFAULT_AWARD";

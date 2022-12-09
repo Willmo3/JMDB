@@ -133,6 +133,44 @@ public class JmdbController
   }
 
   /**
+   * Refreshes the cached data of the passed movie.
+   * 
+   * @param selected
+   *          the Movie whose data should be refreshed
+   */
+  public void refresh(Movie selected)
+  {
+    Movie savedMovie;
+    if (cacheModel.containsKey(selected.getId()))
+    {
+      savedMovie = cacheModel.get(selected.getId());
+      cacheChanged = true;
+    }
+    else
+    {
+      return;
+    }
+    // make API query data be unset so the next get call updates their values
+    savedMovie.setRetrievedRatings(false);
+    savedMovie.setTrailerLink(Movie.DEFAULT_TRAILER);
+    savedMovie.setAward(Movie.DEFAULT_AWARD);
+    savedMovie.setWiki(Movie.DEFAULT_WIKI);
+    new Thread(new Runnable()
+    {
+      @Override
+      public void run()
+      {
+        // call all of the newly-unset API queries to refresh their values
+        savedMovie.getRatings();
+        savedMovie.getTrailerLink();
+        savedMovie.getAward();
+        savedMovie.getWiki();
+        cacheModel.replace(selected.getId(), savedMovie);
+      }
+    }).start();
+  }
+
+  /**
    * Adds the passed movie to the watch-list if it isn't already present in the
    * watch-list.
    * 
@@ -230,5 +268,25 @@ public class JmdbController
   public Collection<Movie> getFeaturedMovieList()
   {
     return featuredListModel.values();
+  }
+
+  /**
+   * Getter for the map of featured movies.
+   * 
+   * @return the hashmap of ID, Movie pairs that make up the featured list model
+   */
+  public HashMap<String, Movie> getFeaturedListModel()
+  {
+    return featuredListModel;
+  }
+
+  /**
+   * Getter for the cached movies.
+   * 
+   * @return the hashmap of ID, Movie pairs that make up the cache
+   */
+  public HashMap<String, Movie> getCachedMovies()
+  {
+    return cacheModel;
   }
 }

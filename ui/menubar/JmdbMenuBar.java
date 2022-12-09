@@ -8,6 +8,7 @@ import javax.swing.JMenuItem;
 
 import mainGUI.JmdbGUI;
 import mainGUI.JmdbGUI.ListViews;
+import media.Movie;
 
 /**
  * The MenuBar for the JMDb GUI.
@@ -23,7 +24,7 @@ public class JmdbMenuBar extends JMenuBar
   private static final long serialVersionUID = 974458634623052710L;
   private JmdbGUI gui;
   private JMenu items;
-  private JMenuItem watch, featured;
+  private JMenuItem watch, featured, refresh;
 
   /**
    * Constructs a MenuBar item with no controller-based functionality.
@@ -38,9 +39,12 @@ public class JmdbMenuBar extends JMenuBar
     items = new JMenu("Menu");
     watch = new JMenuItem("Watch List");
     featured = new JMenuItem("Featured Movies");
+    refresh = new JMenuItem("Refresh Selected Movie Data");
     items.add(watch);
     items.addSeparator();
     items.add(featured);
+    items.addSeparator();
+    items.add(refresh);
     addFunctionality();
     add(items);
   }
@@ -69,6 +73,15 @@ public class JmdbMenuBar extends JMenuBar
         gui.switchListView(ListViews.FEATURED);
       }
     });
-
+    
+    refresh.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+        Movie selected = gui.getSelectedMovie();
+        gui.getController().refresh(selected);
+      }
+    });
   }
 }
