@@ -6,6 +6,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import game.GuessTheRating;
 import mainGUI.JmdbGUI;
 import mainGUI.JmdbGUI.ListViews;
 import media.Movie;
@@ -24,7 +25,7 @@ public class JmdbMenuBar extends JMenuBar
   private static final long serialVersionUID = 974458634623052710L;
   private JmdbGUI gui;
   private JMenu items;
-  private JMenuItem watch, featured, refresh;
+  private JMenuItem watch, featured, refresh, game;
 
   /**
    * Constructs a MenuBar item with no controller-based functionality.
@@ -40,11 +41,14 @@ public class JmdbMenuBar extends JMenuBar
     watch = new JMenuItem("Watch List");
     featured = new JMenuItem("Featured Movies");
     refresh = new JMenuItem("Refresh Selected Movie Data");
+    game = new JMenuItem("Guess the rating"); //a
     items.add(watch);
     items.addSeparator();
     items.add(featured);
     items.addSeparator();
     items.add(refresh);
+    items.add(game); //a
+    this.add(items); //a
     addFunctionality();
     add(items);
   }
@@ -81,6 +85,24 @@ public class JmdbMenuBar extends JMenuBar
       {
         Movie selected = gui.getSelectedMovie();
         gui.getController().refresh(selected);
+      }
+    });
+
+    game.addActionListener(new ActionListener()
+    {
+      @Override
+      public void actionPerformed(ActionEvent e)
+      {
+        // only call the GuessTheRating game.runGame() if the user has a movie selected on the left tree
+        Movie selected = gui.getSelectedMovie();
+        if (selected != null)
+        {
+          GuessTheRating game = new GuessTheRating(gui.getSelectedMovie());
+          game.runGame();
+          System.out.println("[DEBUG] - Game started with valid movie: " + selected.getTitle());
+        } else {
+            System.out.println("[DEBUG] - Game not started, no movie selected");
+        }
       }
     });
   }

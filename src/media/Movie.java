@@ -200,6 +200,17 @@ public class Movie
     return ratings;
   }
 
+  // method that fetches just the IMDB rating from the ratings array
+    public double getImdbRating()
+    {
+        if (!retrievedRatings)
+        {
+        ratings = JsonRequestor.queryRating(id);
+        }
+        retrievedRatings = true;
+        return ratings[0];
+    }
+
   /**
    * Fetches the trailer for a movie. Grabs one from the internet if the link's
    * information has not already been retrieved from the internet.

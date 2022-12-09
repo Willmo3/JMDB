@@ -7,14 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.util.Collection;
 
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -246,6 +239,10 @@ public class JmdbGUI extends JFrame
   public void buildStartupDisplay()
   {
     selectedMoviePanel = new JPanel();
+    // add a default image to the selectedMoviePanel from images/startup.png
+    selectedMoviePanel.add(new JLabel(new ImageIcon("images/startup.png")));
+    add(selectedMoviePanel, BorderLayout.CENTER);
+
     // set the startup model to be displayed on the JList
     currentListView = ListViews.FEATURED;
     listLabel.setText(currentListView.getText());
