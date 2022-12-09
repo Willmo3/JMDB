@@ -1,0 +1,61 @@
+{
+  "items": [
+    {
+      "id": "tt9764362",
+      "title": "The Menu",
+      "fullTitle": "The Menu (2022)",
+      "year": "2022",
+      "releaseState": "18 Nov 2022",
+      "image": "https://m.media-amazon.com/images/M/MV5BMzdjNjI5MmYtODhiNS00NTcyLWEzZmUtYzVmODM5YzExNDE3XkEyXkFqcGdeQXVyMTAyMjQ3NzQ1._V1_Ratio0.6699_AL_.jpg",
+      "runtimeMins": "107",
+      "runtimeStr": "107 mins",
+      "plot": "A young couple travels to a remote island to eat at an exclusive restaurant where the chef has prepared a lavish menu, with some shocking surprises.",
+      "contentRating": "R",
+      "imDbRating": "7.5",
+      "imDbRatingCount": "32014",
+      "metacriticRating": "71",
+      "genres": "Comedy, Horror, Thriller",
+      "genreList": [
+        {
+          "key": "Comedy",
+          "value": "Comedy"
+        },
+        {
+          "key": "Horror",
+          "value": "Horror"
+        },
+        {
+          "key": "Thriller",
+          "value": "Thriller"
+        }
+      ],
+      "directors": "Mark Mylod",
+      "directorList": [
+        {
+          "id": "nm0617042",
+          "name": "Mark Mylod"
+        }
+      ],
+      "stars": "Ralph Fiennes, Anya Taylor-Joy, Nicholas Hoult, Hong Chau",
+      "starList": [
+        {
+          "id": "nm0000146",
+          "name": "Ralph Fiennes"
+        },
+        {
+          "id": "nm5896355",
+          "name": "Anya Taylor-Joy"
+        },
+        {
+          "id": "nm0396558",
+          "name": "Nicholas Hoult"
+        },
+        {
+          "id": "nm2186865",
+          "name": "Hong Chau"
+        }
+      ]
+    }
+  ],
+  "errorMessage": ""
+}
