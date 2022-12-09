@@ -6,10 +6,14 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import cast.Actor;
+import cast.Job;
+import cast.Worker;
 import list.MovieList;
 import media.Movie;
 import media.RatingTypes;
@@ -272,13 +276,14 @@ public final class JsonRequestor
   }
 
   /**
-   * Queries the IMDb web API in order to get the director and writer of a film.
-   *
+   * Queries the IMDb web API in order to get the full cast of a film.
+   * 
    * @param id
    *          the movie ID to get the crew of
-   * @return the crew of the passed movie
+   * @return a List with the specified jobs, which contains all workers who work
+   *         in that job, or null if there is cast data missing
    */
-  public static String queryCrew(String id)
+  public static List<Job> queryCrew(String id)
   {
     String url = String
         .format("https://imdb-api.com/en/API/FullCast/k_mcx0w8kk/%s", id);
@@ -287,30 +292,62 @@ public final class JsonRequestor
 
       ObjectMapper mapper = new ObjectMapper();
       InputStream stream = fetch(url);
-      JsonNode crew = mapper.readTree(stream);
+      JsonNode crewTree = mapper.readTree(stream);
       stream.close();
-
-      String director, writer, discription1, discription2;
-
-      JsonNode items = crew.get("directors").get("items").get(0);
-
-      director = items.get("name").asText();
-      discription1 = items.get("description").asText();
-      if (discription1.isBlank())
+      // in the event that any crew data is missing, return null
+      if (crewTree.get("directors").isNull() || crewTree.get("writers").isNull()
+          || crewTree.get("actors").isNull() || crewTree.get("others").isNull())
       {
-        discription1 = "Director";
+        return null;
       }
 
-      JsonNode items2 = crew.get("writers").get("items").get(0);
-      writer = items2.get("name").asText();
-      discription2 = items2.get("description").asText();
-      if (discription2.isBlank())
-      {
-        discription2 = "Writer";
-      }
-      return String.format("%s: %s, %s: %s", discription1, director,
-          discription2, writer);
+      // set up the nodes to read
+      JsonNode directorsNode, writersNode, actorsNode, othersNode;
+      directorsNode = crewTree.get("directors").get("items");
+      writersNode = crewTree.get("writers").get("items");
+      actorsNode = crewTree.get("actors");
+      othersNode = crewTree.get("others");
 
+      // set up the crew list to read into
+      ArrayList<Job> crew = new ArrayList<Job>();
+      crew.add(new Job("Directors"));
+      crew.add(new Job("Writers"));
+      crew.add(new Job("Actors"));
+      Job directors, writers, actors;
+      directors = crew.get(0);
+      writers = crew.get(1);
+      actors = crew.get(2);
+
+      // read in the cast/crew from the nodes
+      for (JsonNode director : directorsNode)
+      {
+        directors.add(new Worker(director.get("name").asText(),
+            director.get("description").textValue()));
+      }
+      for (JsonNode writer : writersNode)
+      {
+        writers.add(new Worker(writer.get("name").asText(),
+            writer.get("description").textValue()));
+      }
+      for (JsonNode actor : actorsNode)
+      {
+        actors.add(new Actor(actor.get("name").asText(),
+            actor.get("asCharacter").textValue()));
+      }
+
+      // read in the other jobs by title and worker
+      for (JsonNode jobNode : othersNode)
+      {
+        Job job = new Job(jobNode.get("job").asText());
+        // parse this job's workers and add them to the crew
+        for (JsonNode worker : jobNode.get("items"))
+        {
+          job.add(new Worker(worker.get("name").asText(),
+              worker.get("description").asText()));
+        }
+        crew.add(job);
+      }
+      return crew;
     }
     catch (IOException e)
     {

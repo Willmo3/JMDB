@@ -1,8 +1,11 @@
 package mediaDisplay;
 
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import java.awt.Dimension;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 import media.RatingTypes;
 
@@ -12,7 +15,7 @@ import media.RatingTypes;
  * @author Matthew Potter
  * @version 12/08/2022
  */
-public class MovieRatingsDisplay extends JPanel
+public class MovieRatingsDisplay extends JScrollPane
 {
   /**
    * Generated serial version UID.
@@ -30,32 +33,49 @@ public class MovieRatingsDisplay extends JPanel
   public MovieRatingsDisplay(double[] ratings)
   {
     super();
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    JTextPane ratingText = new JTextPane();
+    setPreferredSize(new Dimension(600, 600));
+    setViewportView(ratingText);
     double imdbRating = ratings[RatingTypes.IMDB.ordinal()];
     double metacriticRating = ratings[RatingTypes.METACRITIC.ordinal()];
     double moviedbRating = ratings[RatingTypes.MOVIEDB.ordinal()];
     double rottenRating = ratings[RatingTypes.ROTTEN_TOMATOES.ordinal()];
     double filmAffRating = ratings[RatingTypes.FILM_AFFINITY.ordinal()];
-    if (Double.isFinite(imdbRating))
+    Document ratingDoc = ratingText.getDocument();
+    try
     {
-      add(new JLabel(String.format("IMDb: %2.1f/10", imdbRating)));
+      if (Double.isFinite(imdbRating))
+      {
+        ratingDoc.insertString(ratingDoc.getLength(),
+            String.format("IMDb: %2.1f/10\n", imdbRating), null);
+      }
+      if (Double.isFinite(metacriticRating))
+      {
+        ratingDoc.insertString(ratingDoc.getLength(),
+            String.format("Metacritic: %.0f/100\n", metacriticRating), null);
+      }
+      if (Double.isFinite(moviedbRating))
+      {
+        ratingDoc.insertString(ratingDoc.getLength(),
+            String.format("The Movie Database: %2.1f/10\n", moviedbRating),
+            null);
+      }
+      if (Double.isFinite(rottenRating))
+      {
+        ratingDoc.insertString(ratingDoc.getLength(),
+            String.format("Rotten Tomatoes: %.0f/100\n", rottenRating), null);
+      }
+      if (Double.isFinite(filmAffRating))
+      {
+        ratingDoc.insertString(ratingDoc.getLength(),
+            String.format("Film Affinity: %2.1f/10\n", filmAffRating), null);
+      }
     }
-    if (Double.isFinite(metacriticRating))
+    catch (BadLocationException e)
     {
-      add(new JLabel(String.format("Metacritic: %.0f/100", metacriticRating)));
-    }
-    if (Double.isFinite(moviedbRating))
-    {
-      add(new JLabel(
-          String.format("The Movie Database: %2.1f/10", moviedbRating)));
-    }
-    if (Double.isFinite(rottenRating))
-    {
-      add(new JLabel(String.format("Rotten Tomatoes: %.0f/100", rottenRating)));
-    }
-    if (Double.isFinite(filmAffRating))
-    {
-      add(new JLabel(String.format("Film Affinity: %2.1f/10", filmAffRating)));
+      System.err.println(
+          "Tried to print to bad location in the document for Ratings");
+      e.printStackTrace();
     }
   }
 }

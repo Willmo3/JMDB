@@ -5,10 +5,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 import list.MovieList;
 import media.RatingTypes;
 import org.junit.jupiter.api.Test;
+
+import cast.Job;
 import search.JsonRequestor;
 import search.JsonRequestor.QueryTypes;
 
@@ -20,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * A test class for when requesting JSON through the IMDB api.
  * 
  * @author Matthew Potter
- * @version 11/10/2022
+ * @version 12/09/2022
  */
 public class JsonRequestorTest
 {
@@ -120,11 +123,17 @@ public class JsonRequestorTest
   @Test
   void testQueryCrew()
   {
-    assertEquals(
-        "(directed by): Christopher Nolan, (written by): Christopher Nolan",
-        JsonRequestor.queryCrew(queryID));
-    assertEquals("Director: Ian Kirby, Writer: Jordan Goldberg",
-        JsonRequestor.queryCrew("tt1790736"));
+    List<Job> crew = JsonRequestor.queryCrew(queryID);
+    assertEquals("(directed by) Christopher Nolan",
+        crew.get(0).getWorkers().get(0).toString());
+    assertEquals("(written by) Christopher Nolan",
+        crew.get(1).getWorkers().get(0).toString());
+    assertEquals("Leonardo DiCaprio as Cobb",
+        crew.get(2).getWorkers().get(0).toString());
+    assertEquals("Produced by", crew.get(3).getJob());
+    assertEquals("line producer: Morocco (as Zak Alaoui) Zakaria Alaoui",
+        crew.get(3).getWorkers().get(0).toString());
+    assertNull(JsonRequestor.queryCrew("nm0000606"));
   }
 
 }

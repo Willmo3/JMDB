@@ -42,27 +42,22 @@ public class MovieTest
         "Inception", "(2010)", inceptionRatings,
         "https://www.youtube.com/watch?v=Jvurpf91omw",
         "Academy Awards, USA, 2011, Winner, Oscar",
-        "https://en.wikipedia.org/wiki/Inception",
-        "(directed by): Christopher Nolan\n(written by): Christopher Nolan",
-        true);
+        "https://en.wikipedia.org/wiki/Inception", true);
     inceptionCopy = new Movie("tt1375666", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjAxMzY3NjcxNF5BMl5BanBnX"
             + "kFtZTcwNTI5OTM0Mw@@._V1_Ratio0.6800_AL_.jpg",
         "Inception", "(2010)", inceptionRatings,
         "https://www.youtube.com/watch?v=Jvurpf91omw",
         "Academy Awards, USA, 2011, Winner, Oscar",
-        "https://en.wikipedia.org/wiki/Inception",
-        "(directed by): Christopher Nolan\n(written by): Christopher Nolan",
-        true);
+        "https://en.wikipedia.org/wiki/Inception", true);
     cobol = new Movie("tt1790736", ResultTypes.TITLE,
         "https://m.media-amazon.com/images/M/MV5BMjE0NGIwM2EtZjQxZi00ZTE5LWEx"
             + "N2MtNDBlMjY1ZmZkYjU3XkEyXkFqcGdeQXVyNjMwNzk3Mjk"
             + "@._V1_Ratio0.6800_AL_.jpg",
         "Inception: The Cobol Job", "(2010 Video)", cobolRatings, "no link",
-        "This film did not win any awards", "no link",
-        ": Ian Kirby\n: Jordan Goldberg", true);
+        "This film did not win any awards", "no link", true);
     silly = new Movie("12345", ResultTypes.TITLE, "image", "Silly Movie",
-        "description", sillyRatings, "trailer", "award", "wiki", "crew", true);
+        "description", sillyRatings, "trailer", "award", "wiki", true);
   }
 
   @Test
@@ -99,7 +94,6 @@ public class MovieTest
     assertEquals("trailer", silly.getTrailerLink());
     assertEquals("award", silly.getAward());
     assertEquals("wiki", silly.getWiki());
-    assertEquals("crew", silly.getCrew());
     // want retrievedRatings true so as to not call API
     assertTrue(silly.isRetrievedRatings());
     silly.setRetrievedRatings(false);
@@ -111,13 +105,11 @@ public class MovieTest
     silly.setTrailerLink("none");
     silly.setAward("none");
     silly.setWiki("none");
-    silly.setCrew("none");
     assertEquals(ResultTypes.INVALID, silly.getType());
     assertEquals(8.8, silly.getRatings()[0]);
     assertEquals("none", silly.getTrailerLink());
     assertEquals("none", silly.getAward());
     assertEquals("none", silly.getWiki());
-    assertEquals("none", silly.getCrew());
   }
 
   @Test
@@ -139,9 +131,6 @@ public class MovieTest
     silly.setWiki("");
     assertNull(silly.getWiki());
     assertNull(silly.getWiki());
-    silly.setCrew("");
-    assertNull(silly.getCrew());
-    assertNull(silly.getCrew());
   }
 
   @Test

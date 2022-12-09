@@ -1,5 +1,6 @@
 package mediaDisplay;
 
+import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Desktop;
 import java.awt.Image;
@@ -7,7 +8,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -25,16 +25,19 @@ import media.Movie;
  * Movie.
  * 
  * @author Immanuel Semelfort & Matthew Potter
- * @version 12/03/2022
+ * @version 12/09/2022
  */
 public class BaseMovieInfo extends JPanel
 {
-  /**
-   * Generated serial UID.
-   */
   private static final long serialVersionUID = 8348996138626439630L;
+  private static final ImageIcon loading = new ImageIcon(
+      "./images/RetrievingImage.png");
+  private static final ImageIcon noImage = new ImageIcon(
+      "./images/NoImage.png");
+
+  private JPanel wrapper;
   private JLabel picLabel;
-  private BaseMovieInfo display;
+  private Movie media;
 
   /**
    * JPanel constructor.
@@ -47,37 +50,49 @@ public class BaseMovieInfo extends JPanel
   public BaseMovieInfo(Movie media)
   {
     super();
-    display = this;
     if (media == null)
     {
       return;
     }
-    ImageIcon loading = new ImageIcon("./images/RetrievingImage.png");
+    this.media = media;
+    wrapper = new JPanel();
     picLabel = new JLabel();
     picLabel.setIcon(loading);
-    buildCoverImage(media);
-    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-    add(picLabel);
-    add(new JLabel(media.getTitle()));
-    add(new JLabel(media.getDescription()));
+    buildCoverImage();
+    wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.Y_AXIS));
+    wrapper.add(picLabel);
+    wrapper.add(new JLabel(media.getTitle()));
+    wrapper.add(new JLabel(media.getDescription()));
 
     // add a clickable link to the Wikipedia link and YouTube trailer if a link
     // to them exists
+    buildWikiLink();
+    buildTrailerLink();
+
+    add(wrapper, BorderLayout.CENTER);
+  }
+
+  private void buildWikiLink()
+  {
     String wikiLink = media.getWiki();
     if (wikiLink != null)
     {
-      add(new JLabel("Link to the Wikipedia page:"));
+      wrapper.add(new JLabel("Link to the Wikipedia page:"));
       JLabel wikiLabel = new JLabel();
       buildLinkLabel(wikiLabel, wikiLink);
-      add(wikiLabel);
+      wrapper.add(wikiLabel);
     }
+  }
+
+  private void buildTrailerLink()
+  {
     String trailerLink = media.getTrailerLink();
     if (trailerLink != null)
     {
-      add(new JLabel("YouTube trailer:"));
+      wrapper.add(new JLabel("YouTube trailer:"));
       JLabel trailerLabel = new JLabel();
       buildLinkLabel(trailerLabel, trailerLink);
-      add(trailerLabel);
+      wrapper.add(trailerLabel);
     }
   }
 
@@ -108,24 +123,28 @@ public class BaseMovieInfo extends JPanel
     label.setText(link);
   }
 
-  private void buildCoverImage(Movie media)
+  private void buildCoverImage()
   {
-    new Thread(() -> {
-      ImageIcon cover = fetchImage(media);
-      if (cover != null)
+    new Thread(new Runnable()
+    {
+      @Override
+      public void run()
       {
-        Image image = cover.getImage();
-        // resize the image to a consistent size
-        Image scaledImage = image.getScaledInstance(230, 310,
-            java.awt.Image.SCALE_SMOOTH);
-        cover = new ImageIcon(scaledImage);
+        ImageIcon cover = fetchImage();
+        if (cover != null)
+        {
+          Image image = cover.getImage();
+          // resize the image to a consistent size
+          Image scaledImage = image.getScaledInstance(230, 310,
+              java.awt.Image.SCALE_SMOOTH);
+          cover = new ImageIcon(scaledImage);
+        }
+        picLabel.setIcon(cover);
       }
-      picLabel.setIcon(cover);
-      display.repaint();
     }).start();
   }
 
-  private ImageIcon fetchImage(Movie media)
+  private ImageIcon fetchImage()
   {
     try
     {
@@ -133,15 +152,9 @@ public class BaseMovieInfo extends JPanel
       BufferedImage buf = ImageIO.read(url);
       return new ImageIcon(buf);
     }
-    catch (MalformedURLException e)
-    {
-      System.err.println("Image Address is improper in MediaDisplayPanel");
-    }
     catch (IOException e)
     {
-      // System.err.println("Image Address is improper in MediaDisplayPanel");
+      return noImage;
     }
-    return null;
   }
-
 }

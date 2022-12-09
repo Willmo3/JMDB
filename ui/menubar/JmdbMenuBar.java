@@ -1,20 +1,13 @@
 package menubar;
 
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.net.URL;
-
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 import mainGUI.JmdbGUI;
 import mainGUI.JmdbGUI.ListViews;
-import media.Movie;
-import trailer.TrailerButton;
 
 /**
  * The MenuBar for the JMDb GUI.
@@ -58,7 +51,7 @@ public class JmdbMenuBar extends JMenuBar
    */
   private void addFunctionality()
   {
-   
+
     watch.addActionListener(new ActionListener()
     {
       @Override
@@ -68,16 +61,14 @@ public class JmdbMenuBar extends JMenuBar
       }
     });
 
-    featured.addActionListener(new ActionListener() {
+    featured.addActionListener(new ActionListener()
+    {
       @Override
       public void actionPerformed(ActionEvent actionEvent)
       {
         gui.switchListView(ListViews.FEATURED);
       }
     });
-    
-    
-  
-    
+
   }
 }

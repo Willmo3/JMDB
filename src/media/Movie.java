@@ -37,11 +37,6 @@ public class Movie
    */
   public static final String DEFAULT_WIKI = "DEFAULT_WIKI";
 
-  /**
-   * Sentinel string for crew.
-   */
-  public static final String DEFAULT_CREW = "DEFAULT_CREW";
-
   private String id;
   private ResultTypes type;
   private String imageLink;
@@ -51,7 +46,6 @@ public class Movie
   private String trailerLink;
   private String award;
   private String wiki;
-  private String crew;
   private boolean retrievedRatings;
 
   /**
@@ -68,7 +62,6 @@ public class Movie
     trailerLink = DEFAULT_TRAILER;
     award = DEFAULT_AWARD;
     wiki = DEFAULT_WIKI;
-    crew = DEFAULT_CREW;
     retrievedRatings = false;
   }
 
@@ -99,7 +92,6 @@ public class Movie
     this.trailerLink = DEFAULT_TRAILER;
     this.award = DEFAULT_AWARD;
     this.wiki = DEFAULT_WIKI;
-    this.crew = DEFAULT_CREW;
     this.retrievedRatings = false;
   }
 
@@ -125,14 +117,12 @@ public class Movie
    *          the awards this Movie has won
    * @param wiki
    *          the wikipedia link of this Movie
-   * @param crew
-   *          the crew list of this Movie
    * @param retrievedRatings
    *          whether the movie's ratings have been retrieved yet
    */
   public Movie(String id, ResultTypes type, String imageLink, String title,
       String description, double[] ratings, String trailerLink, String award,
-      String wiki, String crew, boolean retrievedRatings)
+      String wiki, boolean retrievedRatings)
   {
     this.id = id;
     this.type = type;
@@ -143,7 +133,6 @@ public class Movie
     this.trailerLink = trailerLink;
     this.award = award;
     this.wiki = wiki;
-    this.crew = crew;
     this.retrievedRatings = retrievedRatings;
   }
 
@@ -282,27 +271,6 @@ public class Movie
   }
 
   /**
-   * Fetches the crew for a movie. Grabs one from the Internet if one does not
-   * already exist.
-   *
-   * @return crew.
-   */
-  public String getCrew()
-  {
-    if (crew == null || crew.isBlank())
-    {
-      crew = null;
-      return crew;
-    }
-
-    if (crew != null && crew.equals(DEFAULT_CREW))
-    {
-      crew = JsonRequestor.queryCrew(id);
-    }
-    return crew;
-  }
-
-  /**
    * Getter for retrievedRatings boolean.
    * 
    * @return whether the Movie's ratings have been retrieved yet.
@@ -431,17 +399,6 @@ public class Movie
   public void setWiki(String wiki)
   {
     this.wiki = wiki;
-  }
-
-  /**
-   * Setter for crew.
-   * 
-   * @param crew
-   *          the crew list to set this Media's crew list to
-   */
-  public void setCrew(String crew)
-  {
-    this.crew = crew;
   }
 
   /**
