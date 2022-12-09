@@ -17,6 +17,7 @@ import cast.Worker;
 import list.MovieList;
 import media.Movie;
 import media.RatingTypes;
+import list.TheaterList;
 
 /**
  * Utility class for querying the Internet in order to receive JSON files that
@@ -121,6 +122,30 @@ public final class JsonRequestor
    * Queries the IMDb web API in order to get the ratings of a film. Sets
    * non-set ratings to Movie.NO_RATING. Will return null if each of the ratings
    * are non-set.
+   *
+   * @return a MovieList containing the movies defined by the received JSON
+   */
+  public static MovieList getInTheaters()
+  {
+    String url = String.format(
+        "https://imdb-api.com/en/API/InTheaters/k_mcx0w8kk");
+
+    try
+    {
+      InputStream stream = fetch(url);
+      MovieList list = new TheaterList(stream);
+      stream.close();
+      return list;
+    }
+    catch (IOException e)
+    {
+      System.err.println("Error grabbing in theaters list!");
+    }
+    return null;
+  }
+
+  /**
+   * Queries the IMDb web API in order to get the rating of a film.
    * 
    * @param id
    *          the movie ID to get the rating of

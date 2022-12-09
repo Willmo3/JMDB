@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 /**
  * Tests for MovieList.
  *
- * @author Will Morris
+ * @author Will Morris, Matthew Potter
  * @version 12/04/2022
  */
 public class MovieListTest

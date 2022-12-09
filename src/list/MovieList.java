@@ -17,13 +17,28 @@ import java.util.List;
  * fields for things like reviews. This should be changed later, but it will
  * require a more in-depth knowledge of how we'll access that data.
  *
- * @author William Morris
- * @version 12/04/2022
+ * @author William Morris, Matthew Potter
+ * @version 12/08/2022
  */
 public class MovieList
 {
 
-  private List<Movie> movieList;
+  protected List<Movie> movieList;
+
+  /**
+   * Default constructor. Used by subclasses.
+   */
+  public MovieList() {
+  }
+
+  /**
+   * MovieList explicit value constructor. Enhances deserialization.
+   *
+   * @param movieList List to set this movie to.
+   */
+  public MovieList(List<Movie> movieList) {
+    this.movieList = movieList;
+  }
 
   /**
    * Parses a MovieList from an InputStream. Note that this assumes the
