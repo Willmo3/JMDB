@@ -16,6 +16,7 @@ import controller.JmdbController;
 import media.Movie;
 import mediaDisplay.MediaDisplay;
 import menubar.JmdbMenuBar;
+import model.TheaterListModel;
 import searchbar.Searchbar;
 
 /**
@@ -45,7 +46,7 @@ public class JmdbGUI extends JFrame
   private DefaultListModel<Movie> searchListModel;
   private DefaultListModel<Movie> watchListModel;
   private DefaultListModel<Movie> featuredListModel;
-  // private DefaultListModel<Movie> popularListModel;
+  private DefaultListModel<Movie> inTheaterListModel;
 
   /**
    * An enumerated class of all the possible views that the List of Movies may
@@ -69,7 +70,12 @@ public class JmdbGUI extends JFrame
     /**
      * The view shown when using the featured movies list.
      */
-    FEATURED("Featured Movies");
+    FEATURED("Featured Movies"),
+
+    /**
+     * The view shown when using the in theaters list.
+     */
+    THEATER("In Theaters");
 
     private final String text;
 
@@ -231,6 +237,8 @@ public class JmdbGUI extends JFrame
     featuredListModel.addAll(controller.startupListContent());
     watchListModel = new DefaultListModel<Movie>();
     watchListModel.addAll(controller.getWatchList());
+    inTheaterListModel = new DefaultListModel<>();
+    inTheaterListModel.addAll(controller.getInTheatersList());
   }
 
   /**
@@ -323,6 +331,16 @@ public class JmdbGUI extends JFrame
         currentListView = ListViews.FEATURED;
         watchListButton.setText("Add to Plan to Watch List");
         moviesJlist.setModel(featuredListModel);
+        break;
+      case THEATER:
+        if (currentListView == ListViews.THEATER)
+        {
+          switchListView(ListViews.SEARCH);
+          break;
+        }
+        currentListView = ListViews.THEATER;
+        watchListButton.setText("Add to Plan to Watch List");
+        moviesJlist.setModel(inTheaterListModel);
         break;
       default:
         System.err.println("Impossible list view requested");

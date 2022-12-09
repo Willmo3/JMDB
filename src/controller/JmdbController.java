@@ -9,6 +9,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import list.MovieList;
 import mainGUI.JmdbGUI;
 import media.Movie;
+import model.TheaterListModel;
 
 /**
  * The controller for the JMDb program. Interfaces with the GUI and Model.
@@ -42,6 +43,8 @@ public class JmdbController
   // booleans denoting if the cache or watchList were updated during runtime
   private boolean cacheChanged;
   private boolean watchListChanged;
+  // Model for TheaterList.
+  private TheaterListModel theaterList;
 
   /**
    * Empty constructor. Made for testing non-GUI function and, as such, none of
@@ -53,6 +56,7 @@ public class JmdbController
     cacheChanged = false;
     watchListChanged = false;
     loadSavedData();
+    theaterList = new TheaterListModel(this);
   }
 
   /**
@@ -258,6 +262,29 @@ public class JmdbController
       }
     }
     return watchList;
+  }
+
+  /**
+   * In Theater List getter.
+   * For each ID in TheaterList, adds a movie object to the return value.
+   * Then, returns new collection of all movies.
+   *
+   * @return Collection of all movies in theaters.
+   */
+  public Collection<Movie> getInTheatersList()
+  {
+    ArrayList<Movie> inTheaters = new ArrayList<>();
+    for (String id : theaterList.getMovies()) {
+      Movie idMovie = cacheModel.get(id);
+      // Check necessary, since movies can be cached in either the featured list model or the cache model.
+      if (idMovie != null) {
+        inTheaters.add(cacheModel.get(id));
+      } else {
+        inTheaters.add(featuredListModel.get(id));
+      }
+    }
+
+    return inTheaters;
   }
 
   /**

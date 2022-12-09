@@ -25,7 +25,7 @@ public class JmdbMenuBar extends JMenuBar
   private static final long serialVersionUID = 974458634623052710L;
   private JmdbGUI gui;
   private JMenu items;
-  private JMenuItem watch, featured, refresh, game;
+  private JMenuItem watch, featured, refresh, game, intheater;
 
   /**
    * Constructs a MenuBar item with no controller-based functionality.
@@ -40,13 +40,17 @@ public class JmdbMenuBar extends JMenuBar
     items = new JMenu("Menu");
     watch = new JMenuItem("Watch List");
     featured = new JMenuItem("Featured Movies");
+    intheater = new JMenuItem("In Theaters");
     refresh = new JMenuItem("Refresh Selected Movie Data");
     game = new JMenuItem("Guess the rating"); //a
     items.add(watch);
     items.addSeparator();
     items.add(featured);
     items.addSeparator();
+    items.add(intheater);
+    items.addSeparator();
     items.add(refresh);
+    items.addSeparator();
     items.add(game); //a
     this.add(items); //a
     addFunctionality();
@@ -75,6 +79,13 @@ public class JmdbMenuBar extends JMenuBar
       public void actionPerformed(ActionEvent actionEvent)
       {
         gui.switchListView(ListViews.FEATURED);
+      }
+    });
+
+    intheater.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent actionEvent) {
+        gui.switchListView(ListViews.THEATER);
       }
     });
     

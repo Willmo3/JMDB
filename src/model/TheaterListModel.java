@@ -1,6 +1,7 @@
 package model;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import controller.JmdbController;
 import controller.JmdbSerializer;
 import list.MovieList;
 import list.TheaterList;
@@ -24,25 +25,40 @@ import java.util.List;
 public class TheaterListModel
 {
   public static final String BASE_PATH = "./data/theaterlist%s.json";
-  public static final TypeReference<List<TheaterMovie>> THEATER_REFERENCE = new TypeReference<List<TheaterMovie>>() {
+  public static final TypeReference<ArrayList<String>> THEATER_REFERENCE = new TypeReference<ArrayList<String>>() {
   };
-  private MovieList list;
+
+  private List<String> movieIDs;
+  private JmdbController controller;
 
   /**
    * Constructor. Saves a new file at BASE_PATH + date if the file at PATH is too old, or if no file yet exists at path.
    * Otherwise, loads file at PATH.
+   *
+   * @param controller controller for this TheaterListModel. Allows access to movie cache.
    */
-  public TheaterListModel()
+  public TheaterListModel(JmdbController controller)
   {
+    this.controller = controller;
     String path = String.format(BASE_PATH, getDate());
     File target = new File(path);
 
     // If target does not exist, then that means that it's time for a new day's search.
-    if (!target.exists()) {
-      list = JsonRequestor.getInTheaters();
-      JmdbSerializer.serialize(path, list.getMovieList());
-    } else {
-      list = new MovieList((List<Movie>) JmdbSerializer.deserialize(path, THEATER_REFERENCE));
+
+    if (!target.exists())
+    {
+      MovieList list = JsonRequestor.getInTheaters();
+      movieIDs = new ArrayList<>();
+      for (Movie m : list.getMovieList())
+      {
+        movieIDs.add(m.getId());
+        controller.addToCache(m);
+      }
+      JmdbSerializer.serialize(path, movieIDs);
+    }
+    else
+    {
+      movieIDs = (ArrayList<String>) JmdbSerializer.deserialize(path, THEATER_REFERENCE);
     }
   }
 
@@ -57,5 +73,10 @@ public class TheaterListModel
     DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     LocalDateTime now = LocalDateTime.now();
     return date.format(now);
+  }
+
+  public List<String> getMovies()
+  {
+    return movieIDs;
   }
 }
