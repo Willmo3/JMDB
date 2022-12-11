@@ -8,7 +8,7 @@ import search.JsonRequestor;
  * changed later.
  *
  * @author Will Morris, Matthew Potter, Immanuel Semelfort
- * @version 12/08/2022
+ * @version 12/10/2022
  */
 public class Movie
 {
@@ -88,6 +88,21 @@ public class Movie
     this.award = DEFAULT_AWARD;
     this.wiki = DEFAULT_WIKI;
     this.retrievedRatings = false;
+  }
+
+  /**
+   * Theater Movie constructor.
+   *
+   * @param id Movie ID.
+   * @param imageLink Movie's imageLink.
+   * @param title Movie's title.
+   * @param description Movie description.
+   */
+  public Movie(String id, String imageLink, String title, String description) {
+    setId(id);
+    setImageLink(imageLink);
+    setTitle(title);
+    setDescription(description);
   }
 
   /**
@@ -201,7 +216,7 @@ public class Movie
   }
 
   // method that fetches just the IMDB rating from the ratings array
-    public double getImdbRating()
+    public double imdbRating()
     {
         if (!retrievedRatings)
         {

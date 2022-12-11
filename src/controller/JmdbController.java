@@ -50,13 +50,12 @@ public class JmdbController
    * Empty constructor. Made for testing non-GUI function and, as such, none of
    * the GUI related methods will work.
    */
-  public JmdbController()
-  {
+  public JmdbController() {
     this.gui = null;
     cacheChanged = false;
     watchListChanged = false;
     loadSavedData();
-    theaterList = new TheaterListModel(this);
+    theaterList = new TheaterListModel();
   }
 
   /**
@@ -273,18 +272,7 @@ public class JmdbController
    */
   public Collection<Movie> getInTheatersList()
   {
-    ArrayList<Movie> inTheaters = new ArrayList<>();
-    for (String id : theaterList.getMovies()) {
-      Movie idMovie = cacheModel.get(id);
-      // Check necessary, since movies can be cached in either the featured list model or the cache model.
-      if (idMovie != null) {
-        inTheaters.add(cacheModel.get(id));
-      } else {
-        inTheaters.add(featuredListModel.get(id));
-      }
-    }
-
-    return inTheaters;
+    return theaterList.getMovies();
   }
 
   /**

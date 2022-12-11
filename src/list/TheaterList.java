@@ -3,8 +3,6 @@ package list;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import media.Movie;
-import media.ResultTypes;
-import media.TheaterMovie;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,7 +13,7 @@ import java.util.ArrayList;
  * Effectively a standard movie list, but has a different constructor to ensure standard movie compliance.
  *
  * @author William Morris
- * @version 12/8/2022
+ * @version 12/10/2022
  */
 public class TheaterList extends MovieList {
 
@@ -36,7 +34,7 @@ public class TheaterList extends MovieList {
       // Ensures that description of TheaterMovies matches other movies.
       String description = String.format("(%s)", movie.get("year").asText());
       movieList.add(
-          new TheaterMovie(movie.get("id").asText(), movie.get("image").asText(),
+          new Movie(movie.get("id").asText(), movie.get("image").asText(),
               movie.get("title").asText(), description));
     }
     source.close();

@@ -1,14 +1,11 @@
 package theaterlist;
 
-import list.MovieList;
 import list.TheaterList;
 import media.Movie;
-import media.TheaterMovie;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -31,6 +28,6 @@ public class TheaterListTest {
     List<Movie> movies = list.getMovieList();
 
     assertEquals(1, movies.size());
-    assertTrue(movies.get(0) instanceof TheaterMovie);
+    assertTrue(movies.get(0) instanceof Movie);
   }
 }

@@ -2,6 +2,7 @@ package game;
 
 import controller.JmdbController;
 import media.Movie;
+import search.JsonRequestor;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -13,6 +14,9 @@ import java.util.Arrays;
  * selected movie in the main GUI. The user will then be prompted to guess the rating of the movie with two
  * options, one being the correct rating and the other being a random rating. The user will then be told if
  * they were correct or not.
+ *
+ * @author Austin Perdue
+ * @version 12/9/2022
  */
 public class GuessTheRating {
     // make a random decimal rating 1-10
@@ -27,7 +31,7 @@ public class GuessTheRating {
     public GuessTheRating(Movie movie) {
         this.movieLink = movie.getImageLink();
         this.randomRating = (int) (Math.random() * 8) + 3;
-        correctRating = (int) movie.getImdbRating();
+        this.correctRating = (int) movie.imdbRating();
         this.movie = movie;
         this.movieTitle = movie.getTitle();
     }

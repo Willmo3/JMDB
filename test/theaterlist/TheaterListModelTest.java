@@ -1,66 +1,57 @@
 package theaterlist;
 
-import controller.JmdbController;
 import media.Movie;
 import model.TheaterListModel;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests that the TheaterListModel successfully loads movies.
  */
 public class TheaterListModelTest {
 
+  private static String dateStr;
+  private static final String DIR = "./data/theaterlist%s.json";
+
+  static {
+    DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    LocalDateTime now = LocalDateTime.now();
+    dateStr = date.format(now);
+  }
   /**
    * Tests loading when there is no in theater list.
-   * Kept for posterity.
    */
   @Test
   void testLoad() {
-    DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    LocalDateTime now = LocalDateTime.now();
-    String dateStr = date.format(now);
-    JmdbController controller = new JmdbController();
-
-    File theaterFile = new File(String.format("./data/theaterlist%s.json", dateStr));
-    TheaterListModel model = new TheaterListModel(controller);
-    assertTrue(new File(String.format("data/theaterlist%s.json", dateStr)).exists());
-    controller.saveData();
+    TheaterListModel model = new TheaterListModel();
+    assertTrue(new File(String.format(DIR, dateStr)).exists());
   }
 
   @Test
   void testGetList() {
-    JmdbController controller = new JmdbController();
-    TheaterListModel model = new TheaterListModel(controller);
-    List<String> movies = model.getMovies();
-    Set<String> cachedMovies = controller.getCachedMovies().keySet();
-    Set<String> featuredMovies = controller.getFeaturedListModel().keySet();
-
-    for (String m : movies) {
-      assertTrue(cachedMovies.contains(m) || featuredMovies.contains(m));
-    }
-
-    controller.saveData();
-  }
-
-  @Test
-  void testGetMovieList() {
-    JmdbController controller = new JmdbController();
-    Collection<Movie> movies = controller.getInTheatersList();
+    TheaterListModel model = new TheaterListModel();
+    Collection<Movie> movies = model.getMovies();
     assertFalse(movies.isEmpty());
 
     for (Movie m : movies) {
-      System.out.println(m.getId());
+      assertNotNull(m);
     }
+  }
+
+  @Test
+  void testCleanDirectory() throws IOException {
+    File badFile = new File(String.format(DIR, "2022-12-09"));
+    File goodFile = new File(String.format(DIR, dateStr));
+    badFile.createNewFile();
+    TheaterListModel model = new TheaterListModel();
+    assertFalse(badFile.exists());
+    assertTrue(goodFile.exists());
   }
 }
